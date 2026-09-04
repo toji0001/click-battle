@@ -1,536 +1,259 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Click Battle 1v1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Click Battle</title>
 
 <style>
-body {
-    margin: 0;
-    background: #111;
-    color: white;
-    text-align: center;
-    font-family: Arial;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#09091a,#17173b);
+  color:white;
+  text-align:center;
 }
-
-#menu {
-    margin-top: 100px;
+.screen{display:none;min-height:100vh;padding:45px 20px}
+.active{display:block}
+h1{font-size:42px;margin:20px 0}
+.card{
+  max-width:430px;
+  margin:30px auto;
+  padding:30px;
+  background:#ffffff12;
+  border:1px solid #ffffff22;
+  border-radius:24px;
+  backdrop-filter:blur(10px);
 }
-
-#game {
-    display: none;
+button{
+  width:100%;
+  padding:16px;
+  margin:10px 0;
+  border:0;
+  border-radius:14px;
+  font-size:19px;
+  font-weight:bold;
+  cursor:pointer;
 }
-
-#over {
-    display: none;
-    margin-top: 100px;
+.primary{background:#6c5ce7;color:white}
+.secondary{background:#25254d;color:white}
+input{
+  width:100%;
+  padding:16px;
+  border-radius:12px;
+  border:1px solid #ffffff33;
+  background:#11112b;
+  color:white;
+  font-size:18px;
+  text-align:center;
 }
-
-input {
-    padding: 14px;
-    font-size: 18px;
-    border-radius: 8px;
-    border: 0;
-    margin: 5px;
-    width: 180px;
+.players{
+  display:flex;
+  justify-content:space-around;
+  gap:15px;
 }
-
-button {
-    padding: 14px 22px;
-    font-size: 18px;
-    border: 0;
-    border-radius: 10px;
-    margin: 6px;
+.player{
+  flex:1;
+  padding:20px;
+  border-radius:18px;
+  background:#ffffff10;
 }
-
-#target {
-    display: none;
-    position: fixed;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: red;
-    color: white;
-    padding: 0;
+.score{font-size:50px;font-weight:bold}
+#target{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:#ff4757;
+  color:white;
+  border:0;
+  font-size:20px;
+  box-shadow:0 0 30px #ff475788;
 }
-
-.room {
-    font-size: 22px;
-    margin: 15px;
+#roomCode{
+  font-size:28px;
+  letter-spacing:5px;
+  margin:20px;
 }
+.small{opacity:.7}
 </style>
 </head>
 
 <body>
 
-<div id="menu">
+<div id="home" class="screen active">
+  <h1>⚡ CLICK BATTLE</h1>
 
-    <h1>🎮 CLICK BATTLE 1v1</h1>
+  <div class="card">
+    <p class="small">2 Player Local Battle</p>
 
-    <button onclick="createRoom()">CREATE ROOM</button>
+    <button class="primary" onclick="createRoom()">CREATE ROOM</button>
 
-    <br>
+    <input id="joinCode" placeholder="Enter Room Code">
 
-    <input id="roomInput" placeholder="Room Code">
-
-    <button onclick="joinRoom()">JOIN ROOM</button>
-
-    <p id="status"></p>
-
+    <button class="secondary" onclick="joinRoom()">JOIN ROOM</button>
+  </div>
 </div>
 
-
-<div id="game">
-
-    <h2>Room: <span id="roomName"></span></h2>
-
-    <h2>
-        You: <span id="myScore">0</span>
-        |
-        Opponent: <span id="opScore">0</span>
-    </h2>
-
-    <h2>Time: <span id="time">30</span></h2>
-
-    <button id="target" onclick="hit()">CLICK!</button>
-
+<div id="room" class="screen">
+  <h1>🎮 ROOM</h1>
+  <div class="card">
+    <p>Your Room Code</p>
+    <div id="roomCode">------</div>
+    <p class="small">Give this code to Player 2</p>
+    <button class="primary" onclick="startGame()">START BATTLE</button>
+    <button class="secondary" onclick="goHome()">BACK</button>
+  </div>
 </div>
 
+<div id="game" class="screen">
+  <h1>⚔️ BATTLE</h1>
 
-<div id="over">
+  <div class="players">
+    <div class="player">
+      <h2>PLAYER 1</h2>
+      <div id="score1" class="score">0</div>
+    </div>
 
-    <h1 id="result"></h1>
+    <div class="player">
+      <h2>PLAYER 2</h2>
+      <div id="score2" class="score">0</div>
+    </div>
+  </div>
 
-    <h2>
-        Your Score: <span id="finalMy">0</span>
-    </h2>
+  <h2>TIME: <span id="time">30</span></h2>
 
-    <h2>
-        Opponent: <span id="finalOp">0</span>
-    </h2>
-
-    <button onclick="location.reload()">🔄 PLAY AGAIN</button>
-
+  <button id="target" onclick="clickTarget()">CLICK!</button>
 </div>
 
+<div id="result" class="screen">
+  <h1>🏆 RESULT</h1>
 
-<script type="module">
+  <div class="card">
+    <h2 id="winner"></h2>
+    <h2>Player 1: <span id="final1">0</span></h2>
+    <h2>Player 2: <span id="final2">0</span></h2>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    <button class="primary" onclick="location.reload()">PLAY AGAIN</button>
+  </div>
+</div>
 
-import {
-    getDatabase,
-    ref,
-    set,
-    get,
-    update,
-    onValue,
-    runTransaction
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+<script>
+let player=0;
+let score1=0;
+let score2=0;
+let time=30;
+let timer=null;
 
-import {
-    getAuth,
-    signInAnonymously
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-
-/* =========================
-   FIREBASE CONFIG
-   ========================= */
-
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
-
-/* ========================= */
-
-const app = initializeApp(firebaseConfig);
-
-const db = getDatabase(app);
-
-const auth = getAuth(app);
-
-let user;
-
-let roomCode = "";
-
-let playerNumber = "";
-
-let score = 0;
-
-let time = 30;
-
-let timer;
-
-let gameStarted = false;
-
-
-/* LOGIN */
-
-signInAnonymously(auth)
-.then((result) => {
-
-    user = result.user;
-
-})
-.catch((error) => {
-
-    console.log(error);
-
-    document.getElementById("status").innerText =
-        "Firebase login error";
-
-});
-
-
-/* ROOM CODE */
-
-function makeRoomCode() {
-
-    return Math.random()
-        .toString(36)
-        .substring(2, 8)
-        .toUpperCase();
-
+function show(id){
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
+function createRoom(){
+  player=1;
 
-/* CREATE ROOM */
+  let code=Math.floor(100000+Math.random()*900000);
 
-window.createRoom = async function() {
+  document.getElementById("roomCode").innerText=code;
 
-    if (!user) {
+  playSound(500);
 
-        document.getElementById("status").innerText =
-            "Connecting... try again";
+  show("room");
+}
 
-        return;
+function joinRoom(){
+  let code=document.getElementById("joinCode").value.trim();
+
+  if(code.length<6){
+    alert("6 digit Room Code daalo!");
+    return;
+  }
+
+  player=2;
+
+  playSound(600);
+
+  startGame();
+}
+
+function startGame(){
+  score1=0;
+  score2=0;
+  time=30;
+
+  document.getElementById("score1").innerText=0;
+  document.getElementById("score2").innerText=0;
+  document.getElementById("time").innerText=30;
+
+  show("game");
+
+  clearInterval(timer);
+
+  timer=setInterval(()=>{
+    time--;
+    document.getElementById("time").innerText=time;
+
+    if(time<=0){
+      clearInterval(timer);
+      finishGame();
     }
-
-    roomCode = makeRoomCode();
-
-    const roomRef = ref(db, "rooms/" + roomCode);
-
-    await set(roomRef, {
-
-        player1: {
-            uid: user.uid,
-            score: 0
-        },
-
-        player2: null,
-
-        status: "waiting",
-
-        startTime: null
-
-    });
-
-    playerNumber = "player1";
-
-    document.getElementById("status").innerText =
-        "Room created! Code: " + roomCode;
-
-    document.getElementById("roomInput").value =
-        roomCode;
-
-    listenRoom();
-
-};
-
-
-/* JOIN ROOM */
-
-window.joinRoom = async function() {
-
-    if (!user) {
-
-        document.getElementById("status").innerText =
-            "Connecting... try again";
-
-        return;
-    }
-
-    roomCode =
-        document.getElementById("roomInput")
-        .value.trim()
-        .toUpperCase();
-
-    if (!roomCode) {
-
-        document.getElementById("status").innerText =
-            "Enter room code";
-
-        return;
-    }
-
-    const roomRef =
-        ref(db, "rooms/" + roomCode);
-
-    const snapshot =
-        await get(roomRef);
-
-    if (!snapshot.exists()) {
-
-        document.getElementById("status").innerText =
-            "Room not found";
-
-        return;
-    }
-
-    const room = snapshot.val();
-
-    if (room.player2) {
-
-        document.getElementById("status").innerText =
-            "Room is full";
-
-        return;
-    }
-
-    await update(roomRef, {
-
-        player2: {
-            uid: user.uid,
-            score: 0
-        },
-
-        status: "ready"
-
-    });
-
-    playerNumber = "player2";
-
-    document.getElementById("status").innerText =
-        "Joined room!";
-
-    listenRoom();
-
-};
-
-
-/* LISTEN TO ROOM */
-
-function listenRoom() {
-
-    const roomRef =
-        ref(db, "rooms/" + roomCode);
-
-    onValue(roomRef, (snapshot) => {
-
-        if (!snapshot.exists()) return;
-
-        const room = snapshot.val();
-
-        if (
-            room.player1 &&
-            room.player2 &&
-            !gameStarted
-        ) {
-
-            startMultiplayerGame();
-
-        }
-
-        if (room.player1) {
-
-            if (playerNumber === "player1") {
-
-                document.getElementById("myScore")
-                    .innerText =
-                    room.player1.score || 0;
-
-                document.getElementById("opScore")
-                    .innerText =
-                    room.player2
-                    ? room.player2.score || 0
-                    : 0;
-
-            } else {
-
-                document.getElementById("myScore")
-                    .innerText =
-                    room.player2
-                    ? room.player2.score || 0
-                    : 0;
-
-                document.getElementById("opScore")
-                    .innerText =
-                    room.player1.score || 0;
-
-            }
-
-        }
-
-    });
-
+  },1000);
 }
 
+function clickTarget(){
+  if(player===1){
+    score1++;
+    document.getElementById("score1").innerText=score1;
+  }else{
+    score2++;
+    document.getElementById("score2").innerText=score2;
+  }
 
-/* START GAME */
-
-async function startMultiplayerGame() {
-
-    gameStarted = true;
-
-    document.getElementById("menu")
-        .style.display = "none";
-
-    document.getElementById("game")
-        .style.display = "block";
-
-    document.getElementById("target")
-        .style.display = "block";
-
-    document.getElementById("roomName")
-        .innerText = roomCode;
-
-    score = 0;
-
-    time = 30;
-
-    move();
-
-    timer = setInterval(() => {
-
-        time--;
-
-        document.getElementById("time")
-            .innerText = time;
-
-        if (time <= 0) {
-
-            clearInterval(timer);
-
-            finishGame();
-
-        }
-
-    }, 1000);
-
+  playSound(700);
 }
 
+function finishGame(){
+  document.getElementById("final1").innerText=score1;
+  document.getElementById("final2").innerText=score2;
 
-/* CLICK */
+  if(score1>score2){
+    document.getElementById("winner").innerText="🥇 PLAYER 1 WINS!";
+  }else if(score2>score1){
+    document.getElementById("winner").innerText="🥇 PLAYER 2 WINS!";
+  }else{
+    document.getElementById("winner").innerText="🤝 DRAW!";
+  }
 
-window.hit = async function() {
-
-    if (!gameStarted) return;
-
-    score++;
-
-    const scoreRef =
-        ref(
-            db,
-            "rooms/" +
-            roomCode +
-            "/" +
-            playerNumber +
-            "/score"
-        );
-
-    await set(scoreRef, score);
-
-    move();
-
-};
-
-
-/* MOVE BUTTON */
-
-function move() {
-
-    const x =
-        Math.random() *
-        (window.innerWidth - 100);
-
-    const y =
-        100 +
-        Math.random() *
-        (window.innerHeight - 200);
-
-    const target =
-        document.getElementById("target");
-
-    target.style.left =
-        x + "px";
-
-    target.style.top =
-        y + "px";
-
+  playSound(900);
+  show("result");
 }
 
-
-/* FINISH */
-
-async function finishGame() {
-
-    gameStarted = false;
-
-    document.getElementById("target")
-        .style.display = "none";
-
-    const roomRef =
-        ref(db, "rooms/" + roomCode);
-
-    const snapshot =
-        await get(roomRef);
-
-    if (!snapshot.exists()) return;
-
-    const room = snapshot.val();
-
-    let myScore =
-        playerNumber === "player1"
-        ? room.player1.score
-        : room.player2.score;
-
-    let opponentScore =
-        playerNumber === "player1"
-        ? room.player2.score
-        : room.player1.score;
-
-    document.getElementById("game")
-        .style.display = "none";
-
-    document.getElementById("over")
-        .style.display = "block";
-
-    document.getElementById("finalMy")
-        .innerText = myScore;
-
-    document.getElementById("finalOp")
-        .innerText = opponentScore;
-
-    if (myScore > opponentScore) {
-
-        document.getElementById("result")
-            .innerText = "🏆 YOU WIN!";
-
-    } else if (myScore < opponentScore) {
-
-        document.getElementById("result")
-            .innerText = "😢 YOU LOSE!";
-
-    } else {
-
-        document.getElementById("result")
-            .innerText = "🤝 DRAW!";
-
-    }
-
+function goHome(){
+  show("home");
 }
 
+function playSound(freq){
+  try{
+    let audio=new AudioContext();
+    let osc=audio.createOscillator();
+    let gain=audio.createGain();
+
+    osc.frequency.value=freq;
+    osc.type="sine";
+
+    gain.gain.setValueAtTime(.08,audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audio.currentTime+.15
+    );
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    osc.start();
+    osc.stop(audio.currentTime+.15);
+  }catch(e){}
+}
 </script>
 
 </body>
