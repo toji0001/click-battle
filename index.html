@@ -1,1 +1,164 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>body {    margin: 0;    background: #111;    color: white;    text-align: center;    font-family: Arial;    overflow: hidden;}#game {    display: none;    height: 100vh;}#start {    margin-top: 150px;}button {    padding: 15px 25px;    font-size: 20px;    border: 0;    border-radius: 10px;}#target {    position: fixed;    display: none;    border-radius: 50%;    background: red;    color: white;    width: 90px;    height: 90px;    padding: 0;}#over {    display: none;    margin-top: 150px;}</style></head><body><div id="start">    <h1>🎮 CLICK BATTLE</h1>    <button onclick="startGame()">START GAME</button></div><div id="game">    <h2>Score: <span id="score">0</span></h2>    <h2>Time: <span id="time">30</span></h2>    <button id="target" onclick="hit()">CLICK!</button></div><div id="over">    <h1>💀 GAME OVER</h1>    <h2>Score: <span id="final">0</span></h2>    <button onclick="location.reload()">🔄 PLAY AGAIN</button></div><script>let score = 0;let time = 30;let timer;function startGame() {    document.getElementById("start").style.display = "none";    document.getElementById("game").style.display = "block";    document.getElementById("target").style.display = "block";    move();    timer = setInterval(function() {        time--;        document.getElementById("time").innerText = time;        if (time <= 0) {            clearInterval(timer);            document.getElementById("game").style.display = "none";            document.getElementById("over").style.display = "block";            document.getElementById("final").innerText = score;        }    }, 1000);}function hit() {    score++;    document.getElementById("score").innerText = score;    move();}function move() {    let x = Math.random() * (window.innerWidth - 100);    let y = 100 + Math.random() * (window.innerHeight - 200);    document.getElementById("target").style.left = x + "px";    document.getElementById("target").style.top = y + "px";}</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    text-align: center;
+    font-family: Arial;
+    overflow: hidden;
+}
+
+#game {
+    display: none;
+    height: 100vh;
+}
+
+#start {
+    margin-top: 150px;
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 20px;
+    border: 0;
+    border-radius: 10px;
+}
+
+#target {
+    position: fixed;
+    display: none;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    width: 90px;
+    height: 90px;
+    padding: 0;
+}
+
+#over {
+    display: none;
+    margin-top: 150px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+    <h1>🎮 CLICK BATTLE</h1>
+    <button onclick="startGame()">START GAME</button>
+</div>
+
+<div id="game">
+    <h2>Score: <span id="score">0</span></h2>
+    <h2>Time: <span id="time">30</span></h2>
+    <button id="target" onclick="hit()">CLICK!</button>
+</div>
+
+<div id="over">
+    <h1>💀 GAME OVER</h1>
+    <h2>Score: <span id="final">0</span></h2>
+    <button onclick="location.reload()">🔄 PLAY AGAIN</button>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import { getDatabase }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+import { getAuth }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+
+// 🔥 APNI FIREBASE CONFIG YAHAN PASTE KARO
+const firebaseConfig = {
+    apiKey: "PASTE_YOUR_API_KEY",
+    authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+    databaseURL: "PASTE_YOUR_DATABASE_URL",
+    projectId: "PASTE_YOUR_PROJECT_ID",
+    storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+    messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+    appId: "PASTE_YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
+
+console.log("🔥 Firebase connected!");
+
+</script>
+
+
+<!-- Game -->
+<script>
+
+let score = 0;
+let time = 30;
+let timer;
+
+function startGame() {
+
+    document.getElementById("start").style.display = "none";
+    document.getElementById("game").style.display = "block";
+    document.getElementById("target").style.display = "block";
+
+    move();
+
+    timer = setInterval(function() {
+
+        time--;
+
+        document.getElementById("time").innerText = time;
+
+        if (time <= 0) {
+
+            clearInterval(timer);
+
+            document.getElementById("game").style.display = "none";
+            document.getElementById("over").style.display = "block";
+
+            document.getElementById("final").innerText = score;
+        }
+
+    }, 1000);
+}
+
+
+function hit() {
+
+    score++;
+
+    document.getElementById("score").innerText = score;
+
+    move();
+}
+
+
+function move() {
+
+    let x = Math.random() * (window.innerWidth - 100);
+
+    let y = 100 + Math.random() *
+        (window.innerHeight - 200);
+
+    document.getElementById("target").style.left =
+        x + "px";
+
+    document.getElementById("target").style.top =
+        y + "px";
+}
+
+</script>
+
+</body>
+</html>
