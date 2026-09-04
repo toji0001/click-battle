@@ -661,9 +661,9 @@ function addXP(amount){
 
 xp+=amount;
 
-while(xp>=level*100){
+while(xp>=level*10000){
 
-xp-=level*100;
+xp-=level*10000;
 level++;
 
 }
@@ -672,11 +672,11 @@ level++;
 
 function getRank(s){
 
-if(s>=150)return"👑 GRANDMASTER";
-if(s>=100)return"💎 MASTER";
-if(s>=75)return"💠 DIAMOND";
-if(s>=50)return"🥇 GOLD";
-if(s>=25)return"🥈 SILVER";
+if(s>=10000)return"👑 GRANDMASTER";
+if(s>=1000)return"💎 MASTER";
+if(s>=750)return"💠 DIAMOND";
+if(s>=500)return"🥇 GOLD";
+if(s>=250)return"🥈 SILVER";
 
 return"🥉 BRONZE";
 
