@@ -1,32 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Click Battle X - Online 1v1</title>
+<title>CLICK BATTLE X</title>
 
 <style>
 *{box-sizing:border-box}
 body{
  margin:0;
  font-family:Arial,sans-serif;
- color:white;
+ color:#fff;
  background:#070712;
+ overflow-x:hidden;
+}
+button,input{font:inherit}
+.screen{
+ display:none;
+ min-height:100vh;
+ padding:25px 16px;
  text-align:center;
 }
-.screen{display:none;min-height:100vh;padding:25px 15px}
 .active{display:block}
-.logo{font-size:40px;font-weight:900;margin:30px 0 5px}
-.sub{opacity:.65}
+
+.bg{
+ position:fixed;
+ inset:0;
+ z-index:-1;
+ background:
+ radial-gradient(circle at 15% 20%,#4c1d95,transparent 30%),
+ radial-gradient(circle at 85% 80%,#0e7490,transparent 30%),
+ #050509;
+}
+
+.logo{
+ font-size:42px;
+ font-weight:1000;
+ letter-spacing:2px;
+ margin:25px 0 5px;
+ text-shadow:0 0 30px #8b5cf6;
+}
+
+.sub{opacity:.65;margin-bottom:25px}
+
 .card{
  width:min(500px,100%);
- margin:18px auto;
- padding:25px;
- border-radius:25px;
- background:#ffffff0c;
- border:1px solid #ffffff18;
- box-shadow:0 15px 60px #0008;
+ margin:16px auto;
+ padding:24px;
+ border:1px solid #ffffff20;
+ border-radius:26px;
+ background:#ffffff0b;
+ backdrop-filter:blur(18px);
+ box-shadow:0 20px 70px #0008;
 }
+
 button{
  width:100%;
  padding:16px;
@@ -34,87 +61,241 @@ button{
  border:0;
  border-radius:15px;
  color:white;
+ font-weight:900;
+ cursor:pointer;
  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
- font-weight:900;
- font-size:16px;
+ box-shadow:0 8px 25px #4f46e544;
 }
-.secondary{background:#ffffff12}
-input{
- width:100%;
- padding:16px;
- border-radius:14px;
- border:1px solid #ffffff20;
- background:#05050d;
- color:white;
- text-align:center;
- font-size:20px;
- text-transform:uppercase;
+
+button:active{transform:scale(.95)}
+.secondary{
+ background:#ffffff12;
+ box-shadow:none;
 }
-.room{
- font-size:38px;
- font-weight:900;
- letter-spacing:7px;
- margin:15px;
-}
-.scores{
+
+.grid,.scores{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:10px;
- max-width:600px;
- margin:auto;
 }
-.scorebox{
- background:#ffffff0c;
- border:1px solid #ffffff15;
+
+.stat,.scorebox{
+ padding:14px;
  border-radius:18px;
+ background:#ffffff0b;
+ border:1px solid #ffffff12;
+}
+
+.stat b{
+ display:block;
+ font-size:24px;
+ margin-top:5px;
+}
+
+.xpbar{
+ height:12px;
+ background:#ffffff15;
+ border-radius:20px;
+ overflow:hidden;
+ margin:12px 0;
+}
+
+#xpFill{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#22d3ee,#8b5cf6);
+ transition:.4s;
+}
+
+.mode{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+
+.rank{
+ font-size:30px;
+ font-weight:1000;
+ margin:15px;
+}
+
+input{
+ width:100%;
  padding:15px;
+ border:1px solid #ffffff20;
+ border-radius:14px;
+ background:#05050d;
+ color:#fff;
+ outline:none;
+ text-align:center;
+ text-transform:uppercase;
+ font-size:20px;
 }
-.score{
+
+.room{
+ font-size:38px;
+ font-weight:1000;
+ letter-spacing:7px;
+ margin:15px;
+}
+
+.status{
+ opacity:.7;
+ margin:15px;
+}
+
+#battle{padding-top:15px}
+
+.big{
  font-size:40px;
- font-weight:900;
+ font-weight:1000;
 }
+
+.combo{
+ height:38px;
+ font-size:25px;
+ font-weight:1000;
+ color:#facc15;
+}
+
 .arena{
  position:relative;
  width:min(700px,100%);
- height:55vh;
- min-height:350px;
- margin:15px auto;
- border-radius:25px;
+ height:58vh;
+ min-height:360px;
+ margin:10px auto;
+ border-radius:28px;
+ border:1px solid #ffffff18;
  background:#ffffff08;
- border:1px solid #ffffff15;
  overflow:hidden;
+ box-shadow:inset 0 0 80px #0008;
 }
+
 #target{
  position:absolute;
- width:90px;
- height:90px;
+ width:100px;
+ height:100px;
  padding:0;
  margin:0;
  border-radius:50%;
- background:linear-gradient(135deg,#ff2d55,#ff7a18);
  border:5px solid white;
- box-shadow:0 0 30px #ff2d55;
+ background:linear-gradient(135deg,#ff2d55,#ff7a18);
+ box-shadow:0 0 25px #ff2d55,0 0 70px #ff2d5588;
+ font-size:17px;
 }
-.big{
- font-size:50px;
- font-weight:900;
- margin:20px;
+
+#target:active{
+ transform:scale(.78);
 }
-.status{margin:15px;opacity:.8}
+
+.pop{
+ position:absolute;
+ font-size:23px;
+ font-weight:1000;
+ pointer-events:none;
+ animation:float .7s forwards;
+ z-index:5;
+}
+
+@keyframes float{
+ 0%{transform:translateY(0) scale(.7);opacity:1}
+ 100%{transform:translateY(-80px) scale(1.2);opacity:0}
+}
+
+.resultScore{
+ font-size:60px;
+ font-weight:1000;
+}
+
+.small{
+ opacity:.6;
+ font-size:13px;
+}
 </style>
 </head>
 
 <body>
 
+<div class="bg"></div>
+
+
 <!-- HOME -->
+
 <section id="home" class="screen active">
 
 <div class="logo">⚡ CLICK BATTLE X</div>
-<div class="sub">ONLINE 1v1 CLICKING ARENA</div>
+<div class="sub">THE ULTIMATE CLICKING ARENA</div>
 
 <div class="card">
 
-<h2>🌐 ONLINE 1v1</h2>
+<h2>PLAYER</h2>
+
+<div class="rank" id="homeRank">
+🥉 BRONZE
+</div>
+
+<div class="xpbar">
+<div id="xpFill"></div>
+</div>
+
+<div class="small">
+LEVEL <b id="level">1</b>
+•
+XP <b id="xp">0</b>
+</div>
+
+<div class="grid" style="margin-top:18px">
+
+<div class="stat">
+🪙
+<b id="coins">0</b>
+Coins
+</div>
+
+<div class="stat">
+🏆
+<b id="wins">0</b>
+Wins
+</div>
+
+<div class="stat">
+🔥
+<b id="best">0</b>
+Best
+</div>
+
+<div class="stat">
+⚡
+<b id="bestCombo">0</b>
+Combo
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ONLINE -->
+
+<div class="card">
+
+<h3>🌐 ONLINE 1v1</h3>
+
+<div class="mode">
+
+<button onclick="chooseMode(30)">
+⚡ 30 SEC
+</button>
+
+<button onclick="chooseMode(60)">
+🔥 60 SEC
+</button>
+
+</div>
+
+<p id="modeText" class="small">
+Selected: 30 seconds
+</p>
 
 <button onclick="createRoom()">
 🚀 CREATE ROOM
@@ -126,14 +307,28 @@ input{
 
 </div>
 
+
+<!-- PRACTICE -->
+
 <div class="card">
 
-<h3>⏱️ GAME MODE</h3>
+<h3>🎮 PRACTICE</h3>
 
-<button onclick="setMode(30)">30 SECONDS</button>
-<button onclick="setMode(60)">60 SECONDS</button>
+<button onclick="startPractice()">
+⚡ START PRACTICE
+</button>
 
-<p id="modeText">Selected: 30 seconds</p>
+<button class="secondary" onclick="show('themes')">
+🎨 CUSTOMIZE
+</button>
+
+<button class="secondary" onclick="showProfile()">
+👤 PROFILE
+</button>
+
+<button class="secondary" onclick="showMissions()">
+🎯 MISSIONS
+</button>
 
 </div>
 
@@ -141,13 +336,15 @@ input{
 
 
 <!-- JOIN -->
+
 <section id="join" class="screen">
 
 <h1>🔑 JOIN ROOM</h1>
 
 <div class="card">
 
-<input id="roomInput"
+<input
+id="roomInput"
 maxlength="6"
 placeholder="ENTER CODE">
 
@@ -165,6 +362,7 @@ JOIN BATTLE
 
 
 <!-- LOBBY -->
+
 <section id="lobby" class="screen">
 
 <h1>⚔️ BATTLE LOBBY</h1>
@@ -173,7 +371,9 @@ JOIN BATTLE
 
 <p>ROOM CODE</p>
 
-<div class="room" id="roomCode">------</div>
+<div class="room" id="roomCode">
+------
+</div>
 
 <button class="secondary" onclick="copyRoom()">
 📋 COPY ROOM CODE
@@ -187,12 +387,16 @@ Waiting for opponent...
 
 <div class="scorebox">
 👤 YOU
-<h2 id="youReady">NOT READY</h2>
+<h3 id="youReady">
+NOT READY
+</h3>
 </div>
 
 <div class="scorebox">
 👤 OPPONENT
-<h2 id="oppReady">WAITING</h2>
+<h3 id="oppReady">
+WAITING
+</h3>
 </div>
 
 </div>
@@ -201,9 +405,9 @@ Waiting for opponent...
 ✅ READY
 </button>
 
-<p class="status">
-Both players press READY to start.
-</p>
+<button class="secondary" onclick="leaveRoom()">
+🏠 LEAVE
+</button>
 
 </div>
 
@@ -211,11 +415,16 @@ Both players press READY to start.
 
 
 <!-- COUNTDOWN -->
+
 <section id="countdown" class="screen">
 
-<div class="logo">⚔️ GET READY</div>
+<div class="logo">
+⚔️ GET READY
+</div>
 
-<div class="big" id="countNumber">3</div>
+<div class="big" id="countNumber">
+3
+</div>
 
 <p>Battle starting...</p>
 
@@ -223,23 +432,32 @@ Both players press READY to start.
 
 
 <!-- BATTLE -->
+
 <section id="battle" class="screen">
 
 <div class="scores">
 
 <div class="scorebox">
 YOU
-<div class="score" id="myScore">0</div>
+<div class="big" id="myScore">
+0
+</div>
 </div>
 
 <div class="scorebox">
 OPPONENT
-<div class="score" id="enemyScore">0</div>
+<div class="big" id="enemyScore">
+0
+</div>
 </div>
 
 </div>
 
-<div class="big" id="gameTime">30</div>
+<div class="big" id="gameTime">
+30
+</div>
+
+<div class="combo" id="combo"></div>
 
 <div class="arena" id="arena">
 
@@ -253,27 +471,38 @@ CLICK!
 
 
 <!-- RESULT -->
+
 <section id="result" class="screen">
 
-<div class="logo">🏆</div>
+<div class="logo">
+🏆
+</div>
 
 <div class="card">
 
-<h1 id="winnerText">RESULT</h1>
+<h1 id="winnerText">
+RESULT
+</h1>
 
 <div class="scores">
 
 <div class="scorebox">
 YOU
-<div class="score" id="finalMyScore">0</div>
+<div class="resultScore" id="finalMyScore">
+0
+</div>
 </div>
 
 <div class="scorebox">
 OPPONENT
-<div class="score" id="finalEnemyScore">0</div>
+<div class="resultScore" id="finalEnemyScore">
+0
+</div>
 </div>
 
 </div>
+
+<div class="rank" id="resultRank"></div>
 
 <button onclick="rematch()">
 🔄 PLAY AGAIN
@@ -288,17 +517,103 @@ OPPONENT
 </section>
 
 
+<!-- THEMES -->
+
+<section id="themes" class="screen">
+
+<h1>🎨 CUSTOMIZE</h1>
+
+<div class="card">
+
+<button onclick="setTheme('neon')">
+💜 NEON
+</button>
+
+<button onclick="setTheme('fire')">
+🔥 FIRE
+</button>
+
+<button onclick="setTheme('ice')">
+❄️ ICE
+</button>
+
+<button onclick="setTheme('space')">
+🌌 SPACE
+</button>
+
+<button class="secondary" onclick="show('home')">
+← BACK
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="screen">
+
+<h1>👤 PROFILE</h1>
+
+<div class="card">
+
+<h2>CLICK MASTER</h2>
+
+<div class="rank" id="profileRank"></div>
+
+<p>⭐ Level: <b id="profileLevel"></b></p>
+<p>🏆 Wins: <b id="profileWins"></b></p>
+<p>🔥 Best Score: <b id="profileBest"></b></p>
+<p>⚡ Best Combo: <b id="profileCombo"></b></p>
+<p>🪙 Coins: <b id="profileCoins"></b></p>
+
+<button class="secondary" onclick="show('home')">
+← BACK
+</button>
+
+</div>
+
+</section>
+
+
+<!-- MISSIONS -->
+
+<section id="missions" class="screen">
+
+<h1>🎯 MISSIONS</h1>
+
+<div class="card">
+
+<p>🔥 Reach 25 Combo</p>
+<p>🏆 Score 50 Points</p>
+<p>⚡ Play 3 Battles</p>
+<p>🎯 Hit 100 Targets</p>
+
+<p class="small">
+More missions coming soon...
+</p>
+
+<button class="secondary" onclick="show('home')">
+← BACK
+</button>
+
+</div>
+
+</section>
+
+
 <script type="module">
 
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import {
+ initializeApp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
  getAuth,
  signInAnonymously,
  onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
  getDatabase,
@@ -308,53 +623,91 @@ import {
  update,
  onValue,
  serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 
-/* FIREBASE CONFIG */
+/* FIREBASE */
 
 const firebaseConfig = {
- apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
- authDomain:"click-battle-a1aee.firebaseapp.com",
- databaseURL:"https://click-battle-a1aee-default-rtdb.firebaseio.com",
- projectId:"click-battle-a1aee",
- storageBucket:"click-battle-a1aee.firebasestorage.app",
- messagingSenderId:"1023566714890",
- appId:"1:1023566714890:web:0ec28afde9c2782855e7f3",
- measurementId:"G-BT7RMQLRLG"
+
+apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
+
+authDomain:"click-battle-a1aee.firebaseapp.com",
+
+databaseURL:
+"https://click-battle-a1aee-default-rtdb.firebaseio.com",
+
+projectId:"click-battle-a1aee",
+
+storageBucket:
+"click-battle-a1aee.firebasestorage.app",
+
+messagingSenderId:"1023566714890",
+
+appId:
+"1:1023566714890:web:0ec28afde9c2782855e7f3",
+
+measurementId:"G-BT7RMQLRLG"
+
 };
 
 
 const app=initializeApp(firebaseConfig);
+
 const auth=getAuth(app);
+
 const db=getDatabase(app);
 
+
 let user=null;
+
 let roomCode="";
 let role="";
 let roomRef=null;
 let roomListener=null;
 
 let mode=30;
+
 let score=0;
 let combo=0;
+let maxCombo=0;
+
 let running=false;
-let endAt=0;
+let practice=false;
+
 let gameTimer=null;
 let startTimer=null;
+
+let endAt=0;
+
 let lastSync=0;
+
 let resultShown=false;
+
+
+/* LOCAL DATA */
+
+let coins=Number(localStorage.getItem("coins")||0);
+let wins=Number(localStorage.getItem("wins")||0);
+let best=Number(localStorage.getItem("best")||0);
+let bestCombo=Number(localStorage.getItem("bestCombo")||0);
+let xp=Number(localStorage.getItem("xp")||0);
+let level=Number(localStorage.getItem("level")||1);
 
 
 /* AUTH */
 
 signInAnonymously(auth).catch(e=>{
- alert("Firebase login error: "+e.message);
+
+alert("Firebase login error: "+e.message);
+
 });
 
+
 onAuthStateChanged(auth,u=>{
- user=u;
+
+user=u;
+
 });
 
 
@@ -362,11 +715,14 @@ onAuthStateChanged(auth,u=>{
 
 function show(id){
 
- document.querySelectorAll(".screen")
- .forEach(x=>x.classList.remove("active"));
+document
+.querySelectorAll(".screen")
+.forEach(x=>x.classList.remove("active"));
 
- document.getElementById(id)
- .classList.add("active");
+document
+.getElementById(id)
+.classList.add("active");
+
 }
 
 window.show=show;
@@ -374,21 +730,24 @@ window.show=show;
 
 /* MODE */
 
-function setMode(x){
+function chooseMode(x){
 
- mode=x;
+mode=x;
 
- document.getElementById("modeText")
- .innerText="Selected: "+x+" seconds";
+document.getElementById("modeText")
+.innerText="Selected: "+x+" seconds";
+
 }
 
-window.setMode=setMode;
+window.chooseMode=chooseMode;
 
 
-/* JOIN SCREEN */
+/* JOIN PAGE */
 
 function showJoin(){
- show("join");
+
+show("join");
+
 }
 
 window.showJoin=showJoin;
@@ -398,265 +757,336 @@ window.showJoin=showJoin;
 
 function generateCode(){
 
- const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const chars=
+"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
- let code="";
+let code="";
 
- for(let i=0;i<6;i++){
-  code+=chars[Math.floor(Math.random()*chars.length)];
- }
+for(let i=0;i<6;i++){
 
- return code;
+code+=chars[
+Math.floor(Math.random()*chars.length)
+];
+
+}
+
+return code;
+
 }
 
 
-/* CREATE ROOM */
+/* CREATE */
 
 async function createRoom(){
 
- if(!user){
-  alert("Firebase login ho raha hai. 2 sec wait karke try karo.");
-  return;
- }
+if(!user){
 
- try{
+alert("Firebase login ho raha hai. 2 sec wait karo.");
 
-  let code;
-  let exists=true;
+return;
 
-  while(exists){
+}
 
-   code=generateCode();
+try{
 
-   const snap=await get(
-    ref(db,"rooms/"+code)
-   );
+let code;
+let exists=true;
 
-   exists=snap.exists();
-  }
+while(exists){
 
-  roomCode=code;
-  role="host";
+code=generateCode();
 
-  roomRef=ref(db,"rooms/"+roomCode);
+const snap=
+await get(ref(db,"rooms/"+code));
 
-  await set(roomRef,{
-   hostUid:user.uid,
-   guestUid:"",
-   duration:mode,
-   hostReady:false,
-   guestReady:false,
-   p1Score:0,
-   p2Score:0,
-   p1Combo:0,
-   p2Combo:0,
-   status:"waiting",
-   createdAt:serverTimestamp()
-  });
+exists=snap.exists();
 
-  document.getElementById("roomCode")
-   .innerText=roomCode;
+}
 
-  show("lobby");
+roomCode=code;
+role="host";
+practice=false;
 
-  listenRoom();
+roomRef=
+ref(db,"rooms/"+roomCode);
 
- }catch(e){
+await set(roomRef,{
 
-  alert("Room create error: "+e.message);
+hostUid:user.uid,
 
- }
+guestUid:"",
+
+duration:mode,
+
+hostReady:false,
+
+guestReady:false,
+
+p1Score:0,
+
+p2Score:0,
+
+p1Combo:0,
+
+p2Combo:0,
+
+status:"waiting",
+
+createdAt:serverTimestamp()
+
+});
+
+
+document.getElementById("roomCode")
+.innerText=roomCode;
+
+show("lobby");
+
+listenRoom();
+
+}catch(e){
+
+alert("Create error: "+e.message);
+
+}
 
 }
 
 window.createRoom=createRoom;
 
 
-/* JOIN ROOM */
+/* JOIN */
 
 async function joinRoom(){
 
- if(!user){
-  alert("Firebase login ho raha hai.");
-  return;
- }
+if(!user){
 
- let code=document
-  .getElementById("roomInput")
-  .value
-  .trim()
-  .toUpperCase();
+alert("Firebase login ho raha hai.");
 
- if(code.length!==6){
+return;
 
-  alert("6 digit room code dalo.");
-  return;
+}
 
- }
+const code=document
+.getElementById("roomInput")
+.value
+.trim()
+.toUpperCase();
 
- try{
+if(code.length!==6){
 
-  const r=ref(db,"rooms/"+code);
-  const snap=await get(r);
+alert("6-character room code dalo.");
 
-  if(!snap.exists()){
+return;
 
-   alert("Room nahi mila.");
-   return;
+}
 
-  }
+try{
 
-  const data=snap.val();
+const r=ref(db,"rooms/"+code);
 
-  if(data.guestUid){
+const snap=await get(r);
 
-   alert("Room already full.");
-   return;
+if(!snap.exists()){
 
-  }
+alert("Room nahi mila.");
 
-  await update(r,{
-   guestUid:user.uid
-  });
+return;
 
-  roomCode=code;
-  role="guest";
-  roomRef=r;
+}
 
-  document.getElementById("roomCode")
-   .innerText=roomCode;
+const data=snap.val();
 
-  show("lobby");
+if(data.guestUid){
 
-  listenRoom();
+alert("Room already full.");
 
- }catch(e){
+return;
 
-  alert("Join error: "+e.message);
+}
 
- }
+await update(r,{
+
+guestUid:user.uid
+
+});
+
+roomCode=code;
+role="guest";
+practice=false;
+roomRef=r;
+
+mode=Number(data.duration)||30;
+
+document.getElementById("roomCode")
+.innerText=roomCode;
+
+show("lobby");
+
+listenRoom();
+
+}catch(e){
+
+alert("Join error: "+e.message);
+
+}
 
 }
 
 window.joinRoom=joinRoom;
 
 
-/* LISTEN ROOM */
+/* ROOM LISTENER */
 
 function listenRoom(){
 
- if(roomListener)
-  roomListener();
+if(roomListener)
+roomListener();
 
- roomListener=onValue(roomRef,snap=>{
+roomListener=onValue(roomRef,snap=>{
 
-  if(!snap.exists())return;
+if(!snap.exists())return;
 
-  const data=snap.val();
+const data=snap.val();
 
-  const opponentExists=
-   role==="host"
-   ? !!data.guestUid
-   : !!data.hostUid;
+if(data.duration)
+mode=Number(data.duration);
 
-  const myReady=
-   role==="host"
-   ? data.hostReady
-   : data.guestReady;
+const opponent=
+role==="host"
+?!!data.guestUid
+:!!data.hostUid;
 
-  const enemyReady=
-   role==="host"
-   ? data.guestReady
-   : data.hostReady;
+const myReady=
+role==="host"
+?!!data.hostReady
+:!!data.guestReady;
 
-  document.getElementById("youReady")
-   .innerText=myReady?"READY":"NOT READY";
+const enemyReady=
+role==="host"
+?!!data.guestReady
+:!!data.hostReady;
 
-  document.getElementById("oppReady")
-   .innerText=
-   !opponentExists
-   ?"WAITING"
-   :(enemyReady?"READY":"NOT READY");
 
-  if(!opponentExists){
+document.getElementById("youReady")
+.innerText=
+myReady?"READY":"NOT READY";
 
-   document.getElementById("lobbyStatus")
-    .innerText="Waiting for opponent...";
 
-  }else if(!myReady){
+document.getElementById("oppReady")
+.innerText=
+opponent
+?(enemyReady?"READY":"NOT READY")
+:"WAITING";
 
-   document.getElementById("lobbyStatus")
-    .innerText="Press READY.";
 
-  }else if(!enemyReady){
+if(!opponent){
 
-   document.getElementById("lobbyStatus")
-    .innerText="Waiting for opponent READY...";
+document.getElementById("lobbyStatus")
+.innerText=
+"Waiting for opponent...";
 
-  }
+}else if(!myReady){
 
-  /* HOST STARTS */
+document.getElementById("lobbyStatus")
+.innerText=
+"Press READY.";
 
-  if(
-   role==="host" &&
-   opponentExists &&
-   data.hostReady &&
-   data.guestReady &&
-   data.status==="waiting"
-  ){
+}else if(!enemyReady){
 
-   const startAt=Date.now()+4000;
+document.getElementById("lobbyStatus")
+.innerText=
+"Waiting for opponent READY...";
 
-   update(roomRef,{
-    status:"countdown",
-    startAt:startAt
-   });
+}else{
 
-  }
+document.getElementById("lobbyStatus")
+.innerText=
+"Starting...";
 
-  /* COUNTDOWN */
+}
 
-  if(
-   (data.status==="countdown") &&
-   data.startAt
-  ){
 
-   startCountdown(data.startAt);
+/* START */
 
-  }
+if(
 
-  /* LIVE SCORES */
+role==="host" &&
+opponent &&
+data.hostReady &&
+data.guestReady &&
+data.status==="waiting"
 
-  if(data.status==="countdown" ||
-     data.status==="running"){
+){
 
-   const enemy=
-    role==="host"
-    ?(data.p2Score||0)
-    :(data.p1Score||0);
+update(roomRef,{
 
-   document.getElementById("enemyScore")
-    .innerText=enemy;
+status:"countdown",
 
-  }
+startAt:Date.now()+4000
 
-  /* FINISHED */
+});
 
-  if(data.status==="finished"){
+}
 
-   stopGame();
 
-   if(!resultShown){
+/* COUNTDOWN */
 
-    resultShown=true;
+if(
 
-    showResult(data);
+data.status==="countdown" &&
+data.startAt
 
-   }
+){
 
-  }
+startCountdown(data.startAt);
 
- });
+}
+
+
+/* OPPONENT SCORE */
+
+if(
+
+data.status==="countdown" ||
+data.status==="running"
+
+){
+
+const enemy=
+
+role==="host"
+?(data.p2Score||0)
+:(data.p1Score||0);
+
+document.getElementById("enemyScore")
+.innerText=enemy;
+
+}
+
+
+/* FINISH */
+
+if(
+
+data.status==="finished" &&
+!resultShown
+
+){
+
+stopGame();
+
+resultShown=true;
+
+setTimeout(()=>{
+
+showResult(data);
+
+},250);
+
+}
+
+});
 
 }
 
@@ -665,31 +1095,36 @@ function listenRoom(){
 
 async function readyUp(){
 
- if(!roomRef)return;
+if(!roomRef)return;
 
- const field=
-  role==="host"
-  ?"hostReady"
-  :"guestReady";
+const readyField=
+role==="host"
+?"hostReady"
+:"guestReady";
 
- const scoreField=
-  role==="host"
-  ?"p1Score"
-  :"p2Score";
+const scoreField=
+role==="host"
+?"p1Score"
+:"p2Score";
 
- const comboField=
-  role==="host"
-  ?"p1Combo"
-  :"p2Combo";
+const comboField=
+role==="host"
+?"p1Combo"
+:"p2Combo";
 
- await update(roomRef,{
-  [field]:true,
-  [scoreField]:0,
-  [comboField]:0
- });
 
- document.getElementById("readyBtn")
-  .innerText="✅ READY";
+await update(roomRef,{
+
+[readyField]:true,
+
+[scoreField]:0,
+
+[comboField]:0
+
+});
+
+document.getElementById("readyBtn")
+.innerText="✅ READY";
 
 }
 
@@ -700,88 +1135,82 @@ window.readyUp=readyUp;
 
 function startCountdown(startAt){
 
- if(startTimer)return;
+if(startTimer)return;
 
- show("countdown");
+show("countdown");
 
- startTimer=setInterval(()=>{
+startTimer=setInterval(()=>{
 
-  const left=startAt-Date.now();
+const left=
+startAt-Date.now();
 
-  if(left<=0){
+if(left<=0){
 
-   clearInterval(startTimer);
-   startTimer=null;
+clearInterval(startTimer);
 
-   startBattle();
+startTimer=null;
 
-   return;
-  }
+startBattle();
 
-  const n=Math.ceil(left/1000);
+return;
 
-  document.getElementById("countNumber")
-   .innerText=n;
+}
 
- },100);
+document.getElementById("countNumber")
+.innerText=Math.ceil(left/1000);
+
+},80);
 
 }
 
 
-/* START GAME */
+/* START ONLINE */
 
 function startBattle(){
 
- if(running)return;
+if(running)return;
 
- running=true;
- resultShown=false;
+running=true;
+practice=false;
 
- score=0;
- combo=0;
+score=0;
+combo=0;
+maxCombo=0;
 
- const duration=
-  modeFromRoomDuration();
+endAt=
+Date.now()+mode*1000;
 
- endAt=Date.now()+duration*1000;
+document.getElementById("myScore")
+.innerText=0;
 
- document.getElementById("myScore")
-  .innerText=0;
+document.getElementById("enemyScore")
+.innerText=0;
 
- document.getElementById("enemyScore")
-  .innerText=0;
+document.getElementById("combo")
+.innerText="";
 
- show("battle");
+show("battle");
 
- moveTarget();
+moveTarget();
 
- clearInterval(gameTimer);
+clearInterval(gameTimer);
 
- gameTimer=setInterval(()=>{
+gameTimer=setInterval(()=>{
 
-  const left=Math.max(
-   0,
-   endAt-Date.now()
-  );
+const left=
+Math.max(0,endAt-Date.now());
 
-  const sec=Math.ceil(left/1000);
+document.getElementById("gameTime")
+.innerText=
+Math.ceil(left/1000);
 
-  document.getElementById("gameTime")
-   .innerText=sec;
+if(left<=0){
 
-  if(left<=0){
-
-   finishGame();
-
-  }
-
- },50);
+finishGame();
 
 }
 
-function modeFromRoomDuration(){
-
- return mode;
+},50);
 
 }
 
@@ -790,98 +1219,114 @@ function modeFromRoomDuration(){
 
 function hit(){
 
- if(!running)return;
+if(!running)return;
 
- score++;
- combo++;
+combo++;
 
- document.getElementById("myScore")
-  .innerText=score;
+maxCombo=
+Math.max(maxCombo,combo);
 
- syncScore();
+let points=1;
 
- moveTarget();
+let text="+1";
+
+const roll=Math.random();
+
+if(roll<.10){
+
+points=5;
+text="💥 CRITICAL +5";
+
+}else if(combo%10===0){
+
+points=10;
+text="🔥 COMBO +10";
 
 }
 
+score+=points;
 
-/* SYNC SCORE */
+document.getElementById("myScore")
+.innerText=score;
+
+document.getElementById("combo")
+.innerText=
+"🔥 "+combo+"x COMBO";
+
+pop(text);
+
+moveTarget();
+
+if(!practice)
+syncScore();
+
+}
+
+window.hit=hit;
+
+
+/* FIREBASE SCORE */
 
 function syncScore(force=false){
 
- if(!roomRef || !user)return;
+if(!roomRef||!user)return;
 
- const now=Date.now();
+const now=Date.now();
 
- if(!force && now-lastSync<120)
-  return;
+if(!force && now-lastSync<120)
+return;
 
- lastSync=now;
+lastSync=now;
 
- const scoreField=
-  role==="host"
-  ?"p1Score"
-  :"p2Score";
+const scoreField=
+role==="host"
+?"p1Score"
+:"p2Score";
 
- const comboField=
-  role==="host"
-  ?"p1Combo"
-  :"p2Combo";
-
- update(roomRef,{
-  [scoreField]:score,
-  [comboField]:combo
- });
-
-}
+const comboField=
+role==="host"
+?"p1Combo"
+:"p2Combo";
 
 
-/* TARGET */
+update(roomRef,{
 
-function moveTarget(){
+[scoreField]:score,
 
- const arena=
-  document.getElementById("arena");
+[comboField]:combo
 
- const target=
-  document.getElementById("target");
-
- const size=
-  65+Math.random()*55;
-
- target.style.width=size+"px";
- target.style.height=size+"px";
-
- const x=
-  Math.random()*
-  Math.max(1,arena.clientWidth-size);
-
- const y=
-  Math.random()*
-  Math.max(1,arena.clientHeight-size);
-
- target.style.left=x+"px";
- target.style.top=y+"px";
+}).catch(()=>{});
 
 }
 
 
-/* FINISH */
+/* FINISH ONLINE */
 
 async function finishGame(){
 
- if(!running)return;
+if(!running)return;
 
- running=false;
+running=false;
 
- clearInterval(gameTimer);
- gameTimer=null;
+clearInterval(gameTimer);
 
- syncScore(true);
+gameTimer=null;
 
- await update(roomRef,{
-  status:"finished"
- });
+syncScore(true);
+
+try{
+
+await update(roomRef,{
+
+status:"finished"
+
+});
+
+}catch(e){
+
+alert("Match sync error: "+e.message);
+
+}
 
 }
 
@@ -890,17 +1335,19 @@ async function finishGame(){
 
 function stopGame(){
 
- running=false;
+running=false;
 
- clearInterval(gameTimer);
- gameTimer=null;
+clearInterval(gameTimer);
 
- if(startTimer){
+gameTimer=null;
 
-  clearInterval(startTimer);
-  startTimer=null;
+if(startTimer){
 
- }
+clearInterval(startTimer);
+
+startTimer=null;
+
+}
 
 }
 
@@ -909,34 +1356,300 @@ function stopGame(){
 
 function showResult(data){
 
- const myScore=
-  role==="host"
-  ?(data.p1Score||0)
-  :(data.p2Score||0);
+const myScore=
 
- const enemyScore=
-  role==="host"
-  ?(data.p2Score||0)
-  :(data.p1Score||0);
+role==="host"
+?(data.p1Score||0)
+:(data.p2Score||0);
 
- document.getElementById("finalMyScore")
-  .innerText=myScore;
+const enemyScore=
 
- document.getElementById("finalEnemyScore")
-  .innerText=enemyScore;
+role==="host"
+?(data.p2Score||0)
+:(data.p1Score||0);
 
- let text="DRAW 🤝";
 
- if(myScore>enemyScore)
-  text="🏆 YOU WIN!";
+document.getElementById("finalMyScore")
+.innerText=myScore;
 
- if(myScore<enemyScore)
-  text="💀 YOU LOST";
+document.getElementById("finalEnemyScore")
+.innerText=enemyScore;
 
- document.getElementById("winnerText")
-  .innerText=text;
 
- show("result");
+if(myScore>enemyScore){
+
+document.getElementById("winnerText")
+.innerText="🏆 YOU WIN!";
+
+}else if(myScore<enemyScore){
+
+document.getElementById("winnerText")
+.innerText="💀 YOU LOST";
+
+}else{
+
+document.getElementById("winnerText")
+.innerText="🤝 DRAW!";
+
+}
+
+
+document.getElementById("resultRank")
+.innerText=
+getRank(myScore);
+
+
+updateStats(myScore,enemyScore);
+
+show("result");
+
+}
+
+
+/* STATS */
+
+function updateStats(myScore,enemyScore){
+
+if(myScore>enemyScore)
+wins++;
+
+if(myScore>best)
+best=myScore;
+
+if(maxCombo>bestCombo)
+bestCombo=maxCombo;
+
+
+const reward=
+Math.max(5,Math.floor(myScore/2));
+
+coins+=reward;
+
+addXP(
+Math.max(10,myScore)
+);
+
+
+localStorage.setItem("wins",wins);
+localStorage.setItem("best",best);
+localStorage.setItem("bestCombo",bestCombo);
+localStorage.setItem("coins",coins);
+localStorage.setItem("xp",xp);
+localStorage.setItem("level",level);
+
+updateHome();
+
+}
+
+
+/* XP */
+
+function addXP(amount){
+
+xp+=amount;
+
+while(xp>=level*100){
+
+xp-=level*100;
+
+level++;
+
+}
+
+}
+
+
+/* RANK */
+
+function getRank(s){
+
+if(s>=150)
+return"👑 GRANDMASTER";
+
+if(s>=100)
+return"💎 MASTER";
+
+if(s>=75)
+return"💠 DIAMOND";
+
+if(s>=50)
+return"🥇 GOLD";
+
+if(s>=25)
+return"🥈 SILVER";
+
+return"🥉 BRONZE";
+
+}
+
+
+/* PRACTICE */
+
+function startPractice(){
+
+practice=true;
+
+score=0;
+combo=0;
+maxCombo=0;
+
+running=true;
+
+endAt=
+Date.now()+mode*1000;
+
+document.getElementById("myScore")
+.innerText=0;
+
+document.getElementById("enemyScore")
+.innerText="—";
+
+document.getElementById("combo")
+.innerText="";
+
+show("battle");
+
+moveTarget();
+
+clearInterval(gameTimer);
+
+gameTimer=setInterval(()=>{
+
+const left=
+Math.max(0,endAt-Date.now());
+
+document.getElementById("gameTime")
+.innerText=
+Math.ceil(left/1000);
+
+if(left<=0)
+finishPractice();
+
+},50);
+
+}
+
+window.startPractice=startPractice;
+
+
+/* PRACTICE FINISH */
+
+function finishPractice(){
+
+if(!running)return;
+
+running=false;
+
+clearInterval(gameTimer);
+
+gameTimer=null;
+
+
+if(score>best)
+best=score;
+
+if(maxCombo>bestCombo)
+bestCombo=maxCombo;
+
+
+coins+=
+Math.max(5,Math.floor(score/2));
+
+addXP(
+Math.max(10,score)
+);
+
+
+localStorage.setItem("best",best);
+localStorage.setItem("bestCombo",bestCombo);
+localStorage.setItem("coins",coins);
+localStorage.setItem("xp",xp);
+localStorage.setItem("level",level);
+
+updateHome();
+
+
+document.getElementById("finalMyScore")
+.innerText=score;
+
+document.getElementById("finalEnemyScore")
+.innerText="—";
+
+document.getElementById("winnerText")
+.innerText=
+"⚡ PRACTICE COMPLETE";
+
+document.getElementById("resultRank")
+.innerText=
+getRank(score);
+
+resultShown=true;
+
+show("result");
+
+}
+
+
+/* TARGET */
+
+function moveTarget(){
+
+const arena=
+document.getElementById("arena");
+
+const target=
+document.getElementById("target");
+
+const size=
+70+Math.random()*60;
+
+target.style.width=
+size+"px";
+
+target.style.height=
+size+"px";
+
+target.style.left=
+Math.random()*
+Math.max(
+1,
+arena.clientWidth-size
+)+"px";
+
+target.style.top=
+Math.random()*
+Math.max(
+1,
+arena.clientHeight-size
+)+"px";
+
+}
+
+
+/* POPUP */
+
+function pop(text){
+
+const p=
+document.createElement("div");
+
+p.className="pop";
+
+p.innerText=text;
+
+p.style.left=
+20+Math.random()*60+"%";
+
+p.style.top=
+35+Math.random()*35+"%";
+
+document
+.getElementById("arena")
+.appendChild(p);
+
+setTimeout(()=>{
+p.remove();
+},700);
 
 }
 
@@ -945,82 +1658,46 @@ function showResult(data){
 
 async function rematch(){
 
- resultShown=false;
+if(practice){
 
- const readyField=
-  role==="host"
-  ?"hostReady"
-  :"guestReady";
+startPractice();
 
- const scoreField=
-  role==="host"
-  ?"p1Score"
-  :"p2Score";
-
- const comboField=
-  role==="host"
-  ?"p1Combo"
-  :"p2Combo";
-
- await update(roomRef,{
-  [readyField]:true,
-  [scoreField]:0,
-  [comboField]:0,
-  status:"waiting"
- });
-
- show("lobby");
+return;
 
 }
 
-window.rematch=rematch;
+resultShown=false;
+
+const readyField=
+role==="host"
+?"hostReady"
+:"guestReady";
+
+const scoreField=
+role==="host"
+?"p1Score"
+:"p2Score";
+
+const comboField=
+role==="host"
+?"p1Combo"
+:"p2Combo";
 
 
-/* COPY */
+await update(roomRef,{
 
-async function copyRoom(){
+[readyField]:true,
 
- try{
+[scoreField]:0,
 
-  await navigator.clipboard.writeText(roomCode);
+[comboField]:0,
 
-  alert("Room code copied!");
+status:"waiting"
 
- }catch(e){
+});
 
-  alert("Room code: "+roomCode);
-
- }
-
-}
-
-window.copyRoom=copyRoom;
-
-
-/* HOME */
-
-function leaveRoom(){
-
- if(roomListener){
-
-  roomListener();
-  roomListener=null;
-
- }
-
- roomRef=null;
- roomCode="";
- role="";
- running=false;
- resultShown=false;
-
- show("home");
+show("lobby");
 
 }
 
-window.leaveRoom=leaveRoom;
-
-</script>
-
-</body>
-                       </html>
+window.rematch
