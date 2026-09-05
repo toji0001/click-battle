@@ -2,202 +2,309 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CLICK BATTLE X</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>CLICK BATTLE X — ULTRA</title>
 
 <style>
 *{box-sizing:border-box}
-
+html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;color:#fff}
 body{
- margin:0;
- font-family:Arial,sans-serif;
- color:#fff;
- background:#070712;
+ background:#050509;
  overflow-x:hidden;
 }
-
 button,input{font:inherit}
+
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ z-index:-3;
+ background:
+ radial-gradient(circle at 15% 15%,#7c3aed55,transparent 28%),
+ radial-gradient(circle at 85% 25%,#06b6d455,transparent 25%),
+ radial-gradient(circle at 50% 100%,#ec489955,transparent 30%),
+ #050509;
+ animation:bgMove 8s ease-in-out infinite alternate;
+}
+@keyframes bgMove{
+ from{filter:hue-rotate(0deg);transform:scale(1)}
+ to{filter:hue-rotate(25deg);transform:scale(1.08)}
+}
+
+body:after{
+ content:"";
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ z-index:50;
+ background:linear-gradient(#ffffff03 50%,#00000012 50%);
+ background-size:100% 4px;
+ opacity:.25;
+}
 
 .screen{
  display:none;
  min-height:100vh;
- padding:25px 16px;
+ padding:18px 14px 50px;
  text-align:center;
 }
-
 .active{display:block}
 
-.bg{
- position:fixed;
- inset:0;
- z-index:-1;
- background:
- radial-gradient(circle at 15% 20%,#4c1d95,transparent 30%),
- radial-gradient(circle at 85% 80%,#0e7490,transparent 30%),
- #050509;
+.wrap{
+ width:min(1100px,100%);
+ margin:auto;
+}
+
+.topbar{
+ width:min(1100px,100%);
+ margin:0 auto 18px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+
+.badge{
+ padding:9px 13px;
+ border:1px solid #ffffff20;
+ border-radius:999px;
+ background:#ffffff0b;
+ backdrop-filter:blur(15px);
+ font-size:12px;
+ font-weight:900;
 }
 
 .logo{
- font-size:42px;
+ font-size:clamp(34px,8vw,72px);
  font-weight:1000;
- letter-spacing:2px;
- margin:25px 0 5px;
- text-shadow:0 0 30px #8b5cf6;
+ letter-spacing:3px;
+ line-height:.95;
+ margin:35px 0 12px;
+ background:linear-gradient(90deg,#fff,#a78bfa,#22d3ee,#fff);
+ background-size:250%;
+ -webkit-background-clip:text;
+ color:transparent;
+ animation:shine 3s linear infinite;
+}
+@keyframes shine{
+ to{background-position:250%}
 }
 
 .sub{
  opacity:.65;
- margin-bottom:25px;
+ font-size:13px;
+ letter-spacing:3px;
+ margin-bottom:28px;
 }
 
 .card{
- width:min(500px,100%);
- margin:16px auto;
- padding:24px;
- border:1px solid #ffffff20;
- border-radius:26px;
- background:#ffffff0b;
- backdrop-filter:blur(18px);
- box-shadow:0 20px 70px #0008;
+ width:min(760px,100%);
+ margin:15px auto;
+ padding:22px;
+ border:1px solid #ffffff18;
+ border-radius:28px;
+ background:#ffffff0a;
+ backdrop-filter:blur(22px);
+ box-shadow:0 20px 80px #0009;
 }
+
+.card h2,.card h3{margin-top:4px}
 
 button{
  width:100%;
  padding:16px;
  margin:7px 0;
  border:0;
- border-radius:15px;
+ border-radius:17px;
  color:white;
- font-weight:900;
+ font-weight:1000;
  cursor:pointer;
  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
- box-shadow:0 8px 25px #4f46e544;
+ box-shadow:0 8px 30px #4f46e555;
+ transition:.15s;
 }
-
+button:hover{
+ transform:translateY(-2px);
+ filter:brightness(1.12);
+}
 button:active{
- transform:scale(.95);
+ transform:scale(.96);
 }
 
 .secondary{
- background:#ffffff12;
+ background:#ffffff0c;
+ border:1px solid #ffffff15;
  box-shadow:none;
 }
 
-.grid,.scores{
+.bigBtn{
+ font-size:20px;
+ padding:21px;
+ background:linear-gradient(135deg,#ec4899,#7c3aed,#2563eb);
+ background-size:200%;
+ animation:buttonGlow 3s infinite alternate;
+}
+@keyframes buttonGlow{
+ to{background-position:100%}
+}
+
+.grid{
  display:grid;
- grid-template-columns:1fr 1fr;
+ grid-template-columns:repeat(4,1fr);
  gap:10px;
 }
-
-.stat,.scorebox{
- padding:14px;
- border-radius:18px;
- background:#ffffff0b;
+.stat{
+ padding:16px 8px;
+ border-radius:20px;
+ background:#ffffff08;
  border:1px solid #ffffff12;
 }
-
 .stat b{
  display:block;
- font-size:24px;
- margin-top:5px;
-}
-
-.xpbar{
- height:12px;
- background:#ffffff15;
- border-radius:20px;
- overflow:hidden;
- margin:12px 0;
-}
-
-#xpFill{
- height:100%;
- width:0%;
- background:linear-gradient(90deg,#22d3ee,#8b5cf6);
- transition:.4s;
+ font-size:25px;
+ margin:5px 0;
 }
 
 .mode{
  display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
+ grid-template-columns:repeat(3,1fr);
+ gap:9px;
+}
+.mode button.selected{
+ outline:2px solid #22d3ee;
+ box-shadow:0 0 30px #22d3ee66;
+}
+
+.xpbar{
+ height:11px;
+ background:#ffffff12;
+ border-radius:99px;
+ overflow:hidden;
+ margin:15px 0;
+}
+#xpFill{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#22d3ee,#8b5cf6,#ec4899);
+ transition:.4s;
 }
 
 .rank{
- font-size:30px;
+ font-size:28px;
  font-weight:1000;
- margin:15px;
+ margin:12px;
 }
 
 input{
  width:100%;
- padding:15px;
+ padding:16px;
  border:1px solid #ffffff20;
- border-radius:14px;
+ border-radius:16px;
  background:#05050d;
  color:#fff;
  outline:none;
  text-align:center;
  text-transform:uppercase;
- font-size:20px;
+ font-size:21px;
 }
 
 .room{
- font-size:38px;
+ font-size:40px;
  font-weight:1000;
- letter-spacing:7px;
- margin:15px;
+ letter-spacing:8px;
+ color:#22d3ee;
+ text-shadow:0 0 25px #22d3ee;
+ margin:16px;
 }
 
 .status{
  opacity:.7;
- margin:15px;
+ min-height:20px;
+}
+
+.scores{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+.scorebox{
+ padding:15px;
+ border-radius:20px;
+ background:#ffffff08;
+ border:1px solid #ffffff12;
 }
 
 #battle{
- padding-top:15px;
+ padding:12px 10px 30px;
+}
+
+.gameHeader{
+ width:min(900px,100%);
+ margin:auto;
+ display:grid;
+ grid-template-columns:1fr 1fr 1fr;
+ gap:8px;
+ align-items:center;
 }
 
 .big{
- font-size:40px;
+ font-size:38px;
  font-weight:1000;
 }
 
+.timer{
+ font-size:45px;
+ color:#22d3ee;
+ text-shadow:0 0 25px #22d3ee;
+}
+
 .combo{
- height:38px;
+ min-height:40px;
  font-size:25px;
  font-weight:1000;
  color:#facc15;
+ text-shadow:0 0 15px #facc15;
 }
 
 .arena{
  position:relative;
- width:min(700px,100%);
+ width:min(900px,100%);
  height:58vh;
- min-height:360px;
- margin:10px auto;
- border-radius:28px;
+ min-height:370px;
+ margin:12px auto;
+ border-radius:30px;
  border:1px solid #ffffff18;
- background:#ffffff08;
+ background:
+ radial-gradient(circle at center,#ffffff09,transparent 45%),
+ #ffffff05;
  overflow:hidden;
- box-shadow:inset 0 0 80px #0008;
+ box-shadow:inset 0 0 100px #000b,0 0 60px #7c3aed22;
+}
+
+.arena:before{
+ content:"";
+ position:absolute;
+ inset:15px;
+ border:1px dashed #ffffff10;
+ border-radius:25px;
+ pointer-events:none;
 }
 
 #target{
  position:absolute;
- width:100px;
- height:100px;
+ width:90px;
+ height:90px;
  padding:0;
  margin:0;
  border-radius:50%;
  border:5px solid white;
- background:linear-gradient(135deg,#ff2d55,#ff7a18);
- box-shadow:0 0 25px #ff2d55,0 0 70px #ff2d5588;
- font-size:17px;
+ background:radial-gradient(circle at 35% 30%,#fff,#ff4d6d 18%,#ff1744 55%,#7f1d1d);
+ box-shadow:0 0 25px #ff1744,0 0 80px #ff174477;
+ font-size:15px;
+ z-index:3;
 }
-
 #target:active{
- transform:scale(.78);
+ transform:scale(.72);
 }
 
 .pop{
@@ -208,447 +315,373 @@ input{
  animation:float .7s forwards;
  z-index:5;
 }
-
 @keyframes float{
- 0%{
-  transform:translateY(0) scale(.7);
-  opacity:1
- }
- 100%{
-  transform:translateY(-80px) scale(1.2);
-  opacity:0
- }
+ 0%{transform:translateY(0) scale(.7);opacity:1}
+ 100%{transform:translateY(-85px) scale(1.2);opacity:0}
 }
 
 .resultScore{
- font-size:60px;
+ font-size:58px;
  font-weight:1000;
 }
 
 .small{
  opacity:.6;
- font-size:13px;
+ font-size:12px;
+}
+
+.list{
+ display:grid;
+ gap:9px;
+}
+.leader{
+ display:flex;
+ justify-content:space-between;
+ padding:14px;
+ border-radius:15px;
+ background:#ffffff08;
+ border:1px solid #ffffff10;
+}
+
+.themeGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+.theme{
+ min-height:100px;
+}
+
+.fire{background:linear-gradient(135deg,#ef4444,#f97316)}
+.ice{background:linear-gradient(135deg,#06b6d4,#2563eb)}
+.space{background:linear-gradient(135deg,#312e81,#7c3aed)}
+
+.hidden{display:none!important}
+
+@media(max-width:650px){
+ .grid{grid-template-columns:1fr 1fr}
+ .mode{grid-template-columns:1fr 1fr 1fr}
+ .card{padding:17px;border-radius:23px}
+ .arena{height:58vh;min-height:330px}
+ .gameHeader{grid-template-columns:1fr 1fr 1fr}
+ .big{font-size:30px}
+ .timer{font-size:36px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
-
 <!-- HOME -->
-
 <section id="home" class="screen active">
+<div class="wrap">
 
-<div class="logo">⚡ CLICK BATTLE X</div>
-<div class="sub">THE ULTIMATE CLICKING ARENA</div>
+<div class="topbar">
+<div class="badge">⚡ CBX ULTRA</div>
+<div class="badge">🟢 ONLINE READY</div>
+</div>
+
+<div class="logo">CLICK<br>BATTLE X</div>
+<div class="sub">THE NEXT GENERATION CLICKING ARENA</div>
 
 <div class="card">
-
-<h2>PLAYER</h2>
-
-<div class="rank" id="homeRank">
-🥉 BRONZE
-</div>
+<div class="rank" id="homeRank">🥉 BRONZE</div>
 
 <div class="xpbar">
 <div id="xpFill"></div>
 </div>
 
 <div class="small">
-LEVEL <b id="level">1</b>
-•
-XP <b id="xp">0</b>
+LEVEL <b id="level">1</b> · XP <b id="xp">0</b>
 </div>
 
 <div class="grid" style="margin-top:18px">
-
-<div class="stat">
-🪙
-<b id="coins">0</b>
-Coins
-</div>
-
-<div class="stat">
-🏆
-<b id="wins">0</b>
-Wins
-</div>
-
-<div class="stat">
-🔥
-<b id="best">0</b>
-Best
-</div>
-
-<div class="stat">
-⚡
-<b id="bestCombo">0</b>
-Combo
-</div>
-
+<div class="stat">🪙<b id="coins">0</b>COINS</div>
+<div class="stat">🏆<b id="wins">0</b>WINS</div>
+<div class="stat">🔥<b id="best">0</b>BEST</div>
+<div class="stat">⚡<b id="bestCombo">0</b>COMBO</div>
 </div>
 </div>
-
 
 <div class="card">
+<h2>⚔️ ENTER THE ARENA</h2>
 
-<h3>🌐 ONLINE 1v1</h3>
-
-<div class="mode">
-
-<button onclick="chooseMode(30)">
-⚡ 30 SEC
+<button class="bigBtn" onclick="startPractice()">
+🎯 PLAY SOLO
 </button>
-
-<button onclick="chooseMode(60)">
-🔥 60 SEC
-</button>
-
-</div>
-
-<p id="modeText" class="small">
-Selected: 30 seconds
-</p>
 
 <button onclick="createRoom()">
-🚀 CREATE ROOM
+🌐 CREATE 1v1 ROOM
 </button>
 
 <button class="secondary" onclick="showJoin()">
-🔑 JOIN ROOM
+🔑 JOIN 1v1
 </button>
-
 </div>
-
 
 <div class="card">
+<h3>⏱️ BATTLE TIME</h3>
 
-<h3>🎮 PRACTICE</h3>
-
-<button onclick="startPractice()">
-⚡ START PRACTICE
-</button>
-
-<button class="secondary" onclick="show('themes')">
-🎨 CUSTOMIZE
-</button>
-
-<button class="secondary" onclick="showProfile()">
-👤 PROFILE
-</button>
-
-<button class="secondary" onclick="showMissions()">
-🎯 MISSIONS
-</button>
-
+<div class="mode">
+<button id="m15" onclick="chooseMode(15)">15 SEC</button>
+<button id="m30" class="selected" onclick="chooseMode(30)">30 SEC</button>
+<button id="m60" onclick="chooseMode(60)">60 SEC</button>
 </div>
 
+<p id="modeText" class="small">Selected: 30 seconds</p>
+</div>
+
+<div class="card">
+<h3>🚀 PLAYER ZONE</h3>
+
+<button class="secondary" onclick="showProfile()">👤 PROFILE</button>
+<button class="secondary" onclick="showLeaderboard()">🏆 LEADERBOARD</button>
+<button class="secondary" onclick="showMissions()">🎯 MISSIONS</button>
+<button class="secondary" onclick="show('themes')">🎨 CUSTOMIZE</button>
+</div>
+
+</div>
 </section>
 
 
 <!-- JOIN -->
-
 <section id="join" class="screen">
-
-<h1>🔑 JOIN ROOM</h1>
+<div class="wrap">
+<div class="logo" style="font-size:45px">JOIN DUEL</div>
 
 <div class="card">
+<p class="small">ENTER YOUR FRIEND'S ROOM CODE</p>
+<input id="roomInput" maxlength="6" placeholder="ABC123">
 
-<input
-id="roomInput"
-maxlength="6"
-placeholder="ENTER CODE">
-
-<button onclick="joinRoom()">
-JOIN BATTLE
-</button>
-
-<button class="secondary" onclick="show('home')">
-← BACK
-</button>
-
+<button onclick="joinRoom()">⚔️ JOIN BATTLE</button>
+<button class="secondary" onclick="show('home')">← BACK</button>
 </div>
-
+</div>
 </section>
 
 
 <!-- LOBBY -->
-
 <section id="lobby" class="screen">
+<div class="wrap">
 
-<h1>⚔️ BATTLE LOBBY</h1>
+<div class="logo" style="font-size:45px">BATTLE LOBBY</div>
 
 <div class="card">
+<p class="small">PRIVATE ROOM</p>
+<div class="room" id="roomCode">------</div>
 
-<p>ROOM CODE</p>
+<button class="secondary" onclick="copyRoom()">📋 COPY CODE</button>
 
-<div class="room" id="roomCode">
-------
-</div>
-
-<button class="secondary" onclick="copyRoom()">
-📋 COPY ROOM CODE
-</button>
-
-<p id="lobbyStatus" class="status">
-Waiting for opponent...
-</p>
+<p id="lobbyStatus" class="status">Waiting for opponent...</p>
 
 <div class="scores">
-
 <div class="scorebox">
-👤 YOU
-<h3 id="youReady">
-NOT READY
-</h3>
+YOU
+<h3 id="youReady">NOT READY</h3>
 </div>
-
 <div class="scorebox">
-👤 OPPONENT
-<h3 id="oppReady">
-WAITING
-</h3>
+OPPONENT
+<h3 id="oppReady">WAITING</h3>
+</div>
+</div>
+
+<button id="readyBtn" onclick="readyUp()">✅ READY UP</button>
+<button class="secondary" onclick="leaveRoom()">🏠 LEAVE</button>
 </div>
 
 </div>
-
-<button id="readyBtn" onclick="readyUp()">
-✅ READY
-</button>
-
-<button class="secondary" onclick="leaveRoom()">
-🏠 LEAVE
-</button>
-
-</div>
-
 </section>
 
 
 <!-- COUNTDOWN -->
-
 <section id="countdown" class="screen">
-
-<div class="logo">
-⚔️ GET READY
-</div>
-
-<div class="big" id="countNumber">
-3
-</div>
-
-<p>Battle starting...</p>
-
+<div class="logo">GET READY</div>
+<div class="big" id="countNumber">3</div>
+<p>DUEL STARTING...</p>
 </section>
 
 
 <!-- BATTLE -->
-
 <section id="battle" class="screen">
 
-<div class="scores">
+<div class="gameHeader">
 
 <div class="scorebox">
 YOU
-<div class="big" id="myScore">
-0
+<div class="big" id="myScore">0</div>
 </div>
+
+<div>
+<div class="timer" id="gameTime">30</div>
+<div class="small">SECONDS</div>
 </div>
 
 <div class="scorebox">
 OPPONENT
-<div class="big" id="enemyScore">
-0
-</div>
+<div class="big" id="enemyScore">—</div>
 </div>
 
-</div>
-
-<div class="big" id="gameTime">
-30
 </div>
 
 <div class="combo" id="combo"></div>
 
 <div class="arena" id="arena">
-
-<button id="target" onclick="hit()">
-CLICK!
-</button>
-
+<button id="target" onclick="hit()">CLICK!</button>
 </div>
 
 </section>
 
 
 <!-- RESULT -->
-
 <section id="result" class="screen">
+<div class="wrap">
 
-<div class="logo">
-🏆
-</div>
+<div class="logo" style="font-size:55px">RESULT</div>
 
 <div class="card">
-
-<h1 id="winnerText">
-RESULT
-</h1>
+<h1 id="winnerText">RESULT</h1>
 
 <div class="scores">
-
 <div class="scorebox">
 YOU
-<div class="resultScore" id="finalMyScore">
-0
+<div class="resultScore" id="finalMyScore">0</div>
 </div>
-</div>
-
 <div class="scorebox">
 OPPONENT
-<div class="resultScore" id="finalEnemyScore">
-0
+<div class="resultScore" id="finalEnemyScore">0</div>
 </div>
-</div>
-
 </div>
 
 <div class="rank" id="resultRank"></div>
 
-<button onclick="rematch()">
-🔄 PLAY AGAIN
-</button>
-
-<button class="secondary" onclick="leaveRoom()">
-🏠 HOME
-</button>
-
+<button class="bigBtn" onclick="rematch()">🔄 PLAY AGAIN</button>
+<button class="secondary" onclick="leaveRoom()">🏠 HOME</button>
 </div>
 
-</section>
-
-
-<!-- THEMES -->
-
-<section id="themes" class="screen">
-
-<h1>🎨 CUSTOMIZE</h1>
-
-<div class="card">
-
-<button onclick="setTheme('neon')">
-💜 NEON
-</button>
-
-<button onclick="setTheme('fire')">
-🔥 FIRE
-</button>
-
-<button onclick="setTheme('ice')">
-❄️ ICE
-</button>
-
-<button onclick="setTheme('space')">
-🌌 SPACE
-</button>
-
-<button class="secondary" onclick="show('home')">
-← BACK
-</button>
-
 </div>
-
 </section>
 
 
 <!-- PROFILE -->
-
 <section id="profile" class="screen">
+<div class="wrap">
 
-<h1>👤 PROFILE</h1>
+<div class="logo" style="font-size:45px">PROFILE</div>
 
 <div class="card">
-
-<h2>CLICK MASTER</h2>
-
+<h2>⚡ CLICK MASTER</h2>
 <div class="rank" id="profileRank"></div>
 
-<p>⭐ Level: <b id="profileLevel"></b></p>
-<p>🏆 Wins: <b id="profileWins"></b></p>
-<p>🔥 Best Score: <b id="profileBest"></b></p>
-<p>⚡ Best Combo: <b id="profileCombo"></b></p>
-<p>🪙 Coins: <b id="profileCoins"></b></p>
+<p>⭐ LEVEL: <b id="profileLevel"></b></p>
+<p>🏆 WINS: <b id="profileWins"></b></p>
+<p>🔥 BEST SCORE: <b id="profileBest"></b></p>
+<p>⚡ BEST COMBO: <b id="profileCombo"></b></p>
+<p>🪙 COINS: <b id="profileCoins"></b></p>
 
-<button class="secondary" onclick="show('home')">
-← BACK
-</button>
-
+<button class="secondary" onclick="show('home')">← BACK</button>
 </div>
 
+</div>
+</section>
+
+
+<!-- LEADERBOARD -->
+<section id="leaderboard" class="screen">
+<div class="wrap">
+
+<div class="logo" style="font-size:45px">LEADERBOARD</div>
+
+<div class="card">
+<div class="list">
+<div class="leader"><b>🥇 YOU</b><b id="lbYou">0</b></div>
+<div class="leader"><b>🥈 SPEED DEMON</b><b>—</b></div>
+<div class="leader"><b>🥉 CLICK LEGEND</b><b>—</b></div>
+<div class="leader"><b>⚡ COMBO KING</b><b>—</b></div>
+</div>
+
+<p class="small" style="margin-top:18px">
+Global leaderboard coming with server-side rankings.
+</p>
+
+<button class="secondary" onclick="show('home')">← BACK</button>
+</div>
+
+</div>
 </section>
 
 
 <!-- MISSIONS -->
-
 <section id="missions" class="screen">
+<div class="wrap">
 
-<h1>🎯 MISSIONS</h1>
+<div class="logo" style="font-size:45px">MISSIONS</div>
 
 <div class="card">
+<div class="leader"><b>🔥 Reach 25 Combo</b><span>+50 XP</span></div>
+<div class="leader"><b>🏆 Score 50</b><span>+100 XP</span></div>
+<div class="leader"><b>⚡ Win 3 Battles</b><span>+150 XP</span></div>
+<div class="leader"><b>🎯 Hit 100 Targets</b><span>+200 XP</span></div>
 
-<p>🔥 Reach 25 Combo</p>
-<p>🏆 Score 50 Points</p>
-<p>⚡ Play 3 Battles</p>
-<p>🎯 Hit 100 Targets</p>
-
-<p class="small">
-More missions coming soon...
-</p>
-
-<button class="secondary" onclick="show('home')">
-← BACK
-</button>
-
+<button class="secondary" onclick="show('home')">← BACK</button>
 </div>
 
+</div>
+</section>
+
+
+<!-- THEMES -->
+<section id="themes" class="screen">
+<div class="wrap">
+
+<div class="logo" style="font-size:45px">CUSTOMIZE</div>
+
+<div class="card themeGrid">
+<button class="theme" onclick="setTheme('neon')">💜<br>NEON</button>
+<button class="theme fire" onclick="setTheme('fire')">🔥<br>FIRE</button>
+<button class="theme ice" onclick="setTheme('ice')">❄️<br>ICE</button>
+<button class="theme space" onclick="setTheme('space')">🌌<br>SPACE</button>
+</div>
+
+<div class="card">
+<button class="secondary" onclick="show('home')">← BACK</button>
+</div>
+
+</div>
 </section>
 
 
 <script type="module">
 
-import {
- initializeApp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
-import {
- getAuth,
- signInAnonymously,
- onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import{
+getAuth,
+signInAnonymously,
+onAuthStateChanged
+}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-import {
- getDatabase,
- ref,
- get,
- set,
- update,
- onValue,
- serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import{
+getDatabase,
+ref,
+get,
+set,
+update,
+onValue,
+serverTimestamp
+}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 
 /* FIREBASE */
 
-const firebaseConfig = {
- apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
- authDomain:"click-battle-a1aee.firebaseapp.com",
- databaseURL:"https://click-battle-a1aee-default-rtdb.firebaseio.com",
- projectId:"click-battle-a1aee",
- storageBucket:"click-battle-a1aee.firebasestorage.app",
- messagingSenderId:"1023566714890",
- appId:"1:1023566714890:web:0ec28afde9c2782855e7f3",
- measurementId:"G-BT7RMQLRLG"
+const firebaseConfig={
+apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
+authDomain:"click-battle-a1aee.firebaseapp.com",
+databaseURL:"https://click-battle-a1aee-default-rtdb.firebaseio.com",
+projectId:"click-battle-a1aee",
+storageBucket:"click-battle-a1aee.firebasestorage.app",
+messagingSenderId:"1023566714890",
+appId:"1:1023566714890:web:0ec28afde9c2782855e7f3",
+measurementId:"G-BT7RMQLRLG"
 };
 
 const app=initializeApp(firebaseConfig);
@@ -656,10 +689,9 @@ const auth=getAuth(app);
 const db=getDatabase(app);
 
 
-/* VARIABLES */
+/* STATE */
 
 let user=null;
-
 let roomCode="";
 let role="";
 let roomRef=null;
@@ -679,7 +711,6 @@ let startTimer=null;
 
 let endAt=0;
 let lastSync=0;
-
 let resultShown=false;
 
 
@@ -696,28 +727,23 @@ let level=Number(localStorage.getItem("level")||1);
 /* AUTH */
 
 signInAnonymously(auth).catch(e=>{
- alert("Firebase login error: "+e.message);
+console.log("Firebase auth:",e.message);
 });
 
 onAuthStateChanged(auth,u=>{
- user=u;
+user=u;
 });
 
 
 /* SCREEN */
 
 function show(id){
-
-document
-.querySelectorAll(".screen")
+document.querySelectorAll(".screen")
 .forEach(x=>x.classList.remove("active"));
 
-const screen=document.getElementById(id);
+const s=document.getElementById(id);
 
-if(screen){
- screen.classList.add("active");
-}
-
+if(s)s.classList.add("active");
 }
 
 window.show=show;
@@ -729,9 +755,19 @@ function chooseMode(x){
 
 mode=x;
 
-document.getElementById("modeText")
-.innerText="Selected: "+x+" seconds";
+document.getElementById("modeText").innerText=
+"Selected: "+x+" seconds";
 
+["m15","m30","m60"].forEach(id=>{
+const b=document.getElementById(id);
+if(b)b.classList.remove("selected");
+});
+
+const selected=document.getElementById(
+x===15?"m15":x===30?"m30":"m60"
+);
+
+if(selected)selected.classList.add("selected");
 }
 
 window.chooseMode=chooseMode;
@@ -740,9 +776,7 @@ window.chooseMode=chooseMode;
 /* JOIN PAGE */
 
 function showJoin(){
-
 show("join");
-
 }
 
 window.showJoin=showJoin;
@@ -753,32 +787,22 @@ window.showJoin=showJoin;
 function generateCode(){
 
 const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
 let code="";
 
-for(let i=0;i<6;i++){
-
-code+=chars[
-Math.floor(Math.random()*chars.length)
-];
-
-}
+for(let i=0;i<6;i++)
+code+=chars[Math.floor(Math.random()*chars.length)];
 
 return code;
-
 }
 
 
-/* CREATE ROOM */
+/* CREATE */
 
 async function createRoom(){
 
 if(!user){
-
-alert(" LOADING... ");
-
+alert("Please wait 1-2 seconds for Firebase login.");
 return;
-
 }
 
 try{
@@ -790,11 +814,9 @@ while(exists){
 
 code=generateCode();
 
-const snap=
-await get(ref(db,"rooms/"+code));
+const snap=await get(ref(db,"rooms/"+code));
 
 exists=snap.exists();
-
 }
 
 roomCode=code;
@@ -802,10 +824,9 @@ role="host";
 practice=false;
 resultShown=false;
 
-roomRef=ref(db,"rooms/"+roomCode);
+roomRef=ref(db,"rooms/"+code);
 
 await set(roomRef,{
-
 hostUid:user.uid,
 guestUid:"",
 duration:mode,
@@ -817,14 +838,11 @@ p1Combo:0,
 p2Combo:0,
 status:"waiting",
 createdAt:serverTimestamp()
-
 });
 
-document.getElementById("roomCode")
-.innerText=roomCode;
+document.getElementById("roomCode").innerText=code;
 
 show("lobby");
-
 listenRoom();
 
 }catch(e){
@@ -838,65 +856,46 @@ alert("Create error: "+e.message);
 window.createRoom=createRoom;
 
 
-/* JOIN ROOM */
+/* JOIN */
 
 async function joinRoom(){
 
 if(!user){
-
-alert(" LOADIND... ");
-
+alert("Please wait 1-2 seconds.");
 return;
-
 }
 
-const input=document.getElementById("roomInput");
-
-const code=input.value.trim().toUpperCase();
+const code=document.getElementById("roomInput")
+.value.trim().toUpperCase();
 
 if(code.length!==6){
-
-alert("6-character room code");
-
+alert("Enter a 6-character code.");
 return;
-
 }
 
 try{
 
 const r=ref(db,"rooms/"+code);
-
 const snap=await get(r);
 
 if(!snap.exists()){
-
-alert(" invalid.");
-
+alert("Room not found.");
 return;
-
 }
 
 const data=snap.val();
 
 if(data.guestUid){
-
-alert("Room already full.");
-
+alert("Room is full.");
 return;
-
 }
 
 if(data.status!=="waiting"){
-
-alert(" battle already started .");
-
+alert("Battle already started.");
 return;
-
 }
 
-await update(r,{
- guestUid:user.uid
-});
+await update(r,{guestUid:user.uid});
 
 roomCode=code;
 role="guest";
@@ -904,14 +903,11 @@ practice=false;
 resultShown=false;
 
 roomRef=r;
-
 mode=Number(data.duration)||30;
 
-document.getElementById("roomCode")
-.innerText=roomCode;
+document.getElementById("roomCode").innerText=code;
 
 show("lobby");
-
 listenRoom();
 
 }catch(e){
@@ -925,15 +921,15 @@ alert("Join error: "+e.message);
 window.joinRoom=joinRoom;
 
 
-/* ROOM LISTENER */
+/* LISTENER */
 
 function listenRoom(){
 
 if(!roomRef)return;
 
 if(roomListener){
- roomListener();
- roomListener=null;
+roomListener();
+roomListener=null;
 }
 
 roomListener=onValue(roomRef,snap=>{
@@ -960,28 +956,11 @@ role==="host"
 ?!!data.guestReady
 :!!data.hostReady;
 
+document.getElementById("youReady").innerText=
+myReady?"READY":"NOT READY";
 
-/* LOBBY UI */
-
-if(document.getElementById("youReady")){
-
-document.getElementById("youReady")
-.innerText=myReady?"READY":"NOT READY";
-
-}
-
-if(document.getElementById("oppReady")){
-
-document.getElementById("oppReady")
-.innerText=
-opponent
-?(enemyReady?"READY":"NOT READY")
-:"WAITING";
-
-}
-
-
-if(document.getElementById("lobbyStatus")){
+document.getElementById("oppReady").innerText=
+opponent?(enemyReady?"READY":"NOT READY"):"WAITING";
 
 if(!opponent){
 
@@ -1005,10 +984,8 @@ document.getElementById("lobbyStatus")
 
 }
 
-}
 
-
-/* START */
+/* HOST START */
 
 if(
 role==="host" &&
@@ -1019,10 +996,8 @@ data.status==="waiting"
 ){
 
 update(roomRef,{
-
 status:"countdown",
 startAt:Date.now()+4000
-
 }).catch(()=>{});
 
 }
@@ -1040,10 +1015,10 @@ startCountdown(data.startAt);
 }
 
 
-/* RUNNING */
+/* OPPONENT SCORE */
 
 if(
-data.status==="countdown" ||
+data.status==="countdown"||
 data.status==="running"
 ){
 
@@ -1052,11 +1027,8 @@ role==="host"
 ?(data.p2Score||0)
 :(data.p1Score||0);
 
-const enemyElement=
-document.getElementById("enemyScore");
-
-if(enemyElement)
-enemyElement.innerText=enemy;
+document.getElementById("enemyScore")
+.innerText=enemy;
 
 }
 
@@ -1069,14 +1041,11 @@ data.status==="finished" &&
 ){
 
 stopGame();
-
 resultShown=true;
 
 setTimeout(()=>{
-
 showResult(data);
-
-},250);
+},200);
 
 }
 
@@ -1089,31 +1058,23 @@ showResult(data);
 
 async function readyUp(){
 
-if(!roomRef || !user)return;
+if(!roomRef||!user)return;
 
-const readyField=
-role==="host"
-?"hostReady"
-:"guestReady";
+const field=
+role==="host"?"hostReady":"guestReady";
 
 const scoreField=
-role==="host"
-?"p1Score"
-:"p2Score";
+role==="host"?"p1Score":"p2Score";
 
 const comboField=
-role==="host"
-?"p1Combo"
-:"p2Combo";
+role==="host"?"p1Combo":"p2Combo";
 
 try{
 
 await update(roomRef,{
-
-[readyField]:true,
+[field]:true,
 [scoreField]:0,
 [comboField]:0
-
 });
 
 }catch(e){
@@ -1145,9 +1106,7 @@ clearInterval(startTimer);
 startTimer=null;
 
 startBattle();
-
 return;
-
 }
 
 document.getElementById("countNumber")
@@ -1158,7 +1117,7 @@ document.getElementById("countNumber")
 }
 
 
-/* START BATTLE */
+/* BATTLE */
 
 function startBattle(){
 
@@ -1179,7 +1138,6 @@ document.getElementById("combo").innerText="";
 document.getElementById("gameTime").innerText=mode;
 
 show("battle");
-
 moveTarget();
 
 clearInterval(gameTimer);
@@ -1191,25 +1149,20 @@ const left=Math.max(0,endAt-Date.now());
 document.getElementById("gameTime")
 .innerText=Math.ceil(left/1000);
 
-if(left<=0){
-
-finishGame();
-
-}
+if(left<=0)finishGame();
 
 },50);
 
 }
 
 
-/* CLICK */
+/* HIT */
 
 function hit(){
 
 if(!running)return;
 
 combo++;
-
 maxCombo=Math.max(maxCombo,combo);
 
 let points=1;
@@ -1217,7 +1170,7 @@ let text="+1";
 
 const roll=Math.random();
 
-if(roll<0.10){
+if(roll<.08){
 
 points=5;
 text="💥 CRITICAL +5";
@@ -1231,592 +1184,5 @@ text="🔥 COMBO +10";
 
 score+=points;
 
-document.getElementById("myScore")
-.innerText=score;
-
-document.getElementById("combo")
-.innerText="🔥 "+combo+"x COMBO";
-
-pop(text);
-
-moveTarget();
-
-if(!practice){
-
-syncScore();
-
-}
-
-}
-
-window.hit=hit;
-
-
-/* SYNC SCORE */
-
-function syncScore(force=false){
-
-if(!roomRef || !user)return;
-
-const now=Date.now();
-
-if(!force && now-lastSync<120)return;
-
-lastSync=now;
-
-const scoreField=
-role==="host"
-?"p1Score"
-:"p2Score";
-
-const comboField=
-role==="host"
-?"p1Combo"
-:"p2Combo";
-
-update(roomRef,{
-
-[scoreField]:score,
-[comboField]:combo
-
-}).catch(()=>{});
-
-}
-
-
-/* FINISH ONLINE */
-
-async function finishGame(){
-
-if(!running)return;
-
-running=false;
-
-clearInterval(gameTimer);
-gameTimer=null;
-
-syncScore(true);
-
-try{
-
-await update(roomRef,{
-
-status:"finished"
-
-});
-
-}catch(e){
-
-console.log("Match sync error",e);
-
-}
-
-}
-
-
-/* STOP */
-
-function stopGame(){
-
-running=false;
-
-clearInterval(gameTimer);
-gameTimer=null;
-
-if(startTimer){
-
-clearInterval(startTimer);
-startTimer=null;
-
-}
-
-}
-
-
-/* RESULT */
-
-function showResult(data){
-
-const myScore=
-role==="host"
-?(data.p1Score||0)
-:(data.p2Score||0);
-
-const enemyScore=
-role==="host"
-?(data.p2Score||0)
-:(data.p1Score||0);
-
-document.getElementById("finalMyScore")
-.innerText=myScore;
-
-document.getElementById("finalEnemyScore")
-.innerText=enemyScore;
-
-
-if(myScore>enemyScore){
-
-document.getElementById("winnerText")
-.innerText="🏆 YOU WIN!";
-
-}else if(myScore<enemyScore){
-
-document.getElementById("winnerText")
-.innerText="💀 YOU LOST";
-
-}else{
-
-document.getElementById("winnerText")
-.innerText="🤝 DRAW!";
-
-}
-
-document.getElementById("resultRank")
-.innerText=getRank(myScore);
-
-updateStats(myScore,enemyScore);
-
-show("result");
-
-}
-
-
-/* STATS */
-
-function updateStats(myScore,enemyScore){
-
-if(myScore>enemyScore)
-wins++;
-
-if(myScore>best)
-best=myScore;
-
-if(maxCombo>bestCombo)
-bestCombo=maxCombo;
-
-coins+=Math.max(5,Math.floor(myScore/2));
-
-addXP(Math.max(10,myScore));
-
-saveStats();
-
-updateHome();
-
-}
-
-
-/* SAVE */
-
-function saveStats(){
-
-localStorage.setItem("wins",wins);
-localStorage.setItem("best",best);
-localStorage.setItem("bestCombo",bestCombo);
-localStorage.setItem("coins",coins);
-localStorage.setItem("xp",xp);
-localStorage.setItem("level",level);
-
-}
-
-
-/* XP */
-
-function addXP(amount){
-
-xp+=amount;
-
-while(xp>=level*100){
-
-xp-=level*100;
-level++;
-
-}
-
-}
-
-
-/* RANK */
-
-function getRank(s){
-
-if(s>=10000)
-return"👑 GRANDMASTER";
-
-if(s>=1000)
-return"💎 MASTER";
-
-if(s>=750)
-return"💠 DIAMOND";
-
-if(s>=500)
-return"🥇 GOLD";
-
-if(s>=250)
-return"🥈 SILVER";
-
-return"🥉 BRONZE";
-
-}
-
-
-/* PRACTICE */
-
-function startPractice(){
-
-stopGame();
-
-practice=true;
-
-score=0;
-combo=0;
-maxCombo=0;
-resultShown=false;
-
-running=true;
-
-endAt=Date.now()+mode*1000;
-
-document.getElementById("myScore")
-.innerText=0;
-
-document.getElementById("enemyScore")
-.innerText="—";
-
-document.getElementById("combo")
-.innerText="";
-
-document.getElementById("gameTime")
-.innerText=mode;
-
-show("battle");
-
-moveTarget();
-
-clearInterval(gameTimer);
-
-gameTimer=setInterval(()=>{
-
-const left=Math.max(0,endAt-Date.now());
-
-document.getElementById("gameTime")
-.innerText=Math.ceil(left/1000);
-
-if(left<=0){
-
-finishPractice();
-
-}
-
-},50);
-
-}
-
-window.startPractice=startPractice;
-
-
-/* PRACTICE FINISH */
-
-function finishPractice(){
-
-if(!running)return;
-
-running=false;
-
-clearInterval(gameTimer);
-gameTimer=null;
-
-if(score>best)
-best=score;
-
-if(maxCombo>bestCombo)
-bestCombo=maxCombo;
-
-coins+=Math.max(5,Math.floor(score/2));
-
-addXP(Math.max(10,score));
-
-saveStats();
-updateHome();
-
-document.getElementById("finalMyScore")
-.innerText=score;
-
-document.getElementById("finalEnemyScore")
-.innerText="—";
-
-document.getElementById("winnerText")
-.innerText="⚡ PRACTICE COMPLETE";
-
-document.getElementById("resultRank")
-.innerText=getRank(score);
-
-resultShown=true;
-
-show("result");
-
-}
-
-window.finishPractice=finishPractice;
-
-
-/* MOVE TARGET */
-
-function moveTarget(){
-
-const arena=document.getElementById("arena");
-const target=document.getElementById("target");
-
-if(!arena || !target)return;
-
-const size=70+Math.random()*60;
-
-target.style.width=size+"px";
-target.style.height=size+"px";
-
-target.style.left=
-Math.random()*
-Math.max(1,arena.clientWidth-size)
-+"px";
-
-target.style.top=
-Math.random()*
-Math.max(1,arena.clientHeight-size)
-+"px";
-
-}
-
-
-/* POPUP */
-
-function pop(text){
-
-const p=document.createElement("div");
-
-p.className="pop";
-p.innerText=text;
-
-p.style.left=
-20+Math.random()*60+"%";
-
-p.style.top=
-35+Math.random()*35+"%";
-
-document.getElementById("arena")
-.appendChild(p);
-
-setTimeout(()=>{
-p.remove();
-},700);
-
-}
-
-
-/* HOME UI */
-
-function updateHome(){
-
-document.getElementById("coins").innerText=coins;
-document.getElementById("wins").innerText=wins;
-document.getElementById("best").innerText=best;
-document.getElementById("bestCombo").innerText=bestCombo;
-document.getElementById("xp").innerText=xp;
-document.getElementById("level").innerText=level;
-
-const needed=level*100;
-const percent=Math.min(100,(xp/needed)*100);
-
-document.getElementById("xpFill").style.width=
-percent+"%";
-
-document.getElementById("homeRank").innerText=
-getRank(best);
-
-}
-
-
-/* PROFILE */
-
-function showProfile(){
-
-document.getElementById("profileRank").innerText=
-getRank(best);
-
-document.getElementById("profileLevel").innerText=
-level;
-
-document.getElementById("profileWins").innerText=
-wins;
-
-document.getElementById("profileBest").innerText=
-best;
-
-document.getElementById("profileCombo").innerText=
-bestCombo;
-
-document.getElementById("profileCoins").innerText=
-coins;
-
-show("profile");
-
-}
-
-window.showProfile=showProfile;
-
-
-/* MISSIONS */
-
-function showMissions(){
-
-show("missions");
-
-}
-
-window.showMissions=showMissions;
-
-
-/* THEMES */
-
-function setTheme(theme){
-
-if(theme==="neon"){
-
-document.body.style.background="#070712";
-
-}else if(theme==="fire"){
-
-document.body.style.background=
-"linear-gradient(135deg,#200000,#7f1d1d)";
-
-}else if(theme==="ice"){
-
-document.body.style.background=
-"linear-gradient(135deg,#001b2e,#075985)";
-
-}else if(theme==="space"){
-
-document.body.style.background=
-"linear-gradient(135deg,#09001f,#111827)";
-
-}
-
-show("home");
-
-}
-
-window.setTheme=setTheme;
-
-
-/* COPY ROOM */
-
-async function copyRoom(){
-
-if(!roomCode)return;
-
-try{
-
-await navigator.clipboard.writeText(roomCode);
-
-alert("Room code copied: "+roomCode);
-
-}catch(e){
-
-alert("Room code: "+roomCode);
-
-}
-
-}
-
-window.copyRoom=copyRoom;
-
-
-/* LEAVE ROOM */
-
-function leaveRoom(){
-
-stopGame();
-
-if(roomListener){
-
-roomListener();
-roomListener=null;
-
-}
-
-roomRef=null;
-roomCode="";
-role="";
-practice=false;
-resultShown=false;
-
-show("home");
-
-}
-
-window.leaveRoom=leaveRoom;
-
-
-/* REMATCH */
-
-async function rematch(){
-
-if(!roomRef || !user){
-
-show("home");
-return;
-
-}
-
-resultShown=false;
-score=0;
-combo=0;
-maxCombo=0;
-
-try{
-
-if(role==="host"){
-
-await update(roomRef,{
-
-status:"waiting",
-hostReady:false,
-guestReady:false,
-p1Score:0,
-p2Score:0,
-p1Combo:0,
-p2Combo:0
-
-});
-
-}else{
-
-await update(roomRef,{
-
-guestReady:false,
-p2Score:0,
-p2Combo:0
-
-});
-
-}
-
-show("lobby");
-
-}catch(e){
-
-alert("Rematch error: "+e.message);
-
-}
-
-}
-
-window.rematch=rematch;
-
-
-/* INITIAL UI */
-
-updateHome();
-
-</script>
-
-</body>
-</html>
+document.getElementById("myScore").innerText=score;
+docum
