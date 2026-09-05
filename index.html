@@ -844,7 +844,7 @@ async function joinRoom(){
 
 if(!user){
 
-alert("Firebase login ho raha hai.");
+alert(" login ho raha hai.");
 
 return;
 
@@ -1604,4 +1604,219 @@ p.style.top=
 document.getElementById("arena")
 .appendChild(p);
 
-setTimeout(()=
+setTimeout(()=>{
+p.remove();
+},700);
+
+}
+
+
+/* HOME UI */
+
+function updateHome(){
+
+document.getElementById("coins").innerText=coins;
+document.getElementById("wins").innerText=wins;
+document.getElementById("best").innerText=best;
+document.getElementById("bestCombo").innerText=bestCombo;
+document.getElementById("xp").innerText=xp;
+document.getElementById("level").innerText=level;
+
+const needed=level*100;
+const percent=Math.min(100,(xp/needed)*100);
+
+document.getElementById("xpFill").style.width=
+percent+"%";
+
+document.getElementById("homeRank").innerText=
+getRank(best);
+
+}
+
+
+/* PROFILE */
+
+function showProfile(){
+
+document.getElementById("profileRank").innerText=
+getRank(best);
+
+document.getElementById("profileLevel").innerText=
+level;
+
+document.getElementById("profileWins").innerText=
+wins;
+
+document.getElementById("profileBest").innerText=
+best;
+
+document.getElementById("profileCombo").innerText=
+bestCombo;
+
+document.getElementById("profileCoins").innerText=
+coins;
+
+show("profile");
+
+}
+
+window.showProfile=showProfile;
+
+
+/* MISSIONS */
+
+function showMissions(){
+
+show("missions");
+
+}
+
+window.showMissions=showMissions;
+
+
+/* THEMES */
+
+function setTheme(theme){
+
+if(theme==="neon"){
+
+document.body.style.background="#070712";
+
+}else if(theme==="fire"){
+
+document.body.style.background=
+"linear-gradient(135deg,#200000,#7f1d1d)";
+
+}else if(theme==="ice"){
+
+document.body.style.background=
+"linear-gradient(135deg,#001b2e,#075985)";
+
+}else if(theme==="space"){
+
+document.body.style.background=
+"linear-gradient(135deg,#09001f,#111827)";
+
+}
+
+show("home");
+
+}
+
+window.setTheme=setTheme;
+
+
+/* COPY ROOM */
+
+async function copyRoom(){
+
+if(!roomCode)return;
+
+try{
+
+await navigator.clipboard.writeText(roomCode);
+
+alert("Room code copied: "+roomCode);
+
+}catch(e){
+
+alert("Room code: "+roomCode);
+
+}
+
+}
+
+window.copyRoom=copyRoom;
+
+
+/* LEAVE ROOM */
+
+function leaveRoom(){
+
+stopGame();
+
+if(roomListener){
+
+roomListener();
+roomListener=null;
+
+}
+
+roomRef=null;
+roomCode="";
+role="";
+practice=false;
+resultShown=false;
+
+show("home");
+
+}
+
+window.leaveRoom=leaveRoom;
+
+
+/* REMATCH */
+
+async function rematch(){
+
+if(!roomRef || !user){
+
+show("home");
+return;
+
+}
+
+resultShown=false;
+score=0;
+combo=0;
+maxCombo=0;
+
+try{
+
+if(role==="host"){
+
+await update(roomRef,{
+
+status:"waiting",
+hostReady:false,
+guestReady:false,
+p1Score:0,
+p2Score:0,
+p1Combo:0,
+p2Combo:0
+
+});
+
+}else{
+
+await update(roomRef,{
+
+guestReady:false,
+p2Score:0,
+p2Combo:0
+
+});
+
+}
+
+show("lobby");
+
+}catch(e){
+
+alert("Rematch error: "+e.message);
+
+}
+
+}
+
+window.rematch=rematch;
+
+
+/* INITIAL UI */
+
+updateHome();
+
+</script>
+
+</body>
+</html>
