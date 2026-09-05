@@ -7,6 +7,7 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
  margin:0;
  font-family:Arial,sans-serif;
@@ -14,13 +15,16 @@ body{
  background:#070712;
  overflow-x:hidden;
 }
+
 button,input{font:inherit}
+
 .screen{
  display:none;
  min-height:100vh;
  padding:25px 16px;
  text-align:center;
 }
+
 .active{display:block}
 
 .bg{
@@ -41,7 +45,10 @@ button,input{font:inherit}
  text-shadow:0 0 30px #8b5cf6;
 }
 
-.sub{opacity:.65;margin-bottom:25px}
+.sub{
+ opacity:.65;
+ margin-bottom:25px;
+}
 
 .card{
  width:min(500px,100%);
@@ -67,7 +74,10 @@ button{
  box-shadow:0 8px 25px #4f46e544;
 }
 
-button:active{transform:scale(.95)}
+button:active{
+ transform:scale(.95);
+}
+
 .secondary{
  background:#ffffff12;
  box-shadow:none;
@@ -144,7 +154,9 @@ input{
  margin:15px;
 }
 
-#battle{padding-top:15px}
+#battle{
+ padding-top:15px;
+}
 
 .big{
  font-size:40px;
@@ -198,8 +210,14 @@ input{
 }
 
 @keyframes float{
- 0%{transform:translateY(0) scale(.7);opacity:1}
- 100%{transform:translateY(-80px) scale(1.2);opacity:0}
+ 0%{
+  transform:translateY(0) scale(.7);
+  opacity:1
+ }
+ 100%{
+  transform:translateY(-80px) scale(1.2);
+  opacity:0
+ }
 }
 
 .resultScore{
@@ -217,7 +235,6 @@ input{
 <body>
 
 <div class="bg"></div>
-
 
 <!-- HOME -->
 
@@ -271,11 +288,8 @@ Combo
 </div>
 
 </div>
-
 </div>
 
-
-<!-- ONLINE -->
 
 <div class="card">
 
@@ -307,8 +321,6 @@ Selected: 30 seconds
 
 </div>
 
-
-<!-- PRACTICE -->
 
 <div class="card">
 
@@ -629,35 +641,22 @@ import {
 /* FIREBASE */
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
-
-authDomain:"click-battle-a1aee.firebaseapp.com",
-
-databaseURL:
-"https://click-battle-a1aee-default-rtdb.firebaseio.com",
-
-projectId:"click-battle-a1aee",
-
-storageBucket:
-"click-battle-a1aee.firebasestorage.app",
-
-messagingSenderId:"1023566714890",
-
-appId:
-"1:1023566714890:web:0ec28afde9c2782855e7f3",
-
-measurementId:"G-BT7RMQLRLG"
-
+ apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
+ authDomain:"click-battle-a1aee.firebaseapp.com",
+ databaseURL:"https://click-battle-a1aee-default-rtdb.firebaseio.com",
+ projectId:"click-battle-a1aee",
+ storageBucket:"click-battle-a1aee.firebasestorage.app",
+ messagingSenderId:"1023566714890",
+ appId:"1:1023566714890:web:0ec28afde9c2782855e7f3",
+ measurementId:"G-BT7RMQLRLG"
 };
 
-
 const app=initializeApp(firebaseConfig);
-
 const auth=getAuth(app);
-
 const db=getDatabase(app);
 
+
+/* VARIABLES */
 
 let user=null;
 
@@ -679,7 +678,6 @@ let gameTimer=null;
 let startTimer=null;
 
 let endAt=0;
-
 let lastSync=0;
 
 let resultShown=false;
@@ -698,16 +696,11 @@ let level=Number(localStorage.getItem("level")||1);
 /* AUTH */
 
 signInAnonymously(auth).catch(e=>{
-
-alert("Firebase login error: "+e.message);
-
+ alert("Firebase login error: "+e.message);
 });
 
-
 onAuthStateChanged(auth,u=>{
-
-user=u;
-
+ user=u;
 });
 
 
@@ -719,9 +712,11 @@ document
 .querySelectorAll(".screen")
 .forEach(x=>x.classList.remove("active"));
 
-document
-.getElementById(id)
-.classList.add("active");
+const screen=document.getElementById(id);
+
+if(screen){
+ screen.classList.add("active");
+}
 
 }
 
@@ -757,8 +752,7 @@ window.showJoin=showJoin;
 
 function generateCode(){
 
-const chars=
-"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 let code="";
 
@@ -775,7 +769,7 @@ return code;
 }
 
 
-/* CREATE */
+/* CREATE ROOM */
 
 async function createRoom(){
 
@@ -806,36 +800,25 @@ exists=snap.exists();
 roomCode=code;
 role="host";
 practice=false;
+resultShown=false;
 
-roomRef=
-ref(db,"rooms/"+roomCode);
+roomRef=ref(db,"rooms/"+roomCode);
 
 await set(roomRef,{
 
 hostUid:user.uid,
-
 guestUid:"",
-
 duration:mode,
-
 hostReady:false,
-
 guestReady:false,
-
 p1Score:0,
-
 p2Score:0,
-
 p1Combo:0,
-
 p2Combo:0,
-
 status:"waiting",
-
 createdAt:serverTimestamp()
 
 });
-
 
 document.getElementById("roomCode")
 .innerText=roomCode;
@@ -855,7 +838,7 @@ alert("Create error: "+e.message);
 window.createRoom=createRoom;
 
 
-/* JOIN */
+/* JOIN ROOM */
 
 async function joinRoom(){
 
@@ -867,11 +850,9 @@ return;
 
 }
 
-const code=document
-.getElementById("roomInput")
-.value
-.trim()
-.toUpperCase();
+const input=document.getElementById("roomInput");
+
+const code=input.value.trim().toUpperCase();
 
 if(code.length!==6){
 
@@ -905,15 +886,23 @@ return;
 
 }
 
+if(data.status!=="waiting"){
+
+alert("Ye battle already start ho chuki hai.");
+
+return;
+
+}
+
 await update(r,{
-
-guestUid:user.uid
-
+ guestUid:user.uid
 });
 
 roomCode=code;
 role="guest";
 practice=false;
+resultShown=false;
+
 roomRef=r;
 
 mode=Number(data.duration)||30;
@@ -940,8 +929,12 @@ window.joinRoom=joinRoom;
 
 function listenRoom(){
 
-if(roomListener)
-roomListener();
+if(!roomRef)return;
+
+if(roomListener){
+ roomListener();
+ roomListener=null;
+}
 
 roomListener=onValue(roomRef,snap=>{
 
@@ -968,10 +961,16 @@ role==="host"
 :!!data.hostReady;
 
 
-document.getElementById("youReady")
-.innerText=
-myReady?"READY":"NOT READY";
+/* LOBBY UI */
 
+if(document.getElementById("youReady")){
+
+document.getElementById("youReady")
+.innerText=myReady?"READY":"NOT READY";
+
+}
+
+if(document.getElementById("oppReady")){
 
 document.getElementById("oppReady")
 .innerText=
@@ -979,30 +978,32 @@ opponent
 ?(enemyReady?"READY":"NOT READY")
 :"WAITING";
 
+}
+
+
+if(document.getElementById("lobbyStatus")){
 
 if(!opponent){
 
 document.getElementById("lobbyStatus")
-.innerText=
-"Waiting for opponent...";
+.innerText="Waiting for opponent...";
 
 }else if(!myReady){
 
 document.getElementById("lobbyStatus")
-.innerText=
-"Press READY.";
+.innerText="Press READY.";
 
 }else if(!enemyReady){
 
 document.getElementById("lobbyStatus")
-.innerText=
-"Waiting for opponent READY...";
+.innerText="Waiting for opponent READY...";
 
 }else{
 
 document.getElementById("lobbyStatus")
-.innerText=
-"Starting...";
+.innerText="Starting...";
+
+}
 
 }
 
@@ -1010,22 +1011,19 @@ document.getElementById("lobbyStatus")
 /* START */
 
 if(
-
 role==="host" &&
 opponent &&
 data.hostReady &&
 data.guestReady &&
 data.status==="waiting"
-
 ){
 
 update(roomRef,{
 
 status:"countdown",
-
 startAt:Date.now()+4000
 
-});
+}).catch(()=>{});
 
 }
 
@@ -1033,10 +1031,8 @@ startAt:Date.now()+4000
 /* COUNTDOWN */
 
 if(
-
 data.status==="countdown" &&
 data.startAt
-
 ){
 
 startCountdown(data.startAt);
@@ -1044,23 +1040,23 @@ startCountdown(data.startAt);
 }
 
 
-/* OPPONENT SCORE */
+/* RUNNING */
 
 if(
-
 data.status==="countdown" ||
 data.status==="running"
-
 ){
 
 const enemy=
-
 role==="host"
 ?(data.p2Score||0)
 :(data.p1Score||0);
 
-document.getElementById("enemyScore")
-.innerText=enemy;
+const enemyElement=
+document.getElementById("enemyScore");
+
+if(enemyElement)
+enemyElement.innerText=enemy;
 
 }
 
@@ -1068,10 +1064,8 @@ document.getElementById("enemyScore")
 /* FINISH */
 
 if(
-
 data.status==="finished" &&
 !resultShown
-
 ){
 
 stopGame();
@@ -1095,7 +1089,7 @@ showResult(data);
 
 async function readyUp(){
 
-if(!roomRef)return;
+if(!roomRef || !user)return;
 
 const readyField=
 role==="host"
@@ -1112,19 +1106,21 @@ role==="host"
 ?"p1Combo"
 :"p2Combo";
 
+try{
 
 await update(roomRef,{
 
 [readyField]:true,
-
 [scoreField]:0,
-
 [comboField]:0
 
 });
 
-document.getElementById("readyBtn")
-.innerText="✅ READY";
+}catch(e){
+
+alert("Ready error: "+e.message);
+
+}
 
 }
 
@@ -1141,13 +1137,11 @@ show("countdown");
 
 startTimer=setInterval(()=>{
 
-const left=
-startAt-Date.now();
+const left=startAt-Date.now();
 
 if(left<=0){
 
 clearInterval(startTimer);
-
 startTimer=null;
 
 startBattle();
@@ -1164,7 +1158,7 @@ document.getElementById("countNumber")
 }
 
 
-/* START ONLINE */
+/* START BATTLE */
 
 function startBattle(){
 
@@ -1177,17 +1171,12 @@ score=0;
 combo=0;
 maxCombo=0;
 
-endAt=
-Date.now()+mode*1000;
+endAt=Date.now()+mode*1000;
 
-document.getElementById("myScore")
-.innerText=0;
-
-document.getElementById("enemyScore")
-.innerText=0;
-
-document.getElementById("combo")
-.innerText="";
+document.getElementById("myScore").innerText=0;
+document.getElementById("enemyScore").innerText=0;
+document.getElementById("combo").innerText="";
+document.getElementById("gameTime").innerText=mode;
 
 show("battle");
 
@@ -1197,12 +1186,10 @@ clearInterval(gameTimer);
 
 gameTimer=setInterval(()=>{
 
-const left=
-Math.max(0,endAt-Date.now());
+const left=Math.max(0,endAt-Date.now());
 
 document.getElementById("gameTime")
-.innerText=
-Math.ceil(left/1000);
+.innerText=Math.ceil(left/1000);
 
 if(left<=0){
 
@@ -1215,7 +1202,7 @@ finishGame();
 }
 
 
-/* HIT */
+/* CLICK */
 
 function hit(){
 
@@ -1223,16 +1210,14 @@ if(!running)return;
 
 combo++;
 
-maxCombo=
-Math.max(maxCombo,combo);
+maxCombo=Math.max(maxCombo,combo);
 
 let points=1;
-
 let text="+1";
 
 const roll=Math.random();
 
-if(roll<.10){
+if(roll<0.10){
 
 points=5;
 text="💥 CRITICAL +5";
@@ -1250,31 +1235,32 @@ document.getElementById("myScore")
 .innerText=score;
 
 document.getElementById("combo")
-.innerText=
-"🔥 "+combo+"x COMBO";
+.innerText="🔥 "+combo+"x COMBO";
 
 pop(text);
 
 moveTarget();
 
-if(!practice)
+if(!practice){
+
 syncScore();
+
+}
 
 }
 
 window.hit=hit;
 
 
-/* FIREBASE SCORE */
+/* SYNC SCORE */
 
 function syncScore(force=false){
 
-if(!roomRef||!user)return;
+if(!roomRef || !user)return;
 
 const now=Date.now();
 
-if(!force && now-lastSync<120)
-return;
+if(!force && now-lastSync<120)return;
 
 lastSync=now;
 
@@ -1288,11 +1274,9 @@ role==="host"
 ?"p1Combo"
 :"p2Combo";
 
-
 update(roomRef,{
 
 [scoreField]:score,
-
 [comboField]:combo
 
 }).catch(()=>{});
@@ -1309,7 +1293,6 @@ if(!running)return;
 running=false;
 
 clearInterval(gameTimer);
-
 gameTimer=null;
 
 syncScore(true);
@@ -1324,7 +1307,7 @@ status:"finished"
 
 }catch(e){
 
-alert("Match sync error: "+e.message);
+console.log("Match sync error",e);
 
 }
 
@@ -1338,13 +1321,11 @@ function stopGame(){
 running=false;
 
 clearInterval(gameTimer);
-
 gameTimer=null;
 
 if(startTimer){
 
 clearInterval(startTimer);
-
 startTimer=null;
 
 }
@@ -1357,17 +1338,14 @@ startTimer=null;
 function showResult(data){
 
 const myScore=
-
 role==="host"
 ?(data.p1Score||0)
 :(data.p2Score||0);
 
 const enemyScore=
-
 role==="host"
 ?(data.p2Score||0)
 :(data.p1Score||0);
-
 
 document.getElementById("finalMyScore")
 .innerText=myScore;
@@ -1393,11 +1371,8 @@ document.getElementById("winnerText")
 
 }
 
-
 document.getElementById("resultRank")
-.innerText=
-getRank(myScore);
-
+.innerText=getRank(myScore);
 
 updateStats(myScore,enemyScore);
 
@@ -1419,16 +1394,20 @@ best=myScore;
 if(maxCombo>bestCombo)
 bestCombo=maxCombo;
 
+coins+=Math.max(5,Math.floor(myScore/2));
 
-const reward=
-Math.max(5,Math.floor(myScore/2));
+addXP(Math.max(10,myScore));
 
-coins+=reward;
+saveStats();
 
-addXP(
-Math.max(10,myScore)
-);
+updateHome();
 
+}
+
+
+/* SAVE */
+
+function saveStats(){
 
 localStorage.setItem("wins",wins);
 localStorage.setItem("best",best);
@@ -1436,8 +1415,6 @@ localStorage.setItem("bestCombo",bestCombo);
 localStorage.setItem("coins",coins);
 localStorage.setItem("xp",xp);
 localStorage.setItem("level",level);
-
-updateHome();
 
 }
 
@@ -1451,7 +1428,6 @@ xp+=amount;
 while(xp>=level*100){
 
 xp-=level*100;
-
 level++;
 
 }
@@ -1487,16 +1463,18 @@ return"🥉 BRONZE";
 
 function startPractice(){
 
+stopGame();
+
 practice=true;
 
 score=0;
 combo=0;
 maxCombo=0;
+resultShown=false;
 
 running=true;
 
-endAt=
-Date.now()+mode*1000;
+endAt=Date.now()+mode*1000;
 
 document.getElementById("myScore")
 .innerText=0;
@@ -1507,6 +1485,9 @@ document.getElementById("enemyScore")
 document.getElementById("combo")
 .innerText="";
 
+document.getElementById("gameTime")
+.innerText=mode;
+
 show("battle");
 
 moveTarget();
@@ -1515,15 +1496,16 @@ clearInterval(gameTimer);
 
 gameTimer=setInterval(()=>{
 
-const left=
-Math.max(0,endAt-Date.now());
+const left=Math.max(0,endAt-Date.now());
 
 document.getElementById("gameTime")
-.innerText=
-Math.ceil(left/1000);
+.innerText=Math.ceil(left/1000);
 
-if(left<=0)
+if(left<=0){
+
 finishPractice();
+
+}
 
 },50);
 
@@ -1541,9 +1523,7 @@ if(!running)return;
 running=false;
 
 clearInterval(gameTimer);
-
 gameTimer=null;
-
 
 if(score>best)
 best=score;
@@ -1551,23 +1531,12 @@ best=score;
 if(maxCombo>bestCombo)
 bestCombo=maxCombo;
 
+coins+=Math.max(5,Math.floor(score/2));
 
-coins+=
-Math.max(5,Math.floor(score/2));
+addXP(Math.max(10,score));
 
-addXP(
-Math.max(10,score)
-);
-
-
-localStorage.setItem("best",best);
-localStorage.setItem("bestCombo",bestCombo);
-localStorage.setItem("coins",coins);
-localStorage.setItem("xp",xp);
-localStorage.setItem("level",level);
-
+saveStats();
 updateHome();
-
 
 document.getElementById("finalMyScore")
 .innerText=score;
@@ -1576,12 +1545,10 @@ document.getElementById("finalEnemyScore")
 .innerText="—";
 
 document.getElementById("winnerText")
-.innerText=
-"⚡ PRACTICE COMPLETE";
+.innerText="⚡ PRACTICE COMPLETE";
 
 document.getElementById("resultRank")
-.innerText=
-getRank(score);
+.innerText=getRank(score);
 
 resultShown=true;
 
@@ -1589,39 +1556,32 @@ show("result");
 
 }
 
+window.finishPractice=finishPractice;
 
-/* TARGET */
+
+/* MOVE TARGET */
 
 function moveTarget(){
 
-const arena=
-document.getElementById("arena");
+const arena=document.getElementById("arena");
+const target=document.getElementById("target");
 
-const target=
-document.getElementById("target");
+if(!arena || !target)return;
 
-const size=
-70+Math.random()*60;
+const size=70+Math.random()*60;
 
-target.style.width=
-size+"px";
-
-target.style.height=
-size+"px";
+target.style.width=size+"px";
+target.style.height=size+"px";
 
 target.style.left=
 Math.random()*
-Math.max(
-1,
-arena.clientWidth-size
-)+"px";
+Math.max(1,arena.clientWidth-size)
++"px";
 
 target.style.top=
 Math.random()*
-Math.max(
-1,
-arena.clientHeight-size
-)+"px";
+Math.max(1,arena.clientHeight-size)
++"px";
 
 }
 
@@ -1630,11 +1590,9 @@ arena.clientHeight-size
 
 function pop(text){
 
-const p=
-document.createElement("div");
+const p=document.createElement("div");
 
 p.className="pop";
-
 p.innerText=text;
 
 p.style.left=
@@ -1643,61 +1601,7 @@ p.style.left=
 p.style.top=
 35+Math.random()*35+"%";
 
-document
-.getElementById("arena")
+document.getElementById("arena")
 .appendChild(p);
 
-setTimeout(()=>{
-p.remove();
-},700);
-
-}
-
-
-/* REMATCH */
-
-async function rematch(){
-
-if(practice){
-
-startPractice();
-
-return;
-
-}
-
-resultShown=false;
-
-const readyField=
-role==="host"
-?"hostReady"
-:"guestReady";
-
-const scoreField=
-role==="host"
-?"p1Score"
-:"p2Score";
-
-const comboField=
-role==="host"
-?"p1Combo"
-:"p2Combo";
-
-
-await update(roomRef,{
-
-[readyField]:true,
-
-[scoreField]:0,
-
-[comboField]:0,
-
-status:"waiting"
-
-});
-
-show("lobby");
-
-}
-
-window.rematch
+setTimeout(()=
