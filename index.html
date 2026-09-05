@@ -775,7 +775,7 @@ async function createRoom(){
 
 if(!user){
 
-alert("Firebase login ho raha hai. 2 sec wait karo.");
+alert(" LOADING... ");
 
 return;
 
@@ -844,7 +844,7 @@ async function joinRoom(){
 
 if(!user){
 
-alert(" login ho raha hai.");
+alert(" LOADIND... ");
 
 return;
 
@@ -856,7 +856,7 @@ const code=input.value.trim().toUpperCase();
 
 if(code.length!==6){
 
-alert("6-character room code dalo.");
+alert("6-character room code");
 
 return;
 
@@ -870,7 +870,7 @@ const snap=await get(r);
 
 if(!snap.exists()){
 
-alert("Room nahi mila.");
+alert(" invalid.");
 
 return;
 
@@ -888,7 +888,7 @@ return;
 
 if(data.status!=="waiting"){
 
-alert("Ye battle already start ho chuki hai.");
+alert(" battle already started .");
 
 return;
 
@@ -1439,19 +1439,19 @@ level++;
 
 function getRank(s){
 
-if(s>=150)
+if(s>=10000)
 return"👑 GRANDMASTER";
 
-if(s>=100)
+if(s>=1000)
 return"💎 MASTER";
 
-if(s>=75)
+if(s>=750)
 return"💠 DIAMOND";
 
-if(s>=50)
+if(s>=500)
 return"🥇 GOLD";
 
-if(s>=25)
+if(s>=250)
 return"🥈 SILVER";
 
 return"🥉 BRONZE";
