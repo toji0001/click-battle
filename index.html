@@ -1,1188 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>CLICK BATTLE X — ULTRA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
 
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;color:#fff}
-body{
- background:#050509;
- overflow-x:hidden;
-}
-button,input{font:inherit}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-body:before{
- content:"";
- position:fixed;
- inset:0;
- z-index:-3;
- background:
- radial-gradient(circle at 15% 15%,#7c3aed55,transparent 28%),
- radial-gradient(circle at 85% 25%,#06b6d455,transparent 25%),
- radial-gradient(circle at 50% 100%,#ec489955,transparent 30%),
- #050509;
- animation:bgMove 8s ease-in-out infinite alternate;
-}
-@keyframes bgMove{
- from{filter:hue-rotate(0deg);transform:scale(1)}
- to{filter:hue-rotate(25deg);transform:scale(1.08)}
-}
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 
-body:after{
- content:"";
- position:fixed;
- inset:0;
- pointer-events:none;
- z-index:50;
- background:linear-gradient(#ffffff03 50%,#00000012 50%);
- background-size:100% 4px;
- opacity:.25;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
 
-.screen{
- display:none;
- min-height:100vh;
- padding:18px 14px 50px;
- text-align:center;
-}
-.active{display:block}
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #25252b;
+            color: white;
+            padding: 15px;
+        }
 
-.wrap{
- width:min(1100px,100%);
- margin:auto;
-}
+        .container {
+            position: relative;
+            width: 750px;
+            height: 450px;
+            border: 2px solid #e46033;
+            box-shadow: 0 0 25px #e46033;
+            overflow: hidden;
+            background: #25252b;
+        }
 
-.topbar{
- width:min(1100px,100%);
- margin:0 auto 18px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
-}
+        /* Decorative shapes */
+        .curved-shape,
+        .curved-shape2 {
+            position: absolute;
+            pointer-events: none;
+        }
 
-.badge{
- padding:9px 13px;
- border:1px solid #ffffff20;
- border-radius:999px;
- background:#ffffff0b;
- backdrop-filter:blur(15px);
- font-size:12px;
- font-weight:900;
-}
+        .curved-shape {
+            right: 0;
+            top: -5px;
+            width: 850px;
+            height: 600px;
+            background: linear-gradient(45deg, #25252b, #e46033);
+            transform: rotate(10deg) skewY(40deg);
+            transform-origin: bottom right;
+            transition: 1.5s ease;
+            transition-delay: 1.6s;
+            z-index: 1;
+        }
 
-.logo{
- font-size:clamp(34px,8vw,72px);
- font-weight:1000;
- letter-spacing:3px;
- line-height:.95;
- margin:35px 0 12px;
- background:linear-gradient(90deg,#fff,#a78bfa,#22d3ee,#fff);
- background-size:250%;
- -webkit-background-clip:text;
- color:transparent;
- animation:shine 3s linear infinite;
-}
-@keyframes shine{
- to{background-position:250%}
-}
+        .container.active .curved-shape {
+            transform: rotate(0deg) skewY(0deg);
+            transition-delay: .5s;
+        }
 
-.sub{
- opacity:.65;
- font-size:13px;
- letter-spacing:3px;
- margin-bottom:28px;
-}
+        .curved-shape2 {
+            left: 250px;
+            top: 100%;
+            width: 850px;
+            height: 700px;
+            background: #25252b;
+            border-top: 3px solid #e46033;
+            transform: rotate(0deg) skewY(0deg);
+            transform-origin: bottom left;
+            transition: 1.5s ease;
+            transition-delay: .5s;
+            z-index: 1;
+        }
 
-.card{
- width:min(760px,100%);
- margin:15px auto;
- padding:22px;
- border:1px solid #ffffff18;
- border-radius:28px;
- background:#ffffff0a;
- backdrop-filter:blur(22px);
- box-shadow:0 20px 80px #0009;
-}
+        .container.active .curved-shape2 {
+            transform: rotate(-11deg) skewY(-41deg);
+            transition-delay: 1.2s;
+        }
 
-.card h2,.card h3{margin-top:4px}
+        /* Forms */
+        .form-box {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 5;
+        }
 
-button{
- width:100%;
- padding:16px;
- margin:7px 0;
- border:0;
- border-radius:17px;
- color:white;
- font-weight:1000;
- cursor:pointer;
- background:linear-gradient(135deg,#8b5cf6,#4f46e5);
- box-shadow:0 8px 30px #4f46e555;
- transition:.15s;
-}
-button:hover{
- transform:translateY(-2px);
- filter:brightness(1.12);
-}
-button:active{
- transform:scale(.96);
-}
+        .form-box.Login {
+            left: 0;
+            padding: 0 40px;
+        }
 
-.secondary{
- background:#ffffff0c;
- border:1px solid #ffffff15;
- box-shadow:none;
-}
+        .form-box.Register {
+            right: 0;
+            padding: 0 60px;
+        }
 
-.bigBtn{
- font-size:20px;
- padding:21px;
- background:linear-gradient(135deg,#ec4899,#7c3aed,#2563eb);
- background-size:200%;
- animation:buttonGlow 3s infinite alternate;
-}
-@keyframes buttonGlow{
- to{background-position:100%}
-}
+        .form-box h2 {
+            color: white;
+            font-size: 32px;
+            text-align: center;
+        }
 
-.grid{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
-}
-.stat{
- padding:16px 8px;
- border-radius:20px;
- background:#ffffff08;
- border:1px solid #ffffff12;
-}
-.stat b{
- display:block;
- font-size:25px;
- margin:5px 0;
-}
+        /* Login animation */
+        .form-box.Login .animation {
+            transform: translateX(0);
+            opacity: 1;
+            transition: .7s;
+            transition-delay: calc(.1s * var(--S));
+        }
 
-.mode{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:9px;
-}
-.mode button.selected{
- outline:2px solid #22d3ee;
- box-shadow:0 0 30px #22d3ee66;
-}
+        .container.active .form-box.Login .animation {
+            transform: translateX(-120%);
+            opacity: 0;
+            transition-delay: calc(.1s * var(--D));
+        }
 
-.xpbar{
- height:11px;
- background:#ffffff12;
- border-radius:99px;
- overflow:hidden;
- margin:15px 0;
-}
-#xpFill{
- height:100%;
- width:0%;
- background:linear-gradient(90deg,#22d3ee,#8b5cf6,#ec4899);
- transition:.4s;
-}
+        /* Register animation */
+        .form-box.Register .animation {
+            transform: translateX(120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition: .7s ease;
+            transition-delay: calc(.1s * var(--S));
+        }
 
-.rank{
- font-size:28px;
- font-weight:1000;
- margin:12px;
-}
+        .container.active .form-box.Register .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition-delay: calc(.1s * var(--li));
+        }
 
-input{
- width:100%;
- padding:16px;
- border:1px solid #ffffff20;
- border-radius:16px;
- background:#05050d;
- color:#fff;
- outline:none;
- text-align:center;
- text-transform:uppercase;
- font-size:21px;
-}
+        /* Inputs */
+        .input-box {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            margin-top: 25px;
+        }
 
-.room{
- font-size:40px;
- font-weight:1000;
- letter-spacing:8px;
- color:#22d3ee;
- text-shadow:0 0 25px #22d3ee;
- margin:16px;
-}
+        .input-box input {
+            width: 100%;
+            height: 100%;
+            padding-right: 30px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid white;
+            outline: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
 
-.status{
- opacity:.7;
- min-height:20px;
-}
+        .input-box input:focus,
+        .input-box input:valid {
+            border-bottom-color: #e46033;
+        }
 
-.scores{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:10px;
-}
-.scorebox{
- padding:15px;
- border-radius:20px;
- background:#ffffff08;
- border:1px solid #ffffff12;
-}
+        .input-box label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 16px;
+            pointer-events: none;
+            transition: .5s;
+        }
 
-#battle{
- padding:12px 10px 30px;
-}
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            top: -5px;
+            color: #e46033;
+        }
 
-.gameHeader{
- width:min(900px,100%);
- margin:auto;
- display:grid;
- grid-template-columns:1fr 1fr 1fr;
- gap:8px;
- align-items:center;
-}
+        .input-box box-icon {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
 
-.big{
- font-size:38px;
- font-weight:1000;
-}
+        /* Buttons */
+        .btn {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            border: 2px solid #e46033;
+            border-radius: 40px;
+            background: transparent;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 10;
+        }
 
-.timer{
- font-size:45px;
- color:#22d3ee;
- text-shadow:0 0 25px #22d3ee;
-}
+        .btn::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -100%;
+            width: 100%;
+            height: 300%;
+            background: linear-gradient(
+                #25252b,
+                #e46033,
+                #25252b,
+                #e46033
+            );
+            transition: .5s;
+            z-index: -1;
+        }
 
-.combo{
- min-height:40px;
- font-size:25px;
- font-weight:1000;
- color:#facc15;
- text-shadow:0 0 15px #facc15;
-}
+        .btn:hover::before {
+            top: 0;
+        }
 
-.arena{
- position:relative;
- width:min(900px,100%);
- height:58vh;
- min-height:370px;
- margin:12px auto;
- border-radius:30px;
- border:1px solid #ffffff18;
- background:
- radial-gradient(circle at center,#ffffff09,transparent 45%),
- #ffffff05;
- overflow:hidden;
- box-shadow:inset 0 0 100px #000b,0 0 60px #7c3aed22;
-}
+        /* Links */
+        .regi-link {
+            margin: 20px 0 10px;
+            text-align: center;
+            font-size: 14px;
+            color: white;
+        }
 
-.arena:before{
- content:"";
- position:absolute;
- inset:15px;
- border:1px dashed #ffffff10;
- border-radius:25px;
- pointer-events:none;
-}
+        .regi-link a {
+            color: #e46033;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 20;
+        }
 
-#target{
- position:absolute;
- width:90px;
- height:90px;
- padding:0;
- margin:0;
- border-radius:50%;
- border:5px solid white;
- background:radial-gradient(circle at 35% 30%,#fff,#ff4d6d 18%,#ff1744 55%,#7f1d1d);
- box-shadow:0 0 25px #ff1744,0 0 80px #ff174477;
- font-size:15px;
- z-index:3;
-}
-#target:active{
- transform:scale(.72);
-}
+        .regi-link a:hover {
+            text-decoration: underline;
+        }
 
-.pop{
- position:absolute;
- font-size:23px;
- font-weight:1000;
- pointer-events:none;
- animation:float .7s forwards;
- z-index:5;
-}
-@keyframes float{
- 0%{transform:translateY(0) scale(.7);opacity:1}
- 100%{transform:translateY(-85px) scale(1.2);opacity:0}
-}
+        /* Info */
+        .info-content {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 2;
+            pointer-events: none;
+        }
 
-.resultScore{
- font-size:58px;
- font-weight:1000;
-}
+        .info-content.Login {
+            right: 0;
+            text-align: right;
+            padding: 0 40px 60px 150px;
+        }
 
-.small{
- opacity:.6;
- font-size:12px;
-}
+        .info-content.Register {
+            left: 0;
+            text-align: left;
+            padding: 0 150px 60px 38px;
+        }
 
-.list{
- display:grid;
- gap:9px;
-}
-.leader{
- display:flex;
- justify-content:space-between;
- padding:14px;
- border-radius:15px;
- background:#ffffff08;
- border:1px solid #ffffff10;
-}
+        .info-content h2 {
+            color: white;
+            text-transform: uppercase;
+            font-size: 36px;
+            line-height: 1.3;
+        }
 
-.themeGrid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:10px;
-}
-.theme{
- min-height:100px;
-}
+        .info-content p {
+            color: white;
+            font-size: 16px;
+        }
 
-.fire{background:linear-gradient(135deg,#ef4444,#f97316)}
-.ice{background:linear-gradient(135deg,#06b6d4,#2563eb)}
-.space{background:linear-gradient(135deg,#312e81,#7c3aed)}
+        .info-content.Login .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition: .7s ease;
+            transition-delay: calc(.1s * var(--S));
+        }
 
-.hidden{display:none!important}
+        .container.active .info-content.Login .animation {
+            transform: translateX(120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition-delay: calc(.1s * var(--D));
+        }
 
-@media(max-width:650px){
- .grid{grid-template-columns:1fr 1fr}
- .mode{grid-template-columns:1fr 1fr 1fr}
- .card{padding:17px;border-radius:23px}
- .arena{height:58vh;min-height:330px}
- .gameHeader{grid-template-columns:1fr 1fr 1fr}
- .big{font-size:30px}
- .timer{font-size:36px}
-}
-</style>
+        .info-content.Register .animation {
+            transform: translateX(-120%);
+            opacity: 0;
+            filter: blur(10px);
+            transition: .7s ease;
+            transition-delay: calc(.1s * var(--S));
+        }
+
+        .container.active .info-content.Register .animation {
+            transform: translateX(0);
+            opacity: 1;
+            filter: blur(0);
+            transition-delay: calc(.1s * var(--li));
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 420px;
+                height: 520px;
+            }
+
+            .form-box {
+                width: 100%;
+                padding: 0 30px !important;
+            }
+
+            .info-content {
+                display: none;
+            }
+
+            .curved-shape,
+            .curved-shape2 {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- HOME -->
-<section id="home" class="screen active">
-<div class="wrap">
+<div class="container">
 
-<div class="topbar">
-<div class="badge">⚡ CBX ULTRA</div>
-<div class="badge">🟢 ONLINE READY</div>
-</div>
+    <div class="curved-shape"></div>
+    <div class="curved-shape2"></div>
 
-<div class="logo">CLICK<br>BATTLE X</div>
-<div class="sub">THE NEXT GENERATION CLICKING ARENA</div>
+    <!-- LOGIN -->
+    <div class="form-box Login">
 
-<div class="card">
-<div class="rank" id="homeRank">🥉 BRONZE</div>
+        <h2 class="animation" style="--D:0; --S:21;">
+            Login
+        </h2>
 
-<div class="xpbar">
-<div id="xpFill"></div>
-</div>
+        <form id="loginForm">
 
-<div class="small">
-LEVEL <b id="level">1</b> · XP <b id="xp">0</b>
-</div>
+            <div class="input-box animation" style="--D:1; --S:22;">
+                <input type="text" required>
+                <label>Username</label>
+                <box-icon type="solid" name="user" color="gray"></box-icon>
+            </div>
 
-<div class="grid" style="margin-top:18px">
-<div class="stat">🪙<b id="coins">0</b>COINS</div>
-<div class="stat">🏆<b id="wins">0</b>WINS</div>
-<div class="stat">🔥<b id="best">0</b>BEST</div>
-<div class="stat">⚡<b id="bestCombo">0</b>COMBO</div>
-</div>
-</div>
+            <div class="input-box animation" style="--D:2; --S:23;">
+                <input type="password" required>
+                <label>Password</label>
+                <box-icon name="lock-alt" type="solid" color="gray"></box-icon>
+            </div>
 
-<div class="card">
-<h2>⚔️ ENTER THE ARENA</h2>
+            <div class="input-box animation" style="--D:3; --S:24;">
+                <button class="btn" type="submit">
+                    Login
+                </button>
+            </div>
 
-<button class="bigBtn" onclick="startPractice()">
-🎯 PLAY SOLO
-</button>
+            <div class="regi-link animation" style="--D:4; --S:25;">
+                <p>
+                    Don't have an account?
+                    <br>
+                    <a href="#" class="SignUpLink">Sign Up</a>
+                </p>
+            </div>
 
-<button onclick="createRoom()">
-🌐 CREATE 1v1 ROOM
-</button>
+        </form>
+    </div>
 
-<button class="secondary" onclick="showJoin()">
-🔑 JOIN 1v1
-</button>
-</div>
+    <!-- LOGIN INFO -->
+    <div class="info-content Login">
 
-<div class="card">
-<h3>⏱️ BATTLE TIME</h3>
+        <h2 class="animation" style="--D:0; --S:20;">
+            Welcome Back!
+        </h2>
 
-<div class="mode">
-<button id="m15" onclick="chooseMode(15)">15 SEC</button>
-<button id="m30" class="selected" onclick="chooseMode(30)">30 SEC</button>
-<button id="m60" onclick="chooseMode(60)">60 SEC</button>
-</div>
+        <p class="animation" style="--D:1; --S:21;">
+            We are happy to have you with us again.
+        </p>
 
-<p id="modeText" class="small">Selected: 30 seconds</p>
-</div>
+    </div>
 
-<div class="card">
-<h3>🚀 PLAYER ZONE</h3>
+    <!-- REGISTER -->
+    <div class="form-box Register">
 
-<button class="secondary" onclick="showProfile()">👤 PROFILE</button>
-<button class="secondary" onclick="showLeaderboard()">🏆 LEADERBOARD</button>
-<button class="secondary" onclick="showMissions()">🎯 MISSIONS</button>
-<button class="secondary" onclick="show('themes')">🎨 CUSTOMIZE</button>
-</div>
+        <h2 class="animation" style="--li:17; --S:0;">
+            Register
+        </h2>
 
-</div>
-</section>
+        <form id="registerForm">
 
+            <div class="input-box animation" style="--li:18; --S:1;">
+                <input type="text" required>
+                <label>Username</label>
+                <box-icon type="solid" name="user" color="gray"></box-icon>
+            </div>
 
-<!-- JOIN -->
-<section id="join" class="screen">
-<div class="wrap">
-<div class="logo" style="font-size:45px">JOIN DUEL</div>
+            <div class="input-box animation" style="--li:19; --S:2;">
+                <input type="email" required>
+                <label>Email</label>
+                <box-icon name="envelope" type="solid" color="gray"></box-icon>
+            </div>
 
-<div class="card">
-<p class="small">ENTER YOUR FRIEND'S ROOM CODE</p>
-<input id="roomInput" maxlength="6" placeholder="ABC123">
+            <div class="input-box animation" style="--li:19; --S:3;">
+                <input type="password" required>
+                <label>Password</label>
+                <box-icon name="lock-alt" type="solid" color="gray"></box-icon>
+            </div>
 
-<button onclick="joinRoom()">⚔️ JOIN BATTLE</button>
-<button class="secondary" onclick="show('home')">← BACK</button>
-</div>
-</div>
-</section>
+            <div class="input-box animation" style="--li:20; --S:4;">
+                <button class="btn" type="submit">
+                    Register
+                </button>
+            </div>
 
+            <div class="regi-link animation" style="--li:21; --S:5;">
+                <p>
+                    Already have an account?
+                    <br>
+                    <a href="#" class="SignInLink">Sign In</a>
+                </p>
+            </div>
 
-<!-- LOBBY -->
-<section id="lobby" class="screen">
-<div class="wrap">
+        </form>
+    </div>
 
-<div class="logo" style="font-size:45px">BATTLE LOBBY</div>
+    <!-- REGISTER INFO -->
+    <div class="info-content Register">
 
-<div class="card">
-<p class="small">PRIVATE ROOM</p>
-<div class="room" id="roomCode">------</div>
+        <h2 class="animation" style="--li:17; --S:0;">
+            Welcome!
+        </h2>
 
-<button class="secondary" onclick="copyRoom()">📋 COPY CODE</button>
+        <p class="animation" style="--li:18; --S:1;">
+            We're delighted to have you here.
+        </p>
 
-<p id="lobbyStatus" class="status">Waiting for opponent...</p>
-
-<div class="scores">
-<div class="scorebox">
-YOU
-<h3 id="youReady">NOT READY</h3>
-</div>
-<div class="scorebox">
-OPPONENT
-<h3 id="oppReady">WAITING</h3>
-</div>
-</div>
-
-<button id="readyBtn" onclick="readyUp()">✅ READY UP</button>
-<button class="secondary" onclick="leaveRoom()">🏠 LEAVE</button>
-</div>
-
-</div>
-</section>
-
-
-<!-- COUNTDOWN -->
-<section id="countdown" class="screen">
-<div class="logo">GET READY</div>
-<div class="big" id="countNumber">3</div>
-<p>DUEL STARTING...</p>
-</section>
-
-
-<!-- BATTLE -->
-<section id="battle" class="screen">
-
-<div class="gameHeader">
-
-<div class="scorebox">
-YOU
-<div class="big" id="myScore">0</div>
-</div>
-
-<div>
-<div class="timer" id="gameTime">30</div>
-<div class="small">SECONDS</div>
-</div>
-
-<div class="scorebox">
-OPPONENT
-<div class="big" id="enemyScore">—</div>
-</div>
+    </div>
 
 </div>
 
-<div class="combo" id="combo"></div>
-
-<div class="arena" id="arena">
-<button id="target" onclick="hit()">CLICK!</button>
-</div>
-
-</section>
-
-
-<!-- RESULT -->
-<section id="result" class="screen">
-<div class="wrap">
-
-<div class="logo" style="font-size:55px">RESULT</div>
-
-<div class="card">
-<h1 id="winnerText">RESULT</h1>
-
-<div class="scores">
-<div class="scorebox">
-YOU
-<div class="resultScore" id="finalMyScore">0</div>
-</div>
-<div class="scorebox">
-OPPONENT
-<div class="resultScore" id="finalEnemyScore">0</div>
-</div>
-</div>
-
-<div class="rank" id="resultRank"></div>
-
-<button class="bigBtn" onclick="rematch()">🔄 PLAY AGAIN</button>
-<button class="secondary" onclick="leaveRoom()">🏠 HOME</button>
-</div>
-
-</div>
-</section>
-
-
-<!-- PROFILE -->
-<section id="profile" class="screen">
-<div class="wrap">
-
-<div class="logo" style="font-size:45px">PROFILE</div>
-
-<div class="card">
-<h2>⚡ CLICK MASTER</h2>
-<div class="rank" id="profileRank"></div>
-
-<p>⭐ LEVEL: <b id="profileLevel"></b></p>
-<p>🏆 WINS: <b id="profileWins"></b></p>
-<p>🔥 BEST SCORE: <b id="profileBest"></b></p>
-<p>⚡ BEST COMBO: <b id="profileCombo"></b></p>
-<p>🪙 COINS: <b id="profileCoins"></b></p>
-
-<button class="secondary" onclick="show('home')">← BACK</button>
-</div>
-
-</div>
-</section>
-
-
-<!-- LEADERBOARD -->
-<section id="leaderboard" class="screen">
-<div class="wrap">
-
-<div class="logo" style="font-size:45px">LEADERBOARD</div>
-
-<div class="card">
-<div class="list">
-<div class="leader"><b>🥇 YOU</b><b id="lbYou">0</b></div>
-<div class="leader"><b>🥈 SPEED DEMON</b><b>—</b></div>
-<div class="leader"><b>🥉 CLICK LEGEND</b><b>—</b></div>
-<div class="leader"><b>⚡ COMBO KING</b><b>—</b></div>
-</div>
-
-<p class="small" style="margin-top:18px">
-Global leaderboard coming with server-side rankings.
-</p>
-
-<button class="secondary" onclick="show('home')">← BACK</button>
-</div>
-
-</div>
-</section>
-
-
-<!-- MISSIONS -->
-<section id="missions" class="screen">
-<div class="wrap">
-
-<div class="logo" style="font-size:45px">MISSIONS</div>
-
-<div class="card">
-<div class="leader"><b>🔥 Reach 25 Combo</b><span>+50 XP</span></div>
-<div class="leader"><b>🏆 Score 50</b><span>+100 XP</span></div>
-<div class="leader"><b>⚡ Win 3 Battles</b><span>+150 XP</span></div>
-<div class="leader"><b>🎯 Hit 100 Targets</b><span>+200 XP</span></div>
-
-<button class="secondary" onclick="show('home')">← BACK</button>
-</div>
-
-</div>
-</section>
-
-
-<!-- THEMES -->
-<section id="themes" class="screen">
-<div class="wrap">
-
-<div class="logo" style="font-size:45px">CUSTOMIZE</div>
-
-<div class="card themeGrid">
-<button class="theme" onclick="setTheme('neon')">💜<br>NEON</button>
-<button class="theme fire" onclick="setTheme('fire')">🔥<br>FIRE</button>
-<button class="theme ice" onclick="setTheme('ice')">❄️<br>ICE</button>
-<button class="theme space" onclick="setTheme('space')">🌌<br>SPACE</button>
-</div>
-
-<div class="card">
-<button class="secondary" onclick="show('home')">← BACK</button>
-</div>
-
-</div>
-</section>
-
-
-<script type="module">
-
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-
-import{
-getAuth,
-signInAnonymously,
-onAuthStateChanged
-}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-import{
-getDatabase,
-ref,
-get,
-set,
-update,
-onValue,
-serverTimestamp
-}from"https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-
-/* FIREBASE */
-
-const firebaseConfig={
-apiKey:"AIzaSyBMQU4RgxQ6nC9HbcOhJyX4bMmTux4IfGU",
-authDomain:"click-battle-a1aee.firebaseapp.com",
-databaseURL:"https://click-battle-a1aee-default-rtdb.firebaseio.com",
-projectId:"click-battle-a1aee",
-storageBucket:"click-battle-a1aee.firebasestorage.app",
-messagingSenderId:"1023566714890",
-appId:"1:1023566714890:web:0ec28afde9c2782855e7f3",
-measurementId:"G-BT7RMQLRLG"
-};
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getDatabase(app);
-
-
-/* STATE */
-
-let user=null;
-let roomCode="";
-let role="";
-let roomRef=null;
-let roomListener=null;
-
-let mode=30;
-
-let score=0;
-let combo=0;
-let maxCombo=0;
-
-let running=false;
-let practice=false;
-
-let gameTimer=null;
-let startTimer=null;
-
-let endAt=0;
-let lastSync=0;
-let resultShown=false;
-
-
-/* LOCAL DATA */
-
-let coins=Number(localStorage.getItem("coins")||0);
-let wins=Number(localStorage.getItem("wins")||0);
-let best=Number(localStorage.getItem("best")||0);
-let bestCombo=Number(localStorage.getItem("bestCombo")||0);
-let xp=Number(localStorage.getItem("xp")||0);
-let level=Number(localStorage.getItem("level")||1);
-
-
-/* AUTH */
-
-signInAnonymously(auth).catch(e=>{
-console.log("Firebase auth:",e.message);
-});
-
-onAuthStateChanged(auth,u=>{
-user=u;
-});
-
-
-/* SCREEN */
-
-function show(id){
-document.querySelectorAll(".screen")
-.forEach(x=>x.classList.remove("active"));
-
-const s=document.getElementById(id);
-
-if(s)s.classList.add("active");
-}
-
-window.show=show;
-
-
-/* MODE */
-
-function chooseMode(x){
-
-mode=x;
-
-document.getElementById("modeText").innerText=
-"Selected: "+x+" seconds";
-
-["m15","m30","m60"].forEach(id=>{
-const b=document.getElementById(id);
-if(b)b.classList.remove("selected");
-});
-
-const selected=document.getElementById(
-x===15?"m15":x===30?"m30":"m60"
-);
-
-if(selected)selected.classList.add("selected");
-}
-
-window.chooseMode=chooseMode;
-
-
-/* JOIN PAGE */
-
-function showJoin(){
-show("join");
-}
-
-window.showJoin=showJoin;
-
-
-/* ROOM CODE */
-
-function generateCode(){
-
-const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-let code="";
-
-for(let i=0;i<6;i++)
-code+=chars[Math.floor(Math.random()*chars.length)];
-
-return code;
-}
-
-
-/* CREATE */
-
-async function createRoom(){
-
-if(!user){
-alert("Please wait 1-2 seconds for Firebase login.");
-return;
-}
-
-try{
-
-let code;
-let exists=true;
-
-while(exists){
-
-code=generateCode();
-
-const snap=await get(ref(db,"rooms/"+code));
-
-exists=snap.exists();
-}
-
-roomCode=code;
-role="host";
-practice=false;
-resultShown=false;
-
-roomRef=ref(db,"rooms/"+code);
-
-await set(roomRef,{
-hostUid:user.uid,
-guestUid:"",
-duration:mode,
-hostReady:false,
-guestReady:false,
-p1Score:0,
-p2Score:0,
-p1Combo:0,
-p2Combo:0,
-status:"waiting",
-createdAt:serverTimestamp()
-});
-
-document.getElementById("roomCode").innerText=code;
-
-show("lobby");
-listenRoom();
-
-}catch(e){
-
-alert("Create error: "+e.message);
-
-}
-
-}
-
-window.createRoom=createRoom;
-
-
-/* JOIN */
-
-async function joinRoom(){
-
-if(!user){
-alert("Please wait 1-2 seconds.");
-return;
-}
-
-const code=document.getElementById("roomInput")
-.value.trim().toUpperCase();
-
-if(code.length!==6){
-alert("Enter a 6-character code.");
-return;
-}
-
-try{
-
-const r=ref(db,"rooms/"+code);
-const snap=await get(r);
-
-if(!snap.exists()){
-alert("Room not found.");
-return;
-}
-
-const data=snap.val();
-
-if(data.guestUid){
-alert("Room is full.");
-return;
-}
-
-if(data.status!=="waiting"){
-alert("Battle already started.");
-return;
-}
-
-await update(r,{guestUid:user.uid});
-
-roomCode=code;
-role="guest";
-practice=false;
-resultShown=false;
-
-roomRef=r;
-mode=Number(data.duration)||30;
-
-document.getElementById("roomCode").innerText=code;
-
-show("lobby");
-listenRoom();
-
-}catch(e){
-
-alert("Join error: "+e.message);
-
-}
-
-}
-
-window.joinRoom=joinRoom;
-
-
-/* LISTENER */
-
-function listenRoom(){
-
-if(!roomRef)return;
-
-if(roomListener){
-roomListener();
-roomListener=null;
-}
-
-roomListener=onValue(roomRef,snap=>{
-
-if(!snap.exists())return;
-
-const data=snap.val();
-
-if(data.duration)
-mode=Number(data.duration);
-
-const opponent=
-role==="host"
-?!!data.guestUid
-:!!data.hostUid;
-
-const myReady=
-role==="host"
-?!!data.hostReady
-:!!data.guestReady;
-
-const enemyReady=
-role==="host"
-?!!data.guestReady
-:!!data.hostReady;
-
-document.getElementById("youReady").innerText=
-myReady?"READY":"NOT READY";
-
-document.getElementById("oppReady").innerText=
-opponent?(enemyReady?"READY":"NOT READY"):"WAITING";
-
-if(!opponent){
-
-document.getElementById("lobbyStatus")
-.innerText="Waiting for opponent...";
-
-}else if(!myReady){
-
-document.getElementById("lobbyStatus")
-.innerText="Press READY.";
-
-}else if(!enemyReady){
-
-document.getElementById("lobbyStatus")
-.innerText="Waiting for opponent READY...";
-
-}else{
-
-document.getElementById("lobbyStatus")
-.innerText="Starting...";
-
-}
-
-
-/* HOST START */
-
-if(
-role==="host" &&
-opponent &&
-data.hostReady &&
-data.guestReady &&
-data.status==="waiting"
-){
-
-update(roomRef,{
-status:"countdown",
-startAt:Date.now()+4000
-}).catch(()=>{});
-
-}
-
-
-/* COUNTDOWN */
-
-if(
-data.status==="countdown" &&
-data.startAt
-){
-
-startCountdown(data.startAt);
-
-}
-
-
-/* OPPONENT SCORE */
-
-if(
-data.status==="countdown"||
-data.status==="running"
-){
-
-const enemy=
-role==="host"
-?(data.p2Score||0)
-:(data.p1Score||0);
-
-document.getElementById("enemyScore")
-.innerText=enemy;
-
-}
-
-
-/* FINISH */
-
-if(
-data.status==="finished" &&
-!resultShown
-){
-
-stopGame();
-resultShown=true;
-
-setTimeout(()=>{
-showResult(data);
-},200);
-
-}
-
-});
-
-}
-
-
-/* READY */
-
-async function readyUp(){
-
-if(!roomRef||!user)return;
-
-const field=
-role==="host"?"hostReady":"guestReady";
-
-const scoreField=
-role==="host"?"p1Score":"p2Score";
-
-const comboField=
-role==="host"?"p1Combo":"p2Combo";
-
-try{
-
-await update(roomRef,{
-[field]:true,
-[scoreField]:0,
-[comboField]:0
-});
-
-}catch(e){
-
-alert("Ready error: "+e.message);
-
-}
-
-}
-
-window.readyUp=readyUp;
-
-
-/* COUNTDOWN */
-
-function startCountdown(startAt){
-
-if(startTimer)return;
-
-show("countdown");
-
-startTimer=setInterval(()=>{
-
-const left=startAt-Date.now();
-
-if(left<=0){
-
-clearInterval(startTimer);
-startTimer=null;
-
-startBattle();
-return;
-}
-
-document.getElementById("countNumber")
-.innerText=Math.ceil(left/1000);
-
-},80);
-
-}
-
-
-/* BATTLE */
-
-function startBattle(){
-
-if(running)return;
-
-running=true;
-practice=false;
-
-score=0;
-combo=0;
-maxCombo=0;
-
-endAt=Date.now()+mode*1000;
-
-document.getElementById("myScore").innerText=0;
-document.getElementById("enemyScore").innerText=0;
-document.getElementById("combo").innerText="";
-document.getElementById("gameTime").innerText=mode;
-
-show("battle");
-moveTarget();
-
-clearInterval(gameTimer);
-
-gameTimer=setInterval(()=>{
-
-const left=Math.max(0,endAt-Date.now());
-
-document.getElementById("gameTime")
-.innerText=Math.ceil(left/1000);
-
-if(left<=0)finishGame();
-
-},50);
-
-}
-
-
-/* HIT */
-
-function hit(){
-
-if(!running)return;
-
-combo++;
-maxCombo=Math.max(maxCombo,combo);
-
-let points=1;
-let text="+1";
-
-const roll=Math.random();
-
-if(roll<.08){
-
-points=5;
-text="💥 CRITICAL +5";
-
-}else if(combo%10===0){
-
-points=10;
-text="🔥 COMBO +10";
-
-}
-
-score+=points;
-
-document.getElementById("myScore").innerText=score;
-docum
+<script>
+    const container = document.querySelector(".container");
+    const signUpLink = document.querySelector(".SignUpLink");
+    const signInLink = document.querySelector(".SignInLink");
+
+    signUpLink.addEventListener("click", function(event) {
+        event.preventDefault();
+        container.classList.add("active");
+    });
+
+    signInLink.addEventListener("click", function(event) {
+        event.preventDefault();
+        container.classList.remove("active");
+    });
+
+    document.querySelector("#loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("Login button clicked!");
+    });
+
+    document.querySelector("#registerForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("Register button clicked!");
+    });
+</script>
+
+</body>
+</html>
