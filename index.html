@@ -1,483 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Register Form</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Login & Register</title>
 
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-            color: #fff;
-        }
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #25252b;
+}
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #25252b;
-            padding: 15px;
-        }
+.container {
+    width: 350px;
+    min-height: 430px;
+    padding: 35px;
+    border: 2px solid #e46033;
+    box-shadow: 0 0 25px #e46033;
+    border-radius: 10px;
+    background: #25252b;
+}
 
-        .container {
-            position: relative;
-            width: 750px;
-            height: 450px;
-            border: 2px solid #e46033;
-            box-shadow: 0 0 25px #e46033;
-            overflow: hidden;
-        }
+.form {
+    display: none;
+}
 
-        .container .form-box {
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 3;
-        }
+.form.active {
+    display: block;
+}
 
-        .form-box.Login {
-            left: 0;
-            padding: 0 40px;
-        }
+h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
 
-        .form-box.Register {
-            right: 0;
-            padding: 0 60px;
-        }
+.input {
+    width: 100%;
+    margin-bottom: 20px;
+}
 
-        .form-box h2 {
-            font-size: 32px;
-            text-align: center;
-        }
+.input input {
+    width: 100%;
+    height: 48px;
+    padding: 0 15px;
+    border: 2px solid #777;
+    border-radius: 6px;
+    outline: none;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+}
 
-        /* Login animation */
-        .form-box.Login .animation {
-            transform: translateX(0);
-            opacity: 1;
-            transition: .7s;
-            transition-delay: calc(.1s * var(--S));
-        }
+.input input:focus {
+    border-color: #e46033;
+}
 
-        .container.active .form-box.Login .animation {
-            transform: translateX(-120%);
-            opacity: 0;
-            transition-delay: calc(.1s * var(--D));
-        }
+button {
+    width: 100%;
+    height: 48px;
+    border: 2px solid #e46033;
+    border-radius: 25px;
+    background: #e46033;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        /* Register animation */
-        .form-box.Register .animation {
-            transform: translateX(120%);
-            opacity: 0;
-            filter: blur(10px);
-            transition: .7s ease;
-            transition-delay: calc(.1s * var(--S));
-        }
+button:active {
+    transform: scale(.98);
+}
 
-        .container.active .form-box.Register .animation {
-            transform: translateX(0);
-            opacity: 1;
-            filter: blur(0);
-            transition-delay: calc(.1s * var(--li));
-        }
+.switch {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+    font-size: 14px;
+}
 
-        /* Input */
-        .input-box {
-            position: relative;
-            width: 100%;
-            height: 50px;
-            margin-top: 25px;
-        }
+.switch a {
+    color: #e46033;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
 
-        .input-box input {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            border-bottom: 2px solid #fff;
-            padding-right: 30px;
-            font-size: 16px;
-            color: #fff;
-            font-weight: 600;
-            transition: .5s;
-        }
-
-        .input-box input:focus,
-        .input-box input:valid {
-            border-bottom-color: #e46033;
-        }
-
-        .input-box label {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #fff;
-            pointer-events: none;
-            transition: .5s;
-        }
-
-        .input-box input:focus ~ label,
-        .input-box input:valid ~ label {
-            top: -5px;
-            color: #e46033;
-        }
-
-        .input-box box-icon {
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        /* Button */
-        .btn {
-            position: relative;
-            width: 100%;
-            height: 45px;
-            background: transparent;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            border: 2px solid #e46033;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .btn::before {
-            content: "";
-            position: absolute;
-            height: 300%;
-            width: 100%;
-            background: linear-gradient(
-                #25252b,
-                #e46033,
-                #25252b,
-                #e46033
-            );
-            top: -100%;
-            left: 0;
-            z-index: -1;
-            transition: .5s;
-        }
-
-        .btn:hover::before {
-            top: 0;
-        }
-
-        /* Sign-up link */
-        .regi-link {
-            font-size: 14px;
-            text-align: center;
-            margin: 20px 0 10px;
-        }
-
-        .regi-link a {
-            text-decoration: none;
-            color: #e46033;
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            z-index: 10;
-        }
-
-        .regi-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Info content */
-        .info-content {
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .info-content.Login {
-            right: 0;
-            text-align: right;
-            padding: 0 40px 60px 150px;
-        }
-
-        .info-content.Register {
-            left: 0;
-            text-align: left;
-            padding: 0 150px 60px 38px;
-        }
-
-        .info-content.Login .animation {
-            transform: translateX(0);
-            opacity: 1;
-            filter: blur(0);
-            transition: .7s ease;
-            transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .info-content.Login .animation {
-            transform: translateX(120%);
-            opacity: 0;
-            filter: blur(10px);
-            transition-delay: calc(.1s * var(--D));
-        }
-
-        .info-content.Register .animation {
-            transform: translateX(-120%);
-            opacity: 0;
-            filter: blur(10px);
-            transition: .7s ease;
-            transition-delay: calc(.1s * var(--S));
-        }
-
-        .container.active .info-content.Register .animation {
-            transform: translateX(0);
-            opacity: 1;
-            filter: blur(0);
-            transition-delay: calc(.1s * var(--li));
-        }
-
-        .info-content h2 {
-            text-transform: uppercase;
-            font-size: 36px;
-            line-height: 1.3;
-        }
-
-        .info-content p {
-            font-size: 16px;
-        }
-
-        /* Curved shapes */
-        .curved-shape,
-        .curved-shape2 {
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .container .curved-shape {
-            right: 0;
-            top: -5px;
-            height: 600px;
-            width: 850px;
-            background: linear-gradient(45deg, #25252b, #e46033);
-            transform: rotate(10deg) skewY(40deg);
-            transform-origin: bottom right;
-            transition: 1.5s ease;
-            transition-delay: 1.6s;
-            z-index: 1;
-        }
-
-        .container.active .curved-shape {
-            transform: rotate(0deg) skewY(0deg);
-            transition-delay: .5s;
-        }
-
-        .container .curved-shape2 {
-            left: 250px;
-            top: 100%;
-            height: 700px;
-            width: 850px;
-            background: #25252b;
-            border-top: 3px solid #e46033;
-            transform: rotate(0deg) skewY(0deg);
-            transform-origin: bottom left;
-            transition: 1.5s ease;
-            transition-delay: .5s;
-            z-index: 1;
-        }
-
-        .container.active .curved-shape2 {
-            transform: rotate(-11deg) skewY(-41deg);
-            transition-delay: 1.2s;
-        }
-
-        /* Mobile */
-        @media (max-width: 700px) {
-            .container {
-                width: 100%;
-                max-width: 420px;
-                height: 500px;
-            }
-
-            .form-box {
-                width: 100% !important;
-                padding: 0 30px !important;
-            }
-
-            .info-content,
-            .curved-shape,
-            .curved-shape2 {
-                display: none;
-            }
-        }
-    </style>
+.switch a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <div class="curved-shape"></div>
-        <div class="curved-shape2"></div>
+    <!-- LOGIN -->
+    <div id="login" class="form active">
 
-        <!-- Login -->
-        <div class="form-box Login">
+        <h2>Login</h2>
 
-            <h2 class="animation" style="--D:0; --S:21;">
-                Login
-            </h2>
-
-            <form id="loginForm">
-
-                <div class="input-box animation" style="--D:1; --S:22;">
-                    <input type="text" required>
-                    <label>Username</label>
-                    <box-icon type="solid" name="user" color="gray"></box-icon>
-                </div>
-
-                <div class="input-box animation" style="--D:2; --S:23;">
-                    <input type="password" required>
-                    <label>Password</label>
-                    <box-icon name="lock-alt" type="solid" color="gray"></box-icon>
-                </div>
-
-                <div class="input-box animation" style="--D:3; --S:24;">
-                    <button class="btn" type="submit">
-                        Login
-                    </button>
-                </div>
-
-                <div class="regi-link animation" style="--D:4; --S:25;">
-                    <p>
-                        Don't have an account?
-                        <br>
-                        <a href="#" class="SignUpLink">Sign Up</a>
-                    </p>
-                </div>
-
-            </form>
+        <div class="input">
+            <input type="text" placeholder="Username">
         </div>
 
-        <!-- Login info -->
-        <div class="info-content Login">
-
-            <h2 class="animation" style="--D:0; --S:20;">
-                Welcome Back!
-            </h2>
-
-            <p class="animation" style="--D:1; --S:21;">
-                We are happy to have you with us again.
-                If you need anything, we are here to help.
-            </p>
-
+        <div class="input">
+            <input type="password" placeholder="Password">
         </div>
 
-        <!-- Register -->
-        <div class="form-box Register">
+        <button type="button" onclick="login()">
+            Login
+        </button>
 
-            <h2 class="animation" style="--li:17; --S:0;">
-                Register
-            </h2>
-
-            <form id="registerForm">
-
-                <div class="input-box animation" style="--li:18; --S:1;">
-                    <input type="text" required>
-                    <label>Username</label>
-                    <box-icon type="solid" name="user" color="gray"></box-icon>
-                </div>
-
-                <div class="input-box animation" style="--li:19; --S:2;">
-                    <input type="email" required>
-                    <label>Email</label>
-                    <box-icon name="envelope" type="solid" color="gray"></box-icon>
-                </div>
-
-                <div class="input-box animation" style="--li:19; --S:3;">
-                    <input type="password" required>
-                    <label>Password</label>
-                    <box-icon name="lock-alt" type="solid" color="gray"></box-icon>
-                </div>
-
-                <div class="input-box animation" style="--li:20; --S:4;">
-                    <button class="btn" type="submit">
-                        Register
-                    </button>
-                </div>
-
-                <div class="regi-link animation" style="--li:21; --S:5;">
-                    <p>
-                        Already have an account?
-                        <br>
-                        <a href="#" class="SignInLink">Sign In</a>
-                    </p>
-                </div>
-
-            </form>
-        </div>
-
-        <!-- Register info -->
-        <div class="info-content Register">
-
-            <h2 class="animation" style="--li:17; --S:0;">
-                Welcome!
-            </h2>
-
-            <p class="animation" style="--li:18; --S:1;">
-                We're delighted to have you here.
-                If you need any assistance, feel free to reach out.
-            </p>
-
+        <div class="switch">
+            Don't have an account?
+            <br>
+            <a href="#" onclick="showRegister(event)">
+                Sign Up
+            </a>
         </div>
 
     </div>
 
-    <script>
-        const container = document.querySelector(".container");
-        const signUpLink = document.querySelector(".SignUpLink");
-        const signInLink = document.querySelector(".SignInLink");
 
-        signUpLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            container.classList.add("active");
-        });
+    <!-- REGISTER -->
+    <div id="register" class="form">
 
-        signInLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            container.classList.remove("active");
-        });
+        <h2>Register</h2>
 
-        document.querySelector("#loginForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            alert("Login button clicked!");
-        });
+        <div class="input">
+            <input type="text" placeholder="Username">
+        </div>
 
-        document.querySelector("#registerForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            alert("Register button clicked!");
-        });
-    </script>
+        <div class="input">
+            <input type="email" placeholder="Email">
+        </div>
+
+        <div class="input">
+            <input type="password" placeholder="Password">
+        </div>
+
+        <button type="button" onclick="register()">
+            Register
+        </button>
+
+        <div class="switch">
+            Already have an account?
+            <br>
+            <a href="#" onclick="showLogin(event)">
+                Sign In
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function showRegister(event) {
+    event.preventDefault();
+
+    document.getElementById("login").classList.remove("active");
+    document.getElementById("register").classList.add("active");
+}
+
+function showLogin(event) {
+    event.preventDefault();
+
+    document.getElementById("register").classList.remove("active");
+    document.getElementById("login").classList.add("active");
+}
+
+function login() {
+    alert("Login button clicked!");
+}
+
+function register() {
+    alert("Register button clicked!");
+}
+
+</script>
 
 </body>
-</html>
+    </html>
