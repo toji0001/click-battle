@@ -1,99 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ColourPlay | Colour Prediction Demo</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlayHub Arcade</title>
 <style>
-:root{--gold:#d9b184;--gold2:#c99b6b;--green:#19aa68;--red:#f04d5b;--violet:#a94bdb;--ink:#293247;--muted:#8790a0;--bg:#f4f5fa}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
+:root{--gold:#d9b184;--gold2:#c99b6b;--ink:#253047;--muted:#8791a3;--bg:#f3f5fa;--green:#18a968;--red:#ef4e5b;--purple:#a94bd7;--blue:#378fe3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
 header{height:68px;background:linear-gradient(110deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#fff}
-.logo{font-size:24px;font-weight:800;letter-spacing:-.8px}.icons{font-size:23px;display:flex;gap:18px}
-main{max-width:720px;margin:auto;padding:12px 13px 34px}
-.card{background:#fff;border-radius:22px;padding:17px;margin-bottom:14px;box-shadow:0 2px 8px #1e293b0a}
-.wallet{text-align:center;padding:23px 18px}.balance{font-size:32px;font-weight:800;margin:0 0 7px}.sub{color:var(--muted);font-size:14px}
-.wallet-actions{display:flex;gap:12px;margin-top:20px}.wallet-actions button{flex:1;border:0;border-radius:30px;padding:14px 5px;color:#fff;font-weight:bold;font-size:17px}
-.green{background:var(--green)}.red{background:var(--red)}.violet{background:var(--violet)}
-.notice{display:flex;align-items:center;gap:9px;color:#657084;font-size:14px;line-height:1.4}.notice b{color:#bd8b51;white-space:nowrap}
-.tabs{display:flex;background:#fff;border-radius:18px;padding:5px;gap:4px;margin:17px 0}.tab{flex:1;border:0;border-radius:13px;padding:14px 2px;background:#fff;color:#7d8798;font-weight:bold;font-size:14px}.tab.active{background:linear-gradient(110deg,var(--gold),var(--gold2));color:white}
-.timerbox{background:linear-gradient(110deg,#d8b184,#c99b6b);color:white;border-radius:20px;padding:17px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center}
-.how{border:1px solid #ffffffaa;background:transparent;color:white;border-radius:24px;padding:9px 12px;margin-bottom:12px}
-.history-title{font-size:14px;margin:0 0 9px}.balls{display:flex;gap:6px}.ball{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:bold;border:3px solid #ffffff88;box-shadow:inset 0 0 0 2px #ffffff55;font-size:14px}.ball.green{background:var(--green)}.ball.red{background:var(--red)}.ball.violet{background:var(--violet)}
-.timer-right{text-align:center}.timer-right b{display:block;margin-bottom:8px}.digits{display:flex;justify-content:center;gap:4px}.digits span{background:#fff;color:#30394b;border-radius:4px;font-weight:800;font-size:25px;padding:7px 5px;min-width:29px}.period{font-size:12px;overflow-wrap:anywhere;margin-top:8px}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin:20px 3px 12px;font-weight:800;font-size:18px}.badge{font-size:11px;color:#a46e35;background:#fff0df;padding:6px 9px;border-radius:12px}
-.colors{display:flex;gap:10px;margin-bottom:20px}.pick{flex:1;border:0;border-radius:11px;color:white;font-size:18px;font-weight:bold;padding:16px 2px;box-shadow:inset 0 -3px #00000012}.pick.selected{outline:3px solid #333b4e;outline-offset:2px}
-.number-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:20px}.number{aspect-ratio:1;border:5px solid #ffffff9c;border-radius:50%;color:white;font-size:32px;font-weight:800;box-shadow:inset 0 0 0 3px #ffffff42}.number.selected{outline:3px solid #30384a;outline-offset:1px}
-.number.n0,.number.n5{background:linear-gradient(135deg,var(--violet),var(--red))}.number.n1,.number.n3,.number.n7,.number.n9{background:linear-gradient(135deg,#31d88d,#079657)}.number.n2,.number.n4,.number.n6,.number.n8{background:linear-gradient(135deg,#ff7d86,#e62f49)}
-.stakes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stake{border:1px solid #e4e7ee;border-radius:9px;background:#f7f8fb;padding:11px 2px;color:#687286;font-weight:bold}.stake.active{background:var(--green);color:white;border-color:var(--green)}
-.betline{display:flex;justify-content:space-between;align-items:center;margin:17px 0 12px;font-size:14px}.confirm{width:100%;border:0;border-radius:28px;background:#368fe4;color:white;font-size:18px;font-weight:bold;padding:15px}
-.status{text-align:center;color:#677185;font-size:13px;min-height:18px;margin-top:11px;line-height:1.4}
-.results{display:flex;gap:8px;flex-wrap:wrap}.result{display:flex;align-items:center;gap:8px;background:#f6f7fb;padding:9px 11px;border-radius:12px;font-size:13px}.result .ball{width:27px;height:27px}
-footer{text-align:center;color:#9aa1af;font-size:12px;line-height:1.5;margin-top:22px}
-@media(max-width:420px){main{padding:10px}.timerbox{padding:13px 9px}.digits span{font-size:21px;min-width:25px;padding:7px 3px}.number-grid{gap:7px}.number{font-size:28px;border-width:4px}.pick{font-size:16px}.tab{font-size:12px}.wallet-actions button{font-size:15px}}
+.brand{font-size:23px;font-weight:900;letter-spacing:-.6px}.head-right{font-size:13px;font-weight:bold;background:#ffffff30;border:1px solid #ffffff70;padding:9px 12px;border-radius:20px}
+main{max-width:760px;margin:auto;padding:13px}
+.panel{background:#fff;border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 3px 14px #2530470a}
+.balance-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.label{font-size:12px;color:var(--muted);letter-spacing:.4px}.balance{font-size:28px;font-weight:900;margin-top:5px}.bonus{border:0;background:var(--green);color:white;border-radius:22px;padding:12px 14px;font-weight:bold}
+.banner{background:linear-gradient(110deg,#d9b184,#c99b6b);border-radius:17px;padding:18px;color:white;margin:14px 0}.banner h2{margin:0 0 7px;font-size:22px}.banner p{margin:0;line-height:1.4;font-size:14px}
+.search{width:100%;padding:13px 15px;border:1px solid #e3e7ef;border-radius:14px;font-size:15px;outline:none}
+.section-title{font-size:18px;font-weight:900;margin:19px 2px 11px;display:flex;justify-content:space-between;align-items:center}.tag{font-size:11px;color:#a3713c;background:#fff0de;border-radius:15px;padding:6px 9px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.game-card{background:white;border:1px solid #edf0f5;border-radius:18px;padding:15px;text-align:left;cursor:pointer;min-height:126px;box-shadow:0 3px 12px #26304708;color:var(--ink)}
+.game-card:active{transform:scale(.985)}.game-icon{font-size:30px;margin-bottom:10px}.game-name{font-size:16px;font-weight:800}.game-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+.hidden{display:none!important}.back{border:0;background:#f0f2f7;border-radius:20px;padding:9px 13px;font-weight:bold;color:#5f6879}
+.game-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.game-top h2{margin:0;font-size:21px}
+.play-area{background:#f7f8fc;border-radius:16px;padding:16px;text-align:center;margin:12px 0}
+.big-emoji{font-size:54px;margin:8px}.buttons{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:14px 0}
+.btn{border:0;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:800;color:white;background:var(--blue);cursor:pointer}
+.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.purple{background:var(--purple)}.btn.gold{background:#c7955e}.btn.gray{background:#6d778a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.output{min-height:25px;text-align:center;font-weight:bold;color:#596478;line-height:1.4;margin-top:12px}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:390px;margin:14px auto}
+.tile{border:0;border-radius:10px;aspect-ratio:1;background:#dce3ef;font-size:25px;font-weight:bold;color:#263047}
+.tile.open{background:#fff;border:1px solid #dce2ec}
+.color-dot{width:72px;height:72px;border-radius:50%;margin:12px auto;border:5px solid #fff;box-shadow:0 0 0 1px #dce2ec}
+.history{display:flex;flex-wrap:wrap;gap:7px}.history span{background:#f1f3f8;border-radius:9px;padding:7px 10px;font-size:12px}
+footer{text-align:center;color:#929bad;font-size:11px;line-height:1.5;padding:18px 8px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:360px){main{padding:9px}.panel{padding:13px}.game-card{padding:12px}.btn{padding:11px 12px}}
 </style>
 </head>
 <body>
-<header><div class="icons" aria-hidden="true">‹</div><div class="logo">ColourPlay</div><div class="icons" aria-hidden="true">♧　☰</div></header>
+<header><div class="brand">🎮 PlayHub</div><div class="head-right">ARCADE · DEMO</div></header>
 <main>
-  <section class="card wallet">
-    <p class="balance">🪙 <span id="balance">1,000</span></p>
-    <div class="sub">Demo coins · No real money</div>
-    <div class="wallet-actions"><button class="red" id="historyJump">Game history</button><button class="green" id="daily">Daily bonus +50</button></div>
-  </section>
-  <section class="card notice"><b>📢 Notice</b><span>Welcome to ColourPlay. This is a play-money demo. Coins have no cash value and cannot be deposited or withdrawn.</span></section>
-  <div class="tabs" role="tablist">
-    <button class="tab" data-seconds="30">WinGo 30s</button>
-    <button class="tab active" data-seconds="60">WinGo 1 Min</button>
-    <button class="tab" data-seconds="180">WinGo 3 Min</button>
-    <button class="tab" data-seconds="300">WinGo 5 Min</button>
-  </div>
-  <section class="timerbox">
-    <div><button class="how" id="how">ⓘ How to play</button><p class="history-title">Recent results</p><div class="balls" id="recentBalls"></div></div>
-    <div class="timer-right"><b>Period countdown</b><div class="digits"><span id="min">00</span><span>:</span><span id="sec">60</span></div><div class="period">Period: <span id="period">202609190001</span></div></div>
-  </section>
-  <div class="section-head"><span>Make a prediction</span><span class="badge">DEMO MODE</span></div>
-  <section class="card">
-    <div class="colors">
-      <button class="pick green" data-choice="Green">Green</button>
-      <button class="pick violet" data-choice="Violet">Violet</button>
-      <button class="pick red" data-choice="Red">Red</button>
-    </div>
-    <div class="number-grid" id="numberGrid"></div>
-    <div class="section-head" style="margin:0 0 12px;font-size:16px"><span>Choose demo stake</span><span id="stakeLabel">10 coins</span></div>
-    <div class="stakes">
-      <button class="stake active" data-stake="10">10</button><button class="stake" data-stake="20">20</button><button class="stake" data-stake="50">50</button><button class="stake" data-stake="100">100</button>
-    </div>
-    <div class="betline"><span>Selected prediction</span><b id="selectedLabel">None</b></div>
-    <button class="confirm" id="confirm">Confirm demo prediction</button>
-    <div class="status" id="status" aria-live="polite">Choose a colour or number, then confirm.</div>
-  </section>
-  <div class="section-head" id="history"><span>Game history</span><span class="badge">Latest first</span></div>
-  <section class="card"><div class="results" id="results"></div></section>
-  <footer>ColourPlay is an independent demo interface. Virtual coins only; no real-money wagering, deposits, or withdrawals.</footer>
+<section id="home">
+ <div class="panel">
+  <div class="balance-row"><div><div class="label">YOUR ARCADE SCORE</div><div class="balance">⭐ <span id="score">0</span></div></div><button class="bonus" id="daily">Daily +25 pts</button></div>
+  <div class="label" style="margin-top:8px">Points are for fun only and have no cash value.</div>
+ </div>
+ <div class="banner"><h2>Welcome to PlayHub!</h2><p>Pick a mini-game, play a round, and build your arcade score. No deposits, wagers, or cash-outs.</p></div>
+ <input id="search" class="search" placeholder="🔎  Find a game..." aria-label="Find a game">
+ <div class="section-title">All Games <span class="tag">8 MINI-GAMES</span></div>
+ <div class="grid" id="gameGrid"></div>
+</section>
+<section id="gameView" class="panel hidden">
+ <div class="game-top"><h2 id="gameTitle">Game</h2><button class="back" id="back">← All games</button></div>
+ <div id="gameContent"></div>
+</section>
+<section class="panel"><div class="section-title" style="margin-top:0">Recent activity</div><div id="activity" class="history"><span>Play a game to see your activity here.</span></div></section>
+<footer>PlayHub is an original casual arcade demo. Scores and points are fictional and cannot be bought, sold, deposited, or withdrawn. Games use no real-money wagering.</footer>
 </main>
 <script>
-const colours=['Green','Violet','Red'];let balance=1000,stake=10,choice=null,roundSeconds=60,remaining=60,period=202609190001,history=[],predictions=[],lastBonusDay='';
+const games=[
+{id:'colour',name:'Colour Match',icon:'🎨',desc:'Watch the colour, then tap its match.'},
+{id:'dice',name:'Dice Guess',icon:'🎲',desc:'Guess whether the die will be high or low.'},
+{id:'duel',name:'Dragon & Tiger',icon:'🐉',desc:'Choose which fantasy card has the higher rank.'},
+{id:'number',name:'Lucky Number',icon:'🔢',desc:'Pick a number and see if it matches.'},
+{id:'mines',name:'Gem Finder',icon:'💎',desc:'A simple memory puzzle: reveal gems, avoid traps.'},
+{id:'wheel',name:'Prize Wheel',icon:'🎡',desc:'Spin for a random arcade-point bonus.'},
+{id:'cricket',name:'Cricket Hit',icon:'🏏',desc:'Tap to swing and score a run.'},
+{id:'slots',name:'Reel Match',icon:'🎰',desc:'Spin three reels and match symbols for points.'}
+];
+let score=0,dailyClaimed=false,activity=[],colourTarget='',gemTrap=-1,gemRevealed=[],gemDone=false;
 const $=id=>document.getElementById(id);
-function colourFor(n){return n===0||n===5?'Violet':([1,3,7,9].includes(n)?'Green':'Red')}
-function classFor(c){return c.toLowerCase()}
-function makeBall(n){let c=colourFor(n);return `<span class="ball ${classFor(c)}">${n}</span>`}
-function updateBalance(){$('balance').textContent=balance.toLocaleString('en-US')}
-function renderRecent(){$('recentBalls').innerHTML=history.slice(0,5).map(x=>makeBall(x.n)).join('')||'<span class="sub">No rounds yet</span>'}
-function renderHistory(){$('results').innerHTML=history.slice(0,12).map(x=>`<div class="result"><b>#${x.period}</b>${makeBall(x.n)}<span>${x.colour}</span></div>`).join('')||'<span class="sub">Results will appear here after the first round.</span>'}
-function renderNumbers(){$('numberGrid').innerHTML=Array.from({length:10},(_,n)=>`<button class="number n${n}" data-number="${n}">${n}</button>`).join('')}
-function updateSelection(){$('selectedLabel').textContent=choice===null?'None':choice;$('stakeLabel').textContent=stake+' coins';document.querySelectorAll('.pick,.number').forEach(b=>b.classList.toggle('selected',b.dataset.choice===choice||b.dataset.number===String(choice)))}
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');roundSeconds=Number(b.dataset.seconds);remaining=roundSeconds;showTimer()}));
-document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',()=>{choice=b.dataset.choice;updateSelection()}));
-$('numberGrid').addEventListener('click',e=>{let b=e.target.closest('[data-number]');if(b){choice=Number(b.dataset.number);updateSelection()}});
-document.querySelectorAll('.stake').forEach(b=>b.addEventListener('click',()=>{stake=Number(b.dataset.stake);document.querySelectorAll('.stake').forEach(x=>x.classList.toggle('active',x===b));updateSelection()}));
-$('confirm').addEventListener('click',()=>{if(choice===null){$('status').textContent='First select a colour or number.';return}if(balance<stake){$('status').textContent='Not enough demo coins. Claim your daily bonus.';return}balance-=stake;updateBalance();predictions.push({period,choice,stake});$('status').textContent=`Demo prediction recorded: ${choice} for ${stake} coins. No real money is involved.`;choice=null;updateSelection()});
-$('daily').addEventListener('click',()=>{let today=new Date().toDateString();if(lastBonusDay===today){$('status').textContent='You have already claimed today’s demo bonus.';return}lastBonusDay=today;balance+=50;updateBalance();$('status').textContent='50 demo coins added to your balance!'});
-$('historyJump').addEventListener('click',()=>$('history').scrollIntoView({behavior:'smooth'}));
-$('how').addEventListener('click',()=>alert('Choose a colour or number and a demo stake, then confirm. When the timer ends, a random demo result is generated. Matching predictions receive demo coins only. Coins have no cash value.'));
-function showTimer(){let m=Math.floor(remaining/60),s=remaining%60;$('min').textContent=String(m).padStart(2,'0');$('sec').textContent=String(s).padStart(2,'0');$('period').textContent=String(period)}
-function newRound(){let n=Math.floor(Math.random()*10),colour=colourFor(n);history.unshift({period,n,colour});predictions.filter(p=>p.period===period).forEach(p=>{let matched=typeof p.choice==='number'?p.choice===n:p.choice===colour;if(matched){let reward=p.stake*2;balance+=reward;$('status').textContent=`Your demo prediction matched! +${reward} coins.`}});if(!predictions.some(p=>p.period===period))$('status').textContent=`Round result: ${n} · ${colour}.`;predictions=predictions.filter(p=>p.period!==period);period++;remaining=roundSeconds;updateBalance();renderRecent();renderHistory();showTimer()}
-renderNumbers();updateSelection();updateBalance();renderRecent();renderHistory();showTimer();
-setInterval(()=>{remaining--;if(remaining<=0)newRound();else showTimer()},1000);
+function addPoints(n,why){score=Math.max(0,score+n);$('score').textContent=score;activity.unshift((n>=0?'+':'')+n+' pts · '+why);renderActivity()}
+function renderActivity(){$('activity').innerHTML=activity.slice(0,8).map(t=>'<span>'+t+'</span>').join('')||'<span>Play a game to see your activity here.</span>'}
+function renderGames(filter=''){$('gameGrid').innerHTML=games.filter(g=>(g.name+' '+g.desc).toLowerCase().includes(filter.toLowerCase())).map(g=>`<button class="game-card" data-id="${g.id}"><div class="game-icon">${g.icon}</div><div class="game-name">${g.name}</div><div class="game-desc">${g.desc}</div></button>`).join('')||'<div>No games found.</div>'}
+$('gameGrid').addEventListener('click',e=>{let b=e.target.closest('[data-id]');if(b)openGame(b.dataset.id)});
+$('search').addEventListener('input',e=>renderGames(e.target.value));
+$('daily').addEventListener('click',()=>{if(dailyClaimed){alert('Daily points already collected today in this session.');return}dailyClaimed=true;addPoints(25,'daily bonus');$('daily').textContent='Collected ✓';$('daily').disabled=true});
+$('back').addEventListener('click',()=>{$('gameView').classList.add('hidden');$('home').classList.remove('hidden')});
+function openGame(id){let g=games.find(x=>x.id===id);$('home').classList.add('hidden');$('gameView').classList.remove('hidden');$('gameTitle').textContent=g.name;const c=$('gameContent');c.innerHTML='';if(id==='colour')colourGame(c);if(id==='dice')diceGame(c);if(id==='duel')duelGame(c);if(id==='number')numberGame(c);if(id==='mines')minesGame(c);if(id==='wheel')wheelGame(c);if(id==='cricket')cricketGame(c);if(id==='slots')slotsGame(c)}
+function colourGame(c){let palette=[['Red','#ef4e5b'],['Green','#19a968'],['Violet','#a94bd7']];colourTarget=palette[Math.floor(Math.random()*3)][0];c.innerHTML=`<p>Match the target colour to earn 5 points.</p><div class="play-area"><div class="label">TARGET</div><div class="color-dot" style="background:${palette.find(x=>x[0]===colourTarget)[1]}"></div><strong>Which colour is it?</strong><div class="buttons">${palette.map(x=>`<button class="btn" style="background:${x[1]}" data-col="${x[0]}">${x[0]}</button>`).join('')}</div><div class="output" id="out"></div></div>`;c.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>{if(c.dataset.done)return;c.dataset.done='1';let ok=b.dataset.col===colourTarget;$('out').textContent=ok?'Correct! +5 points':'Not this time. Target was '+colourTarget+'.';if(ok)addPoints(5,'Colour Match')})}
+function diceGame(c){let done=false;c.innerHTML=`<p>Pick high (4–6) or low (1–3), then roll.</p><div class="play-area"><div class="big-emoji" id="die">🎲</div><div class="buttons"><button class="btn green" data-guess="high">High · 4–6</button><button class="btn purple" data-guess="low">Low · 1–3</button></div><button class="btn gold" id="roll">Roll die</button><div class="output" id="out"></div></div>`;let guess='';c.querySelectorAll('[data-guess]').forEach(b=>b.onclick=()=>{guess=b.dataset.guess;$('out').textContent='Chosen: '+guess+'. Now roll.'});$('roll').onclick=()=>{if(done)return;if(!guess){$('out').textContent='Choose high or low first.';return}done=true;let n=1+Math.floor(Math.random()*6);$('die').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];let ok=(n>=4)===(guess==='high');$('out').textContent=`Rolled ${n}. ${ok?'Correct! +5 points':'No match this round.'}`;if(ok)addPoints(5,'Dice Guess')}}
+function duelGame(c){let done=false;c.innerHTML=`<p>Pick Dragon or Tiger. Higher card rank wins this friendly round.</p><div class="play-area"><div class="buttons"><button class="btn red" data-pick="Dragon">🐉 Dragon</button><button class="btn gold" data-pick="Tiger">🐅 Tiger</button></div><button class="btn" id="draw">Reveal cards</button><div class="output" id="out"></div></div>`;let pick='';c.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{pick=b.dataset.pick;$('out').textContent='You picked '+pick+'. Reveal the cards.'});$('draw').onclick=()=>{if(done)return;if(!pick){$('out').textContent='Pick a side first.';return}done=true;let a=1+Math.floor(Math.random()*13),b=1+Math.floor(Math.random()*13);let winner=a===b?'Tie':a>b?'Dragon':'Tiger';let ok=winner===pick;$('out').textContent=`Dragon ${a} · Tiger ${b}. ${winner==='Tie'?'It is a tie.':winner+' wins.'} ${ok?'+5 points!':''}`;if(ok)addPoints(5,'Dragon & Tiger')}}
+function numberGame(c){let target=Math.floor(Math.random()*10),done=false;c.innerHTML=`<p>Choose a number from 0 to 9. Exact match earns 10 points.</p><div class="play-area"><div class="buttons">${Array.from({length:10},(_,i)=>`<button class="btn gray" data-n="${i}">${i}</button>`).join('')}</div><div class="output" id="out">Choose your number.</div></div>`;c.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{if(done)return;done=true;let n=+b.dataset.n;$('out').textContent=`Your pick: ${n}. Result: ${target}. ${n===target?'Exact match! +10 points.':'No match this round.'}`;if(n===target)addPoints(10,'Lucky Number')})}
+function minesGame(c){gemTrap=Math.floor(Math.random()*16);gemRevealed=[];gemDone=false;c.innerHTML=`<p>Reveal tiles to find gems. One tile hides a harmless game-over trap. Find 3 gems for 8 points.</p><div class="tiles" id="tiles">${Array.from({length:16},(_,i)=>`<button class="tile" data-tile="${i}">?</button>`).join('')}</div><div class="output" id="out">Gems found: 0 / 3</div><button class="btn" id="again">New puzzle</button>`;c.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>{if(gemDone||gemRevealed.includes(+b.dataset.tile))return;let n=+b.dataset.tile;gemRevealed.push(n);b.classList.add('open');if(n===gemTrap){b.textContent='⚠️';gemDone=true;$('out').textContent='Trap tile! Puzzle ended. Try a new board.';c.querySelectorAll('[data-tile]').forEach(x=>{if(+x.dataset.tile===gemTrap)x.textContent='⚠️';x.disabled=true})}else{b.textContent='💎';let found=gemRevealed.length;if(found>=3){gemDone=true;$('out').textContent='Three gems found! +8 points.';addPoints(8,'Gem Finder');c.querySelectorAll('[data-tile]').forEach(x=>x.disabled=true)}else $('out').textContent=`Gems found: ${found} / 3`}});$('again').onclick=()=>minesGame(c)}
+function wheelGame(c){let done=false;c.innerHTML=`<p>Spin once for a random arcade score bonus.</p><div class="play-area"><div class="big-emoji" id="wheel">🎡</div><button class="btn purple" id="spin">Spin wheel</button><div class="output" id="out"></div></div>`;$('spin').onclick=()=>{if(done)return;done=true;let prizes=[1,2,3,5,8,10],p=prizes[Math.floor(Math.random()*prizes.length)];$('wheel').textContent='🎉';$('out').textContent='You earned '+p+' points!';addPoints(p,'Prize Wheel')}}
+function cricketGame(c){let done=false;c.innerHTML=`<p>One ball coming! Tap Swing to try for a run.</p><div class="play-area"><div class="big-emoji">🏏 🏟️</div><button class="btn green" id="swing">Swing!</button><div class="output" id="out"></div></div>`;$('swing').onclick=()=>{if(done)return;done=true;let runs=[0,1,2,4,6][Math.floor(Math.random()*5)];$('out').textContent=runs===0?'Bowled! No run this time.':`Great hit! ${runs} run${runs===1?'':'s'} · +${runs} points.`;if(runs)addPoints(runs,'Cricket Hit')}}
+function slotsGame(c){let done=false;let syms=['🍒','🍋','🔔','⭐','🍇'];c.innerHTML=`<p>Spin the reels. Matching symbols earn arcade points.</p><div class="play-area"><div class="big-emoji" id="reels">❔ ❔ ❔</div><button class="btn gold" id="spin">Spin reels</button><div class="output" id="out"></div></div>`;$('spin').onclick=()=>{if(done)return;done=true;let a=Array.from({length:3},()=>syms[Math.floor(Math.random()*syms.length)]);$('reels').textContent=a.join(' ');let pts=a[0]===a[1]&&a[1]===a[2]?12:a[0]===a[1]||a[1]===a[2]||a[0]===a[2]?4:0;$('out').textContent=pts?`Match! +${pts} points.`:'No matching pair. Try another game.';if(pts)addPoints(pts,'Reel Match')}}
+renderGames();
 </script>
-</body>
-</html>
+</body></html>
