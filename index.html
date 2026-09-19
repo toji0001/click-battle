@@ -1,88 +1,163 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PlayHub Arcade</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PlayHub — Arcade Demo</title>
 <style>
-:root{--gold:#d9b184;--gold2:#c99b6b;--ink:#253047;--muted:#8791a3;--bg:#f3f5fa;--green:#18a968;--red:#ef4e5b;--purple:#a94bd7;--blue:#378fe3}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
-header{height:68px;background:linear-gradient(110deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#fff}
-.brand{font-size:23px;font-weight:900;letter-spacing:-.6px}.head-right{font-size:13px;font-weight:bold;background:#ffffff30;border:1px solid #ffffff70;padding:9px 12px;border-radius:20px}
-main{max-width:760px;margin:auto;padding:13px}
-.panel{background:#fff;border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 3px 14px #2530470a}
-.balance-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.label{font-size:12px;color:var(--muted);letter-spacing:.4px}.balance{font-size:28px;font-weight:900;margin-top:5px}.bonus{border:0;background:var(--green);color:white;border-radius:22px;padding:12px 14px;font-weight:bold}
-.banner{background:linear-gradient(110deg,#d9b184,#c99b6b);border-radius:17px;padding:18px;color:white;margin:14px 0}.banner h2{margin:0 0 7px;font-size:22px}.banner p{margin:0;line-height:1.4;font-size:14px}
-.search{width:100%;padding:13px 15px;border:1px solid #e3e7ef;border-radius:14px;font-size:15px;outline:none}
-.section-title{font-size:18px;font-weight:900;margin:19px 2px 11px;display:flex;justify-content:space-between;align-items:center}.tag{font-size:11px;color:#a3713c;background:#fff0de;border-radius:15px;padding:6px 9px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.game-card{background:white;border:1px solid #edf0f5;border-radius:18px;padding:15px;text-align:left;cursor:pointer;min-height:126px;box-shadow:0 3px 12px #26304708;color:var(--ink)}
-.game-card:active{transform:scale(.985)}.game-icon{font-size:30px;margin-bottom:10px}.game-name{font-size:16px;font-weight:800}.game-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
-.hidden{display:none!important}.back{border:0;background:#f0f2f7;border-radius:20px;padding:9px 13px;font-weight:bold;color:#5f6879}
-.game-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.game-top h2{margin:0;font-size:21px}
-.play-area{background:#f7f8fc;border-radius:16px;padding:16px;text-align:center;margin:12px 0}
-.big-emoji{font-size:54px;margin:8px}.buttons{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:14px 0}
-.btn{border:0;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:800;color:white;background:var(--blue);cursor:pointer}
-.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.purple{background:var(--purple)}.btn.gold{background:#c7955e}.btn.gray{background:#6d778a}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.output{min-height:25px;text-align:center;font-weight:bold;color:#596478;line-height:1.4;margin-top:12px}
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:390px;margin:14px auto}
-.tile{border:0;border-radius:10px;aspect-ratio:1;background:#dce3ef;font-size:25px;font-weight:bold;color:#263047}
-.tile.open{background:#fff;border:1px solid #dce2ec}
-.color-dot{width:72px;height:72px;border-radius:50%;margin:12px auto;border:5px solid #fff;box-shadow:0 0 0 1px #dce2ec}
-.history{display:flex;flex-wrap:wrap;gap:7px}.history span{background:#f1f3f8;border-radius:9px;padding:7px 10px;font-size:12px}
-footer{text-align:center;color:#929bad;font-size:11px;line-height:1.5;padding:18px 8px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:360px){main{padding:9px}.panel{padding:13px}.game-card{padding:12px}.btn{padding:11px 12px}}
+:root{--gold:#f6c84b;--gold2:#ffdf79;--ink:#22232a;--muted:#92929b;--bg:#f4f5f8;--red:#ed4b5b;--green:#16b879;--violet:#8b55d9;--navy:#262b46}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#292a31}button{font:inherit;cursor:pointer;border:0}button:focus-visible{outline:3px solid #7da7ff}
+.app{max-width:480px;margin:auto;min-height:100vh;background:#f5f6fa;box-shadow:0 0 30px #00000012;position:relative;padding-bottom:76px}
+.top{height:58px;background:linear-gradient(105deg,#ffdc70,#f2b92e);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:20;box-shadow:0 2px 7px #b8872925}
+.brand{font-size:23px;font-weight:900;letter-spacing:-1px;color:#6e4310}.brand span{color:#fff;text-shadow:0 1px 2px #9b6819}
+.head-actions{display:flex;gap:8px}.round-btn{background:#fff8df;border:1px solid #fff0bf;border-radius:18px;padding:8px 12px;font-size:12px;font-weight:bold;color:#815613}
+.page{display:none;padding:12px}.page.active{display:block}
+.hero{height:145px;border-radius:14px;overflow:hidden;background:linear-gradient(115deg,#2b2854,#5e3d8f 58%,#f2b94b);color:#fff;position:relative;padding:18px 20px;margin-bottom:13px}
+.hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-35px;top:-45px;border:22px solid #ffffff16;box-shadow:0 0 0 20px #ffffff0c}
+.hero h2{font-size:24px;line-height:1.1;margin:0 0 9px;max-width:240px}.hero p{margin:0;font-size:12px;color:#eee2ff}.hero .hero-tag{display:inline-block;margin-top:13px;background:#ffda68;color:#6b4313;border-radius:20px;padding:7px 13px;font-weight:bold;font-size:11px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:17px 2px 10px;font-weight:800;font-size:16px}.section-title small{font-size:11px;color:#a0a0aa;font-weight:500}
+.wallet-card{border-radius:15px;background:linear-gradient(115deg,#34304d,#52447a);color:white;padding:16px;margin-bottom:13px;position:relative;overflow:hidden}
+.wallet-card:after{content:"";position:absolute;right:-30px;top:-55px;width:150px;height:150px;border:24px solid #ffffff0b;border-radius:50%}
+.wallet-label{font-size:12px;color:#d5d0e8}.balance{font-size:29px;font-weight:900;margin:6px 0 13px}.wallet-actions{display:flex;gap:9px;position:relative;z-index:1}.wallet-actions button{padding:9px 14px;border-radius:20px;font-size:12px;font-weight:bold}.primary{background:var(--gold);color:#67460e}.secondary{background:#ffffff20;color:#fff;border:1px solid #ffffff30}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.quick{background:white;border-radius:12px;padding:12px 4px;text-align:center;box-shadow:0 3px 10px #272d4210;color:#4a4a54;font-size:11px;font-weight:bold}
+.quick .ico{height:42px;width:42px;margin:0 auto 7px;border-radius:13px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,#fff1c4,#ffdb71)}
+.promo-row{display:flex;gap:10px;overflow:auto;padding-bottom:4px}.promo{min-width:190px;border-radius:12px;padding:13px;color:white;background:linear-gradient(120deg,#ed7b53,#f3ba51)}.promo:nth-child(2){background:linear-gradient(120deg,#6156bc,#a27ce1)}.promo b{font-size:14px}.promo div{font-size:11px;margin-top:5px;opacity:.9}
+.game-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.game-card{background:#fff;border-radius:13px;padding:13px;box-shadow:0 3px 12px #1b21400b;display:flex;gap:10px;align-items:center;text-align:left;width:100%;color:#333}
+.game-icon{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;font-size:25px;background:linear-gradient(135deg,#ffedb4,#ffce51);flex-shrink:0}.game-card b{font-size:13px;display:block}.game-card small{font-size:10px;color:#999;display:block;margin-top:5px}
+.notice{background:#fff7df;border:1px solid #ffe7a1;color:#88631c;border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.5;margin:12px 0}
+.wingo-head{background:linear-gradient(110deg,#ecb735,#ffe07b);border-radius:14px;padding:15px;margin-bottom:12px;color:#654414}
+.wingo-head .title{font-size:21px;font-weight:900}.wingo-head p{font-size:11px;margin:6px 0 0;line-height:1.5}
+.period-box{background:#fff;border-radius:13px;padding:13px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px #00000008}
+.period-box small{color:#999;font-size:10px;display:block;margin-bottom:5px}.period-box strong{font-size:16px}.timer{font-size:22px;font-weight:900;color:#e94c57;letter-spacing:2px}
+.tabs{display:flex;background:#e8e9ef;border-radius:10px;padding:4px;gap:3px;margin:12px 0}.tabs button{flex:1;background:transparent;border-radius:8px;padding:10px 2px;font-size:12px;font-weight:bold;color:#777}.tabs button.selected{background:#fff;color:#9c6811;box-shadow:0 2px 5px #00000010}
+.panel{background:white;border-radius:13px;padding:14px;margin:11px 0;box-shadow:0 2px 8px #00000008}
+.panel-title{font-size:14px;font-weight:800;margin-bottom:12px}
+.color-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.color-chip{border-radius:8px;padding:12px 0;color:white;font-size:13px;font-weight:800;opacity:.95}.color-chip.red{background:var(--red)}.color-chip.green{background:var(--green)}.color-chip.violet{background:var(--violet)}
+.num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.num{height:45px;border-radius:50%;background:#f4f5f9;border:2px solid #ececf3;color:#4d4e58;font-size:17px;font-weight:900}.num:nth-child(3n+1){color:var(--green);border-color:#d4f3e6}.num:nth-child(3n+2){color:var(--red);border-color:#ffe0e3}.num:nth-child(5n){color:var(--violet);border-color:#e6d9fb}
+.free-result{background:#f7f7fb;border:1px dashed #d9d9e6;border-radius:10px;text-align:center;padding:13px;color:#777;font-size:12px;line-height:1.5}.free-result strong{color:#343543;font-size:17px}
+.history{width:100%;border-collapse:collapse;font-size:11px}.history th{background:#faf8f1;color:#8a6b2a;padding:10px 5px;text-align:center}.history td{padding:10px 5px;text-align:center;border-bottom:1px solid #f0f0f4}.pill{display:inline-block;border-radius:12px;padding:4px 8px;color:white;font-weight:bold}.pill.red{background:var(--red)}.pill.green{background:var(--green)}.pill.violet{background:var(--violet)}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);height:67px;background:#fff;display:flex;justify-content:space-around;align-items:center;box-shadow:0 -3px 14px #20244210;z-index:30;border-radius:15px 15px 0 0}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;color:#9a9aa4;font-size:10px;font-weight:bold;min-width:58px}.nav-item .navico{font-size:21px}.nav-item.active{color:#c18b1d}
+.profile-head{border-radius:14px;background:linear-gradient(110deg,#f2bd40,#ffdf7d);padding:18px;display:flex;align-items:center;gap:12px}.avatar{width:52px;height:52px;border-radius:50%;background:#fff5cf;display:grid;place-items:center;font-size:27px}.profile-head b{font-size:16px}.profile-head small{display:block;margin-top:5px;color:#8a641c;font-size:11px}
+.menu-list{background:white;border-radius:12px;margin-top:13px;overflow:hidden}.menu-row{display:flex;justify-content:space-between;padding:15px;border-bottom:1px solid #f1f1f4;font-size:13px}.menu-row:last-child{border:0}.menu-row span:last-child{color:#aaa}
+.empty{text-align:center;padding:28px;color:#aaa;font-size:12px}.toast{position:fixed;bottom:83px;left:50%;transform:translateX(-50%);background:#2f3040;color:#fff;padding:11px 16px;border-radius:20px;font-size:12px;z-index:50;display:none;white-space:nowrap;box-shadow:0 5px 20px #0003}
+@media(min-width:600px){body{padding:18px 0}.app{border-radius:18px;overflow:hidden;min-height:calc(100vh - 36px)}.top{border-radius:18px 18px 0 0}.bottom-nav{bottom:18px;border-radius:15px}.toast{bottom:105px}}
 </style>
 </head>
 <body>
-<header><div class="brand">🎮 PlayHub</div><div class="head-right">ARCADE · DEMO</div></header>
+<div class="app">
+<header class="top">
+  <div class="brand">PLAY<span>HUB</span></div>
+  <div class="head-actions"><button class="round-btn" onclick="toast('Demo profile — no account needed')">♙ Guest</button><button class="round-btn" onclick="showPage('wallet')">◎ <span id="headPoints">1000</span></button></div>
+</header>
+
 <main>
-<section id="home">
- <div class="panel">
-  <div class="balance-row"><div><div class="label">YOUR ARCADE SCORE</div><div class="balance">⭐ <span id="score">0</span></div></div><button class="bonus" id="daily">Daily +25 pts</button></div>
-  <div class="label" style="margin-top:8px">Points are for fun only and have no cash value.</div>
- </div>
- <div class="banner"><h2>Welcome to PlayHub!</h2><p>Pick a mini-game, play a round, and build your arcade score. No deposits, wagers, or cash-outs.</p></div>
- <input id="search" class="search" placeholder="🔎  Find a game..." aria-label="Find a game">
- <div class="section-title">All Games <span class="tag">8 MINI-GAMES</span></div>
- <div class="grid" id="gameGrid"></div>
+<section id="home" class="page active">
+  <div class="hero"><h2>PLAY MORE.<br>HAVE FUN.</h2><p>Arcade games · Daily challenges · Just for fun</p><span class="hero-tag">★ DEMO ARCADE</span></div>
+  <div class="wallet-card"><div class="wallet-label">YOUR DEMO POINTS</div><div class="balance"><span id="homePoints">1,000</span> <span style="font-size:13px;color:#e4d8ff">pts</span></div><div class="wallet-actions"><button class="primary" onclick="showPage('wallet')">Point details</button><button class="secondary" onclick="toast('Demo points are for display only')">How it works</button></div></div>
+  <div class="section-title">Quick access <small>Explore the arcade</small></div>
+  <div class="quick-grid">
+    <button class="quick" onclick="showPage('wingo')"><div class="ico">🎯</div>Color Demo</button>
+    <button class="quick" onclick="showPage('games')"><div class="ico">🎮</div>All Games</button>
+    <button class="quick" onclick="showPage('records')"><div class="ico">📋</div>Results</button>
+    <button class="quick" onclick="showPage('profile')"><div class="ico">👤</div>Profile</button>
+  </div>
+  <div class="section-title">Featured <small>Free-to-play previews</small></div>
+  <div class="promo-row"><div class="promo"><b>🎯 Color & Number</b><div>Explore randomly generated demo results</div></div><div class="promo"><b>🧩 Puzzle Corner</b><div>More casual arcade experiences</div></div></div>
+  <div class="section-title">Popular games <small onclick="showPage('games')" style="cursor:pointer">View all ›</small></div>
+  <div class="game-list">
+    <button class="game-card" onclick="showPage('wingo')"><span class="game-icon">🎯</span><span><b>Color Demo</b><small>Number & color results</small></span></button>
+    <button class="game-card" onclick="toast('This demo game is a preview only')"><span class="game-icon">🃏</span><span><b>Card Match</b><small>Memory mini-game</small></span></button>
+    <button class="game-card" onclick="toast('Coming soon in this prototype')"><span class="game-icon">🎲</span><span><b>Dice Dash</b><small>Casual arcade preview</small></span></button>
+    <button class="game-card" onclick="toast('Coming soon in this prototype')"><span class="game-icon">🧩</span><span><b>Lucky Puzzle</b><small>Brain teaser</small></span></button>
+  </div>
+  <div class="notice">This is an independent visual prototype, not the original Big Mumbai website. It uses no real money, deposits, withdrawals, or wagering.</div>
 </section>
-<section id="gameView" class="panel hidden">
- <div class="game-top"><h2 id="gameTitle">Game</h2><button class="back" id="back">← All games</button></div>
- <div id="gameContent"></div>
+
+<section id="games" class="page">
+  <div class="section-title" style="margin-top:4px">All games <small>Demo arcade</small></div>
+  <div class="game-list">
+    <button class="game-card" onclick="showPage('wingo')"><span class="game-icon">🎯</span><span><b>Color Demo</b><small>Open color & number viewer</small></span></button>
+    <button class="game-card" onclick="toast('Preview only — mini-game not included')"><span class="game-icon">🃏</span><span><b>Card Match</b><small>Memory game preview</small></span></button>
+    <button class="game-card" onclick="toast('Preview only — mini-game not included')"><span class="game-icon">🎲</span><span><b>Dice Dash</b><small>Casual dice preview</small></span></button>
+    <button class="game-card" onclick="toast('Preview only — mini-game not included')"><span class="game-icon">🧩</span><span><b>Lucky Puzzle</b><small>Brain teaser preview</small></span></button>
+    <button class="game-card" onclick="toast('Preview only — mini-game not included')"><span class="game-icon">🚀</span><span><b>Rocket Run</b><small>Arcade concept</small></span></button>
+    <button class="game-card" onclick="toast('Preview only — mini-game not included')"><span class="game-icon">🏆</span><span><b>Daily Challenge</b><small>Challenge hub preview</small></span></button>
+  </div>
+  <div class="notice">Only the Color Demo result viewer is interactive. Other tiles are non-functional design previews.</div>
 </section>
-<section class="panel"><div class="section-title" style="margin-top:0">Recent activity</div><div id="activity" class="history"><span>Play a game to see your activity here.</span></div></section>
-<footer>PlayHub is an original casual arcade demo. Scores and points are fictional and cannot be bought, sold, deposited, or withdrawn. Games use no real-money wagering.</footer>
+
+<section id="wingo" class="page">
+  <div class="wingo-head"><div class="title">🎯 COLOR DEMO</div><p>Watch a free random number and its matching color. This page is a non-wagering demo: selections do not cost or earn points.</p></div>
+  <div class="period-box"><div><small>DEMO ROUND</small><strong id="roundNo">D-00001</strong></div><div style="text-align:right"><small>NEXT REFRESH</small><div class="timer" id="timer">00:30</div></div></div>
+  <div class="tabs" id="periodTabs"><button class="selected" data-seconds="30">30 Sec</button><button data-seconds="60">1 Min</button><button data-seconds="180">3 Min</button><button data-seconds="300">5 Min</button></div>
+  <div class="panel"><div class="panel-title">Color guide</div><div class="color-row"><div class="color-chip green">GREEN</div><div class="color-chip red">RED</div><div class="color-chip violet">VIOLET</div></div><p style="font-size:11px;color:#9696a0;margin:10px 0 0">Color labels are for learning the interface only. No predictions or bets are submitted.</p></div>
+  <div class="panel"><div class="panel-title">Number guide</div><div class="num-grid" id="numberGrid"></div><div class="free-result" style="margin-top:13px">Current demo result<br><strong id="resultDisplay">—</strong><br><span id="resultColor">Tap “Generate demo result” to begin.</span></div><button class="primary" style="width:100%;padding:13px;border-radius:9px;margin-top:12px;font-weight:800" id="generateBtn">Generate demo result</button></div>
+  <div class="panel"><div class="panel-title">Recent demo results</div><div style="overflow-x:auto"><table class="history"><thead><tr><th>Round</th><th>Number</th><th>Color</th><th>Mode</th></tr></thead><tbody id="historyRows"><tr><td colspan="4" style="color:#aaa">No results yet</td></tr></tbody></table></div></div>
+  <div class="notice">This demo does not accept stakes and does not offer prizes, deposits, or withdrawals.</div>
+</section>
+
+<section id="wallet" class="page">
+  <div class="section-title" style="margin-top:4px">Demo wallet</div>
+  <div class="wallet-card"><div class="wallet-label">DISPLAY BALANCE</div><div class="balance"><span id="walletPoints">1,000</span> <span style="font-size:13px;color:#e4d8ff">pts</span></div><div class="wallet-label">Demo-only points · no monetary value</div></div>
+  <div class="panel"><div class="panel-title">Point information</div><div class="menu-row"><span>Starting demo points</span><b>1,000 pts</b></div><div class="menu-row"><span>Cash value</span><b>₹0</b></div><div class="menu-row"><span>Deposits / withdrawals</span><b>Unavailable</b></div></div>
+  <div class="notice">Points are a static interface sample. They cannot be purchased, transferred, wagered, or redeemed.</div>
+</section>
+
+<section id="records" class="page">
+  <div class="section-title" style="margin-top:4px">Demo history <small>Locally generated</small></div>
+  <div class="panel"><div style="overflow-x:auto"><table class="history"><thead><tr><th>Round</th><th>Number</th><th>Color</th><th>Mode</th></tr></thead><tbody id="historyRows2"><tr><td colspan="4" style="color:#aaa">No results yet</td></tr></tbody></table></div></div>
+  <div class="notice">Results are random samples generated in your browser. They are not connected to a real game service.</div>
+</section>
+
+<section id="profile" class="page">
+  <div class="profile-head"><div class="avatar">👤</div><div><b>Guest Player</b><small>Demo account · ID: PLAY-0001</small></div></div>
+  <div class="menu-list"><div class="menu-row"><span>🪙 Demo points</span><span>1,000 pts　›</span></div><div class="menu-row"><span>📋 Demo history</span><span onclick="showPage('records')" style="cursor:pointer">View　›</span></div><div class="menu-row"><span>🔔 Notifications</span><span>Preview　›</span></div><div class="menu-row"><span>⚙️ Settings</span><span>›</span></div><div class="menu-row"><span>ℹ️ About this prototype</span><span>›</span></div></div>
+  <div class="notice">No sign-up, identity verification, payments, or personal data collection is implemented.</div>
+</section>
 </main>
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="home"><span class="navico">⌂</span>Home</button>
+  <button class="nav-item" data-page="games"><span class="navico">🎮</span>Games</button>
+  <button class="nav-item" data-page="wingo"><span class="navico">🎯</span>Color</button>
+  <button class="nav-item" data-page="records"><span class="navico">▤</span>Records</button>
+  <button class="nav-item" data-page="profile"><span class="navico">♙</span>Profile</button>
+</nav>
+<div class="toast" id="toast"></div>
+</div>
 <script>
-const games=[
-{id:'colour',name:'Colour Match',icon:'🎨',desc:'Watch the colour, then tap its match.'},
-{id:'dice',name:'Dice Guess',icon:'🎲',desc:'Guess whether the die will be high or low.'},
-{id:'duel',name:'Dragon & Tiger',icon:'🐉',desc:'Choose which fantasy card has the higher rank.'},
-{id:'number',name:'Lucky Number',icon:'🔢',desc:'Pick a number and see if it matches.'},
-{id:'mines',name:'Gem Finder',icon:'💎',desc:'A simple memory puzzle: reveal gems, avoid traps.'},
-{id:'wheel',name:'Prize Wheel',icon:'🎡',desc:'Spin for a random arcade-point bonus.'},
-{id:'cricket',name:'Cricket Hit',icon:'🏏',desc:'Tap to swing and score a run.'},
-{id:'slots',name:'Reel Match',icon:'🎰',desc:'Spin three reels and match symbols for points.'}
-];
-let score=0,dailyClaimed=false,activity=[],colourTarget='',gemTrap=-1,gemRevealed=[],gemDone=false;
-const $=id=>document.getElementById(id);
-function addPoints(n,why){score=Math.max(0,score+n);$('score').textContent=score;activity.unshift((n>=0?'+':'')+n+' pts · '+why);renderActivity()}
-function renderActivity(){$('activity').innerHTML=activity.slice(0,8).map(t=>'<span>'+t+'</span>').join('')||'<span>Play a game to see your activity here.</span>'}
-function renderGames(filter=''){$('gameGrid').innerHTML=games.filter(g=>(g.name+' '+g.desc).toLowerCase().includes(filter.toLowerCase())).map(g=>`<button class="game-card" data-id="${g.id}"><div class="game-icon">${g.icon}</div><div class="game-name">${g.name}</div><div class="game-desc">${g.desc}</div></button>`).join('')||'<div>No games found.</div>'}
-$('gameGrid').addEventListener('click',e=>{let b=e.target.closest('[data-id]');if(b)openGame(b.dataset.id)});
-$('search').addEventListener('input',e=>renderGames(e.target.value));
-$('daily').addEventListener('click',()=>{if(dailyClaimed){alert('Daily points already collected today in this session.');return}dailyClaimed=true;addPoints(25,'daily bonus');$('daily').textContent='Collected ✓';$('daily').disabled=true});
-$('back').addEventListener('click',()=>{$('gameView').classList.add('hidden');$('home').classList.remove('hidden')});
-function openGame(id){let g=games.find(x=>x.id===id);$('home').classList.add('hidden');$('gameView').classList.remove('hidden');$('gameTitle').textContent=g.name;const c=$('gameContent');c.innerHTML='';if(id==='colour')colourGame(c);if(id==='dice')diceGame(c);if(id==='duel')duelGame(c);if(id==='number')numberGame(c);if(id==='mines')minesGame(c);if(id==='wheel')wheelGame(c);if(id==='cricket')cricketGame(c);if(id==='slots')slotsGame(c)}
-function colourGame(c){let palette=[['Red','#ef4e5b'],['Green','#19a968'],['Violet','#a94bd7']];colourTarget=palette[Math.floor(Math.random()*3)][0];c.innerHTML=`<p>Match the target colour to earn 5 points.</p><div class="play-area"><div class="label">TARGET</div><div class="color-dot" style="background:${palette.find(x=>x[0]===colourTarget)[1]}"></div><strong>Which colour is it?</strong><div class="buttons">${palette.map(x=>`<button class="btn" style="background:${x[1]}" data-col="${x[0]}">${x[0]}</button>`).join('')}</div><div class="output" id="out"></div></div>`;c.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>{if(c.dataset.done)return;c.dataset.done='1';let ok=b.dataset.col===colourTarget;$('out').textContent=ok?'Correct! +5 points':'Not this time. Target was '+colourTarget+'.';if(ok)addPoints(5,'Colour Match')})}
-function diceGame(c){let done=false;c.innerHTML=`<p>Pick high (4–6) or low (1–3), then roll.</p><div class="play-area"><div class="big-emoji" id="die">🎲</div><div class="buttons"><button class="btn green" data-guess="high">High · 4–6</button><button class="btn purple" data-guess="low">Low · 1–3</button></div><button class="btn gold" id="roll">Roll die</button><div class="output" id="out"></div></div>`;let guess='';c.querySelectorAll('[data-guess]').forEach(b=>b.onclick=()=>{guess=b.dataset.guess;$('out').textContent='Chosen: '+guess+'. Now roll.'});$('roll').onclick=()=>{if(done)return;if(!guess){$('out').textContent='Choose high or low first.';return}done=true;let n=1+Math.floor(Math.random()*6);$('die').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];let ok=(n>=4)===(guess==='high');$('out').textContent=`Rolled ${n}. ${ok?'Correct! +5 points':'No match this round.'}`;if(ok)addPoints(5,'Dice Guess')}}
-function duelGame(c){let done=false;c.innerHTML=`<p>Pick Dragon or Tiger. Higher card rank wins this friendly round.</p><div class="play-area"><div class="buttons"><button class="btn red" data-pick="Dragon">🐉 Dragon</button><button class="btn gold" data-pick="Tiger">🐅 Tiger</button></div><button class="btn" id="draw">Reveal cards</button><div class="output" id="out"></div></div>`;let pick='';c.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{pick=b.dataset.pick;$('out').textContent='You picked '+pick+'. Reveal the cards.'});$('draw').onclick=()=>{if(done)return;if(!pick){$('out').textContent='Pick a side first.';return}done=true;let a=1+Math.floor(Math.random()*13),b=1+Math.floor(Math.random()*13);let winner=a===b?'Tie':a>b?'Dragon':'Tiger';let ok=winner===pick;$('out').textContent=`Dragon ${a} · Tiger ${b}. ${winner==='Tie'?'It is a tie.':winner+' wins.'} ${ok?'+5 points!':''}`;if(ok)addPoints(5,'Dragon & Tiger')}}
-function numberGame(c){let target=Math.floor(Math.random()*10),done=false;c.innerHTML=`<p>Choose a number from 0 to 9. Exact match earns 10 points.</p><div class="play-area"><div class="buttons">${Array.from({length:10},(_,i)=>`<button class="btn gray" data-n="${i}">${i}</button>`).join('')}</div><div class="output" id="out">Choose your number.</div></div>`;c.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{if(done)return;done=true;let n=+b.dataset.n;$('out').textContent=`Your pick: ${n}. Result: ${target}. ${n===target?'Exact match! +10 points.':'No match this round.'}`;if(n===target)addPoints(10,'Lucky Number')})}
-function minesGame(c){gemTrap=Math.floor(Math.random()*16);gemRevealed=[];gemDone=false;c.innerHTML=`<p>Reveal tiles to find gems. One tile hides a harmless game-over trap. Find 3 gems for 8 points.</p><div class="tiles" id="tiles">${Array.from({length:16},(_,i)=>`<button class="tile" data-tile="${i}">?</button>`).join('')}</div><div class="output" id="out">Gems found: 0 / 3</div><button class="btn" id="again">New puzzle</button>`;c.querySelectorAll('[data-tile]').forEach(b=>b.onclick=()=>{if(gemDone||gemRevealed.includes(+b.dataset.tile))return;let n=+b.dataset.tile;gemRevealed.push(n);b.classList.add('open');if(n===gemTrap){b.textContent='⚠️';gemDone=true;$('out').textContent='Trap tile! Puzzle ended. Try a new board.';c.querySelectorAll('[data-tile]').forEach(x=>{if(+x.dataset.tile===gemTrap)x.textContent='⚠️';x.disabled=true})}else{b.textContent='💎';let found=gemRevealed.length;if(found>=3){gemDone=true;$('out').textContent='Three gems found! +8 points.';addPoints(8,'Gem Finder');c.querySelectorAll('[data-tile]').forEach(x=>x.disabled=true)}else $('out').textContent=`Gems found: ${found} / 3`}});$('again').onclick=()=>minesGame(c)}
-function wheelGame(c){let done=false;c.innerHTML=`<p>Spin once for a random arcade score bonus.</p><div class="play-area"><div class="big-emoji" id="wheel">🎡</div><button class="btn purple" id="spin">Spin wheel</button><div class="output" id="out"></div></div>`;$('spin').onclick=()=>{if(done)return;done=true;let prizes=[1,2,3,5,8,10],p=prizes[Math.floor(Math.random()*prizes.length)];$('wheel').textContent='🎉';$('out').textContent='You earned '+p+' points!';addPoints(p,'Prize Wheel')}}
-function cricketGame(c){let done=false;c.innerHTML=`<p>One ball coming! Tap Swing to try for a run.</p><div class="play-area"><div class="big-emoji">🏏 🏟️</div><button class="btn green" id="swing">Swing!</button><div class="output" id="out"></div></div>`;$('swing').onclick=()=>{if(done)return;done=true;let runs=[0,1,2,4,6][Math.floor(Math.random()*5)];$('out').textContent=runs===0?'Bowled! No run this time.':`Great hit! ${runs} run${runs===1?'':'s'} · +${runs} points.`;if(runs)addPoints(runs,'Cricket Hit')}}
-function slotsGame(c){let done=false;let syms=['🍒','🍋','🔔','⭐','🍇'];c.innerHTML=`<p>Spin the reels. Matching symbols earn arcade points.</p><div class="play-area"><div class="big-emoji" id="reels">❔ ❔ ❔</div><button class="btn gold" id="spin">Spin reels</button><div class="output" id="out"></div></div>`;$('spin').onclick=()=>{if(done)return;done=true;let a=Array.from({length:3},()=>syms[Math.floor(Math.random()*syms.length)]);$('reels').textContent=a.join(' ');let pts=a[0]===a[1]&&a[1]===a[2]?12:a[0]===a[1]||a[1]===a[2]||a[0]===a[2]?4:0;$('out').textContent=pts?`Match! +${pts} points.`:'No matching pair. Try another game.';if(pts)addPoints(pts,'Reel Match')}}
-renderGames();
+let points=1000, round=1, seconds=30, remaining=30, history=[];
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+ document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function toast(text){const el=document.getElementById('toast');el.textContent=text;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2300)}
+function updatePoints(){['headPoints','homePoints','walletPoints'].forEach(id=>document.getElementById(id).textContent=points.toLocaleString('en-US'))}
+const grid=document.getElementById('numberGrid');
+for(let n=0;n<10;n++){let b=document.createElement('button');b.className='num';b.textContent=n;b.title='Number '+n+' — display guide';b.addEventListener('click',()=>toast('Number '+n+' is only a guide; no selection or stake was made.'));grid.appendChild(b)}
+document.querySelectorAll('#periodTabs button').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('#periodTabs button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');
+ seconds=Number(b.dataset.seconds);remaining=seconds;renderTimer();toast('Demo interval changed');
+}));
+function renderTimer(){let m=String(Math.floor(remaining/60)).padStart(2,'0'),s=String(remaining%60).padStart(2,'0');document.getElementById('timer').textContent=m+':'+s}
+setInterval(()=>{remaining--;if(remaining<0)remaining=seconds;renderTimer()},1000);
+function colorFor(n){if(n===0||n===5)return 'VIOLET';return n%2===0?'RED':'GREEN'}
+function renderHistory(){
+ const html=history.length?history.map(r=>`<tr><td>${r.id}</td><td><b>${r.n}</b></td><td><span class="pill ${r.color.toLowerCase()}">${r.color}</span></td><td>${r.mode}</td></tr>`).join(''):'<tr><td colspan="4" style="color:#aaa">No results yet</td></tr>';
+ document.getElementById('historyRows').innerHTML=html;document.getElementById('historyRows2').innerHTML=html;
+}
+document.getElementById('generateBtn').addEventListener('click',()=>{
+ const n=Math.floor(Math.random()*10), color=colorFor(n), id='D-'+String(round++).padStart(5,'0');
+ document.getElementById('roundNo').textContent=id;
+ document.getElementById('resultDisplay').textContent=n;
+ document.getElementById('resultColor').innerHTML=`<span class="pill ${color.toLowerCase()}">${color}</span> · randomly generated sample`;
+ const mode=document.querySelector('#periodTabs button.selected').textContent;
+ history.unshift({id,n,color,mode});history=history.slice(0,12);renderHistory();remaining=seconds;renderTimer();
+});
+updatePoints();
 </script>
-</body></html>
+</body>
+</html>
