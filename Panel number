@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>
+    <link href='https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap' rel='stylesheet'>
+    <title>NUMBER PENNEL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: transparent !important;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
+        }
+
+        #mini {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #mini img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 15px rgba(255,0,255,0.5);
+            animation: pulsePurple 1.5s infinite alternate;
+            background: #000;
+        }
+
+        @keyframes pulsePurple {
+            0% { box-shadow: 0 0 10px rgba(255,0,255,0.4); }
+            100% { box-shadow: 0 0 20px rgba(255,50,255,0.8), 0 0 30px rgba(200,0,255,0.5); }
+        }
+
+        #main {
+            display: flex !important;
+            width: 260px;
+            padding: 18px 15px 20px 15px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(rgba(10,0,20,0.85), rgba(5,0,15,0.95)), 
+                        linear-gradient(rgba(255,0,255,0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,0,255,0.05) 1px, transparent 1px),
+                        linear-gradient(145deg, #3a0055, #1a0033, #4d0066);
+            background-size: auto, 25px 25px, 25px 25px, auto;
+            border: 1px solid rgba(255,0,255,0.5);
+            box-shadow: inset 0 0 15px rgba(255,0,255,0.25), 0 0 28px rgba(255,0,255,0.4);
+            flex-direction: column;
+            z-index: 1001;
+            transition: 0.3s;
+        }
+
+        #main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(200,100,255,0.2), transparent);
+            animation: shimmerBox 3s infinite;
+        }
+
+        @keyframes shimmerBox {
+            100% { left: 100%; }
+        }
+
+        .glow {
+            position: absolute;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5);
+            border-radius: 10px;
+        }
+        .glow.top { top: 2px; left: 50%; transform: translateX(-50%); width: 70px; height: 3px; }
+        .glow.bottom { bottom: 2px; left: 50%; transform: translateX(-50%); width: 70px; height: 3px; }
+        .glow.left { left: 2px; top: 50%; transform: translateY(-50%); width: 3px; height: 70px; }
+        .glow.right { right: 2px; top: 50%; transform: translateY(-50%); width: 3px; height: 70px; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .title {
+            font-size: 14px;
+            color: #ffe6ff;
+            text-shadow: 0 0 5px rgba(255,255,255,0.4), 0 0 15px rgba(255,0,255,0.9);
+            font-weight: 900;
+            letter-spacing: 1.5px;
+        }
+        .close {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #cc00ff, #4d0099);
+            border: 1px solid rgba(200,100,255,0.6);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255,0,255,0.6);
+            transition: 0.1s;
+        }
+        .close:active { transform: scale(0.94); opacity: 0.8; }
+
+        .screen {
+            margin-top: 12px;
+            background: rgba(0,5,10,0.96);
+            border: 1px solid rgba(255,0,255,0.25);
+            border-radius: 20px;
+            padding: 20px 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            box-shadow: inset 0 0 15px rgba(255,0,255,0.15);
+        }
+        .line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,0,255,0.7), transparent);
+            z-index: 0;
+            opacity: 0.8;
+        }
+        .scan-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(230,150,255,0.95), transparent);
+            box-shadow: 0 0 10px rgba(200,100,255,0.8), 0 0 20px rgba(255,0,255,0.5);
+            animation: scanMove 2.2s linear infinite;
+            z-index: 1;
+        }
+        @keyframes scanMove {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .circle {
+            width: 52px;
+            height: 52px;
+            margin: auto;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top: 4px solid #ff00ff;
+            border-right: 4px solid rgba(255,255,255,0.9);
+            animation: spin 0.9s linear infinite;
+            box-shadow: 0 0 15px rgba(255,0,255,0.6);
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .content-box {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .analyse {
+            color: #ffccff;
+            font-size: 11px;
+            letter-spacing: 3px;
+            margin-top: 12px;
+            text-shadow: 0 0 8px rgba(200,100,255,0.9);
+            font-weight: 600;
+        }
+        .info-text {
+            color: #ffccff;
+            font-size: 12px;
+            letter-spacing: 1px;
+            line-height: 1.6;
+            text-shadow: 0 0 5px rgba(255,0,255,0.7);
+            font-weight: 700;
+        }
+        .res-text {
+            color: #fffb00;
+            font-size: 28px;
+            font-weight: 900;
+            text-shadow: 0 0 10px #ffea00, 0 0 25px #ffaa00, 0 0 45px rgba(255,210,0,0.8);
+            animation: resultPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, yellowGlow 1.5s infinite alternate;
+            margin-bottom: 6px;
+        }
+        @keyframes yellowGlow {
+            0% { text-shadow: 0 0 10px #ffea00, 0 0 20px #ffaa00; }
+            100% { text-shadow: 0 0 22px #fff700, 0 0 40px #ffcc00, 0 0 55px #ffd000; }
+        }
+        @keyframes resultPop {
+            0% { transform: scale(0.2); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .prd-text {
+            color: #ffe0f0;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 4px rgba(255,0,255,0.6);
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        .big-btn {
+            display: block;
+            width: calc(100% - 6px);
+            margin: 18px auto 0;
+            padding: 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(200,100,255,0.6);
+            background: linear-gradient(145deg, #5a0090, #230046, #4a0070);
+            color: #ffe9ff;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 8px rgba(255,255,255,0.1), 0 0 18px rgba(255,0,255,0.5);
+            z-index: 10;
+            text-transform: uppercase;
+            transition: 0.07s linear;
+        }
+        .big-btn:active {
+            transform: scale(0.97);
+            box-shadow: inset 0 0 15px rgba(255,230,255,0.3), 0 0 12px #ff44ff;
+        }
+        .big-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(240,180,255,0.25), transparent);
+            animation: shine 2.2s infinite;
+        }
+        @keyframes shine { 100% { left: 100%; } }
+    </style>
+</head>
+<body>
+    <div id='mini' onclick='openM()'><img src='http://jalwagame09.us.cc/IMG-20260330-WA0003.jpg'></div>
+    
+    <div class='injector' id='main'>
+        <div class='glow top'></div>
+        <div class='glow bottom'></div>
+        <div class='glow left'></div>
+        <div class='glow right'></div>
+        <div class='header'>
+            <div class='title'>NUMBER PENNEL</div>
+            <div class='close' onclick='closeM()'>✕</div>
+        </div>
+        <div class='screen'>
+            <div class='line'></div>
+            <div class='scan-line'></div>
+            <div id='screen-content' class='content-box'></div>
+        </div>
+        <button class='big-btn' id='action-btn'>PREDICT</button>
+    </div>
+
+    <script>
+        let balance = '0';
+        let state = 'active';
+        let cache = null;
+        let isScanning = false;
+        
+        function getP() {
+            let d = new Date();
+            let utc = new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }));
+            utc.setMinutes(utc.getMinutes() + 330);
+            let day = utc.getUTCFullYear() + String(utc.getUTCMonth() + 1).padStart(2, '0') + String(utc.getUTCDate()).padStart(2, '0');
+            let min = utc.getUTCHours() * 60 + utc.getUTCMinutes();
+            return day + '1000' + (10001 + min);
+        }
+        
+        function openM() {
+            document.getElementById('main').style.display = 'flex';
+            document.getElementById('mini').style.display = 'none';
+            if(window.TeamBridge) TeamBridge.resizeView(260, 290);
+        }
+        
+        function closeM() {
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('mini').style.display = 'flex';
+            if(window.TeamBridge) TeamBridge.resizeView(80, 80);
+        }
+        
+        function render() {
+            let sc = document.getElementById('screen-content');
+            let btn = document.getElementById('action-btn');
+            if(isScanning) return;
+            if(state === 'result') return;
+            
+            sc.innerHTML = `
+                <div class='info-text' style='font-size:13px; color:#00ffaa; text-shadow:0 0 8px #00ffaa;'>
+                    READY<br>
+                    <span style='font-size:10px; color:#ffccff;'>ACTIVE</span>
+                </div>
+                <div class='analyse' style='margin-top:6px;'>PRESS PREDICT</div>
+            `;
+            btn.innerText = 'PREDICT';
+            btn.onclick = startHack;
+        }
+        
+        function startHack() {
+            if(isScanning) return;
+            
+            let cp = getP();
+            if(cache && cache.p === cp) {
+                showResult(cache.n, cache.s, cp);
+                return;
+            }
+            
+            isScanning = true;
+            let sc = document.getElementById('screen-content');
+            let btn = document.getElementById('action-btn');
+            
+            sc.innerHTML = `
+                <div class='circle'></div>
+                <div class='analyse'>SCANNING</div>
+            `;
+            btn.innerText = '...';
+            btn.onclick = null;
+            
+            setTimeout(function() {
+                let n = Math.floor(Math.random() * 10);
+                let s = (n <= 4) ? 'SMALL' : 'BIG';
+                cache = {n: n, s: s, p: cp};
+                isScanning = false;
+                showResult(n, s, cp);
+            }, 3500);
+        }
+        
+        function showResult(n, s, p) {
+            state = 'result';
+            let sc = document.getElementById('screen-content');
+            let btn = document.getElementById('action-btn');
+            
+            sc.innerHTML = `
+                <div class='res-text'>${s} ${n}</div>
+                <div class='prd-text'>PERIOD: ${p.slice(-5)}</div>
+            `;
+            btn.innerText = 'NEXT';
+            btn.onclick = function() {
+                state = 'active';
+                render();
+            };
+            
+            if(window.TeamBridge) TeamBridge.speak(s + ' ' + n);
+        }
+        
+        document.getElementById('main').style.display = 'flex';
+        document.getElementById('mini').style.display = 'none';
+        render();
+    </script>
+</body>
+</html>
